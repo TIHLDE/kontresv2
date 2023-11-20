@@ -1,7 +1,7 @@
-export default function Home({ className }) {
-  return (
-    <main className={`flex gap-3 ${className}`}>
-      <div>git version embret</div>
-    </main>
-  );
+export default function Home() {
+    return (
+        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+            <div>git version embret</div>
+        </main>
+    );
 }

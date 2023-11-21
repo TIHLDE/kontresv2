@@ -23,6 +23,19 @@ const getColorsWithDefault = (colors: Omit<ColorRange, 'DEFAULT'>, defaultShade:
 	...colors
 })
 
+const invertColors = (colors: Omit<ColorRange, 'DEFAULT'>) => ({
+	50: colors[900],
+	100: colors[800],
+	200: colors[700],
+	300: colors[600],
+	400: colors[500],
+	500: colors[400],
+	600: colors[300],
+	700: colors[200],
+	800: colors[100],
+	900: colors[50]
+})
+
 const base = {}
 
 const dark = {}

@@ -1,23 +1,46 @@
 import type { Config } from 'tailwindcss';
+//@ts-expect-error no types
 import themeSwapper from 'tailwindcss-theme-swapper';
 
-const base = {
-    colors: {
-        primary: '#1C458A',
-        secondary: '#581D6C',
-        accent: '#',
-        surface: '#',
-        background: '#',
-    },
-    borderRadius: {
-        sm: '4px',
-        DEFAULT: '8px',
-        lg: '16px',
-        xl: '24px',
-    },
-};
+interface ColorRange {
+    50: string;
+    100: string;
+    200: string;
+    300: string;
+    400: string;
+    500: string;
+    600: string;
+    700: string;
+    800: string;
+    900: string;
+    DEFAULT: string;
+}
 
-{ 'cyclamen': { DEFAULT: '#F56FA1', 100: '#43051b', 200: '#860937', 300: '#c80e52', 400: '#f02d75', 500: '#f56fa1', 600: '#f78db4', 700: '#f9a9c6', 800: '#fbc6d9', 900: '#fde2ec' }, 'marian_blue': { DEFAULT: '#1C458A', 100: '#060e1c', 200: '#0b1c38', 300: '#112a54', 400: '#173770', 500: '#1c458a', 600: '#2861c4', 700: '#5586dc', 800: '#8eafe8', 900: '#c6d7f3' }, 'tropical_indigo': { DEFAULT: '#9888FF', 100: '#0a004f', 200: '#15009d', 300: '#1f00ec', 400: '#553bff', 500: '#9888ff', 600: '#aea1ff', 700: '#c2b9ff', 800: '#d6d0ff', 900: '#ebe8ff' } }
+type Shades = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+
+const getColorsWithDefault = (
+    colors: Omit<ColorRange, 'DEFAULT'>,
+    defaultShade: Shades = 500,
+) => ({
+    DEFAULT: colors[defaultShade],
+    ...colors,
+});
+
+const invertColors = (colors: Omit<ColorRange, 'DEFAULT'>) => ({
+    50: colors[900],
+    100: colors[800],
+    200: colors[700],
+    300: colors[600],
+    400: colors[500],
+    500: colors[400],
+    600: colors[300],
+    700: colors[200],
+    800: colors[100],
+    900: colors[50],
+});
+
+const base = {};
+
 const dark = {};
 
 const config: Config = {

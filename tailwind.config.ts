@@ -1,72 +1,80 @@
-import type { Config } from 'tailwindcss';
-//@ts-expect-error no types
-import themeSwapper from 'tailwindcss-theme-swapper';
+import type { Config } from "tailwindcss"
 
-interface ColorRange {
-    50: string;
-    100: string;
-    200: string;
-    300: string;
-    400: string;
-    500: string;
-    600: string;
-    700: string;
-    800: string;
-    900: string;
-    DEFAULT: string;
-}
-
-type Shades = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-
-const getColorsWithDefault = (
-    colors: Omit<ColorRange, 'DEFAULT'>,
-    defaultShade: Shades = 500,
-) => ({
-    DEFAULT: colors[defaultShade],
-    ...colors,
-});
-
-const invertColors = (colors: Omit<ColorRange, 'DEFAULT'>) => ({
-    50: colors[900],
-    100: colors[800],
-    200: colors[700],
-    300: colors[600],
-    400: colors[500],
-    500: colors[400],
-    600: colors[300],
-    700: colors[200],
-    800: colors[100],
-    900: colors[50],
-});
-
-const base = {};
-
-const dark = {};
-
-const config: Config = {
-    content: [
-        './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-        './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-        './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    ],
-    theme: {
-        extend: {},
+const config = {
+  darkMode: ["class"],
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+	],
+  prefix: "",
+  theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
     },
-    plugins: [
-        themeSwapper({
-            themes: [
-                {
-                    name: 'base',
-                    selectors: [':root'],
-                    theme: base,
-                },
-                {
-                    name: 'dark',
-                    selectors: ['.dark'],
-                    theme: dark,
-                },
-            ],
-        }),
-    ],
-};
-export default config;
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config
+
+export default config

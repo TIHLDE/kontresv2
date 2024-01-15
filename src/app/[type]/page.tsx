@@ -1,9 +1,9 @@
+import Calendar from "../../components/ui/calendar/calendar";
 
-export default function Page() {
+export default async function Page() {
   return (
     <div>
-      {/* Your page content goes here */}
+      <Calendar />
     </div>
   );
-};
-
+}

@@ -5,7 +5,7 @@ export default async function Header() {
 	//const navItems = await fetch('')
 
 	return (
-		<header className="p-4 min-h-[80px] backdrop-blur-sm top-0 z-10 sticky w-full bg-background/80 border-b border-border flex justify-start items-center">
+		<header className="p-4 min-h-[80px] backdrop-blur-sm top-0 z-10 fixed w-full bg-background/80 border-b border-border flex justify-start items-center">
 			<_Link href="/" className="mr-16">
 				<Image
 					src="/tihlde.svg"

@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 
 export default function Hero() {
 	return (
-		<div className="h-[calc(100vh-80px)] w-screen flex flex-col justify-center items-center">
+		<div className="h-screen w-screen flex flex-col justify-center items-center">
 			<h1 className="text-6xl font-bold m-32">
 				Lyst på noe for deg selv?
 			</h1>

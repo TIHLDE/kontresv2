@@ -1,33 +1,23 @@
-import axios, { Axios, AxiosDefaults, AxiosHeaders, AxiosPromise, AxiosRequestConfig } from 'axios';
 import { stringify } from 'querystring';
 import { ACCESS_TOKEN, TOKEN_HEADER_NAME } from '../../../constants';
 import { cookies } from "next/headers";
+import { init } from 'next/dist/compiled/webpack/webpack';
 
-export const IPost = <T extends unknown>(url: string, data?: any, config?: AxiosRequestConfig<any>) => {
-  const headers = {
-    ...config?.headers,
-  } as AxiosHeaders;
-  headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string;
-
-  return axios.post<T>(url, data, {
-    ...config,
-    headers,
-  });
-};
-
-interface IGetProps {
-  url: string;
-  config?: AxiosRequestConfig<any>;
+interface IFetchProps {
+    url: string;
+    config?: RequestInit
 }
 
-export const IGet = <T extends unknown>({ url, config }: IGetProps) => {
-  const headers = {
-    ...config?.headers,
-  } as AxiosHeaders;
-  headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string;
+export const IFetch = <T extends unknown>({url, config}: IFetchProps) => {
+  const headers: HeadersInit = {}
+  headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string
 
-  return axios.get<T>(url, {
+  return fetch(url, {
     ...config,
-    headers,
-  });
+    method: "POST",
+    headers: {
+        ...config?.headers,
+        ...headers
+    }
+  })
 };

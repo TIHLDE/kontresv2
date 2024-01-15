@@ -200,6 +200,15 @@ export default function AutoSelect(props: Props) {
 		...rest
 	} = props
 
+	const contentProps = {
+		position,
+		side,
+		sideOffset,
+		align,
+		alignOffset,
+		collisionPadding,
+	}
+
 	return (
 		<Select {...rest}>
 			<SelectTrigger>
@@ -207,12 +216,7 @@ export default function AutoSelect(props: Props) {
 			</SelectTrigger>
 			<SelectContent
 				className="rounded-md border border-accent-100 bg-background p-1.5"
-				position={position}
-				side={side}
-				sideOffset={sideOffset}
-				align={align}
-				alignOffset={alignOffset}
-				collisionPadding={collisionPadding}
+				{...contentProps}
 			>
 				{options.map((option, index) => {
 					if (isSelectOptionType(option)) {

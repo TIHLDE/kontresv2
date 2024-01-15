@@ -30,7 +30,7 @@ export const getReservation = (uuid: string) => {
  */
 export const getItem = (uuid: string) => {
   return IFetch<DetailedItem[]>({
-    url: `${baseUrl}/kontres/bookable_items/${uuid}`,
+    url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
     config: {
         method: "GET"
     }

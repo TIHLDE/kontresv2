@@ -19,5 +19,8 @@ export const IFetch = <T extends unknown>({url, config}: IFetchProps) => {
         ...config?.headers,
         ...headers
     }
-  })
+  }).then(res => {
+    if (!res.ok) throw new Error(res.statusText);
+    return res.json() as Promise<{data: T}>
+  }).then(data => {return data.data})
 };

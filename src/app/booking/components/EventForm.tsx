@@ -5,7 +5,7 @@ import { DetailedItem } from "@/utils/apis/types";
 import { EventFormFields, EventFormValueTypes } from "@/app/booking/components/EventFormFields";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AutoAlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 
 
@@ -17,7 +17,8 @@ type EventFormType = {
 
 const EventForm = ({ items }: EventFormType) => {
     const [alertOpen, setAlertOpen] = useState(false);
-    const [formValues, setFormValues] = useState<EventFormValueTypes>();
+    const formValues = useRef<EventFormValueTypes>();
+    
     const searchParams = useSearchParams();
     const from = searchParams.get("from");
     const to = searchParams.get("to");
@@ -26,13 +27,13 @@ const EventForm = ({ items }: EventFormType) => {
     const defaultItem = items.filter(a => a.id == itemUUID).length > 0 ? itemUUID : items[0].id
 
     const onSubmit = async (values: EventFormValueTypes) => {
-        const state = setAlertOpen(true);
-        setFormValues(values);
+        formValues.current = values;
+        setAlertOpen(true);
     }
 
     const createReservation = () => {
         // Use the values stored in the state hook
-        console.log(formValues)
+        console.log(formValues.current)
     }
 
 

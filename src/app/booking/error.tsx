@@ -7,7 +7,7 @@ type ErrorPropType = {
     error: Error & { digest?: string }
 }
 
-export default function Error({error}: ErrorPropType) {
+export default function Error({ error }: ErrorPropType) {
     return (
         <div className="max-w-7xl mx-auto min-h-screen mt-16">
             <h1 className="font-bold">Kræsj, pang, bom. Noe gikk galt.</h1>

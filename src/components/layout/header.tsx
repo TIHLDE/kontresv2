@@ -17,6 +17,7 @@ export default async function Header() {
 			<nav>
 				<Link href="/kontoret">Reserver kontoret</Link>
 				<Link href="/soundbox">Reserver soundbox</Link>
+				<Link href="/reservasjoner">Reservasjoner</Link>
 			</nav>
 		</header>
 	)

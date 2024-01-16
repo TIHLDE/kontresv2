@@ -6,7 +6,7 @@ export default async function Page() {
     const items = await getItems();
 
     return (
-        <div className="max-w-7xl mx-auto h-screen mt-16">
+        <div className="max-w-page mx-auto h-screen mt-16">
             <h1 className="font-semibold my-5 text-3xl w-fit mx-auto md:mx-0">Reserver en gjenstand</h1>
             <Card className="p-4">
                 <EventForm items={items} />

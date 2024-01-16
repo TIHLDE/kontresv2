@@ -45,7 +45,7 @@ const EventFormFields = ({initialItem, items, onSubmit}: EventFormFieldsType) =>
                         <FormItem>
                             <FormLabel>Fra dato</FormLabel>
                             <FormControl>
-                                <DateTimePicker className="flex" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
+                                <DateTimePicker className="flex md:w-fit w-full" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
                                     form.setValue("from", e.target.value as unknown as Date, {
                                         shouldDirty: true,
                                         shouldTouch: true
@@ -63,7 +63,7 @@ const EventFormFields = ({initialItem, items, onSubmit}: EventFormFieldsType) =>
                         <FormItem>
                             <FormLabel>Til dato</FormLabel>
                             <FormControl>
-                                <DateTimePicker className="flex" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
+                                <DateTimePicker className="flex md:w-fit w-full" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
                                     form.setValue("to", e.target.value as unknown as Date, {
                                         shouldDirty: true,
                                         shouldTouch: true
@@ -108,7 +108,7 @@ const EventFormFields = ({initialItem, items, onSubmit}: EventFormFieldsType) =>
                 />
 
                 <div className="mt-5">
-                    <Button type="submit">Reserver</Button>
+                    <Button type="submit" className="md:w-fit w-full">Reserver</Button>
                 </div>
             </form>
         </Form>

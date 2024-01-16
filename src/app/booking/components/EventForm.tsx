@@ -18,7 +18,7 @@ type EventFormType = {
 const EventForm = ({ items }: EventFormType) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const formValues = useRef<EventFormValueTypes>();
-    
+
     const searchParams = useSearchParams();
     const from = searchParams.get("from");
     const to = searchParams.get("to");

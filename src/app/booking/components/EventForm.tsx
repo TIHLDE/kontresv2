@@ -2,13 +2,16 @@
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, FormProps, UseFormReturn, useForm } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
-import { SelectValue } from "@radix-ui/react-select";
+import AutoSelect from "@/components/ui/select";
 import { useSearchParams } from "next/navigation";
 import { DetailedItem } from "@/utils/apis/types";
+import { Button } from "@/components/ui/button";
+import { TimePickerInput } from "@/components/ui/time-picker-input";
+import { useState } from "react";
+import { DateTimePicker } from "@/components/ui/date-time-picker";
 
 const formSchema = z.object({
     from: z.date(),
@@ -29,10 +32,14 @@ const EventForm = ({items}: EventFormType) => {
     const to = searchParams.get("to");
     const itemUUID = searchParams.get("itemUUID")
 
-    console.log(items)
+    const defaultItem = items.filter(a => a.id == itemUUID).length > 0 ? itemUUID : items[0].id 
 
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        shouldUnregister: false,
+        defaultValues: {
+            item: defaultItem as string,
+        }
     })
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -45,11 +52,16 @@ const EventForm = ({items}: EventFormType) => {
                 <FormField
                     control={form.control}
                     name="from"
-                    render={({field}) => (
+                    render={({field, fieldState}) => (
                         <FormItem>
                             <FormLabel>Fra dato</FormLabel>
                             <FormControl>
-                                <Input type="date"></Input>
+                                <DateTimePicker className="flex" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
+                                    form.setValue("from", e.target.value as unknown as Date, {
+                                        shouldDirty: true,
+                                        shouldTouch: true
+                                    })
+                                }}/>
                             </FormControl>
                         </FormItem>
                     )}
@@ -58,11 +70,16 @@ const EventForm = ({items}: EventFormType) => {
                 <FormField
                     control={form.control}
                     name="to"
-                    render={({field}) => (
+                    render={({field, fieldState}) => (
                         <FormItem>
-                            <FormLabel>Til dato</FormLabel>
+                            <FormLabel>Fra dato</FormLabel>
                             <FormControl>
-                                <Input type="date"></Input>
+                                <DateTimePicker className="flex" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
+                                    form.setValue("to", e.target.value as unknown as Date, {
+                                        shouldDirty: true,
+                                        shouldTouch: true
+                                    })
+                                }}/>
                             </FormControl>
                         </FormItem>
                     )}
@@ -75,15 +92,14 @@ const EventForm = ({items}: EventFormType) => {
                         <FormItem>
                             <FormLabel>Gjenstand</FormLabel>
                             <FormControl>
-                                <Select>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Kontoret" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Boomboks">Boomboks</SelectItem>
-                                        <SelectItem value="Kontoret">Kontoret</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <AutoSelect options={(
+                                    items.map(item => (
+                                        {
+                                            label: item.name,
+                                            value: item.id
+                                        }
+                                    ))
+                                )} placeholder={"Velg en gjenstand"} defaultValue={defaultItem as string} onValueChange={field.onChange}{...field} />
                             </FormControl>
                         </FormItem>
                     )}
@@ -95,11 +111,16 @@ const EventForm = ({items}: EventFormType) => {
                         <FormItem>
                             <FormLabel>Beskrivelse</FormLabel>
                             <FormControl>
-                                <Input type="text" />
+                                <Input type="text" {...field} />
                             </FormControl>
+                            <FormDescription>Forklar hvorfor akkurat <span className="font-bold italic">du</span> skal få innvilget søknaden!</FormDescription>
                         </FormItem>
                     )}
                 />
+
+                <div className="mt-5">
+                    <Button type="submit">Reserver</Button>
+                </div>
             </form>
         </Form>
     )

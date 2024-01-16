@@ -7,6 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
 import { SelectValue } from "@radix-ui/react-select";
+import { useSearchParams } from "next/navigation";
 
 const formSchema = z.object({
     from: z.date(),
@@ -18,6 +19,11 @@ const formSchema = z.object({
 })
 
 const EventForm = () => {
+    const searchParams = useSearchParams();
+    const from = searchParams.get("from");
+    const to = searchParams.get("to");
+    const itemUUID = searchParams.get("itemUUID")
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema)
     })

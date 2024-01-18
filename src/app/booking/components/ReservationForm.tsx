@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { DetailedItem } from "@/utils/apis/types";
-import { EventFormFields, EventFormValueTypes } from "@/app/booking/components/EventFormFields";
+import { EventFormFields, EventFormValueTypes } from "@/app/booking/components/ReservationFormFields";
 import { AlertDialogAction, AlertDialogCancel, AutoAlertDialog } from "@/components/ui/alert-dialog";
 import { useRef, useState } from "react";
 import { createReservation } from "@/utils/apis/reservations";
@@ -15,7 +15,9 @@ type EventFormType = {
 }
 
 
-
+/**
+ * Parent wrapper for the entire reservation form
+ */
 const EventForm = ({ items }: EventFormType) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);

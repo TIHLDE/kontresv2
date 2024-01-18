@@ -26,6 +26,9 @@ type EventFormFieldsType = {
     onSubmit: (values: EventFormValueTypes) => void;
 }
 
+/**
+ * Component that contains all of the fields that belong to the reservation form.
+ */
 const EventFormFields = ({initialItem, items, onSubmit}: EventFormFieldsType) => {
     const form = useForm<EventFormValueTypes>({
         resolver: zodResolver(formSchema),

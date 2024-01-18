@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import EventForm from "./components/EventForm";
+import EventForm from "./components/ReservationForm";
 import { getItems } from "@/utils/apis/items";
 import { DetailedItem } from "@/utils/apis/types";
 

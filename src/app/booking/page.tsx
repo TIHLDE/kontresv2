@@ -1,9 +1,10 @@
 import { Card } from "@/components/ui/card";
 import EventForm from "./components/EventForm";
-import { getItems } from "@/utils/apis/reservations";
+import { getItems } from "@/utils/apis/items";
+import { DetailedItem } from "@/utils/apis/types";
 
 export default async function Page() {
-    const items = await getItems();
+    const items: DetailedItem[] = await getItems() as DetailedItem[];
 
     return (
         <div className="max-w-page mx-auto h-screen mt-16">

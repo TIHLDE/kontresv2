@@ -1,3 +1,5 @@
+"use server"
+
 import { stringify } from 'querystring';
 import { ACCESS_TOKEN, TOKEN_HEADER_NAME } from '../../../constants';
 import { cookies } from "next/headers";
@@ -7,6 +9,12 @@ import { DetailedItem } from '@/utils/apis/types';
 interface IFetchProps {
     url: string;
     config?: RequestInit
+}
+
+export interface ErrorType {
+  status?: number;
+  statusText?: string;
+  response?: Record<string,unknown>;
 }
 
 export const IFetch = <T extends unknown>({url, config}: IFetchProps) => {
@@ -21,8 +29,18 @@ export const IFetch = <T extends unknown>({url, config}: IFetchProps) => {
   return fetch(url, {
     ...config,
     headers 
-  }).then(res => {
-    if (!res.ok) throw new Error(res.statusText);
-    return res.json() as T
   })
+  .then(async res => {
+    if (!res.ok) {
+      const message = await res.json();
+      const errorObject: ErrorType = {
+        status: res.status,
+        statusText: res.statusText,
+        response: message
+      }
+      throw new Error(JSON.stringify(errorObject))
+    }
+
+    return res.json();
+  }) as Promise<T>
 };

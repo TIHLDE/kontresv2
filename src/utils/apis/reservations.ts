@@ -1,11 +1,17 @@
+"use server"
+
+import { cookies } from 'next/headers';
 import { IFetch } from './fetch';
 import { DetailedItem, DetailedReservation } from './types';
+import { ACCESS_TOKEN } from '../../../constants';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 /**
  * Gets a specific reservation given a reservation UUID.
  *
+ * TODO - Perform proper sanitization for the uuid when it
+ * is placed in the query url.
  * @param uuid The UUID
  * @returns Reservation details
  */
@@ -18,35 +24,25 @@ export const getReservation = (uuid: string) => {
   });
 };
 
-/* 
-    !!!: The following two functions are very similar because there is no backend implementation for getting specific items. 
-    Therefore, both functions do the same as of now.
-  */
-/**
- * Gets a specific item given an item UUID.
- *
- * @param uuid The UUID
- * @returns Item details
- */
-export const getItem = (uuid: string) => {
-  return IFetch<DetailedItem[]>({
-    url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
-    config: {
-        method: "GET"
-    }
-  });
-};
 
 /**
- * Gets all items in the database.
- *
- * @returns A list of all reservalble items
+ * Registers a reservation with the backend.
+ * 
+ * @returns Reservation details
  */
-export const getItems = () => {
-  return IFetch<DetailedItem[]>({
-    url: `${baseUrl}/kontres/bookable_items/`,
+export const createReservation = ({...rest}: Omit<DetailedReservation, 'state' | 'created_at' | 'author' | 'id'>) => {
+  const body = {
+    ...rest,
+    author: "index"
+  }
+  return IFetch<DetailedReservation>({
+    url: `${baseUrl}/kontres/reservations/`,
     config: {
-        method: "GET"
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
     }
   });
-};
+}

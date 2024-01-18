@@ -1,10 +1,7 @@
 "use server"
 
-import { stringify } from 'querystring';
 import { ACCESS_TOKEN, TOKEN_HEADER_NAME } from '../../../constants';
 import { cookies } from "next/headers";
-import { init } from 'next/dist/compiled/webpack/webpack';
-import { DetailedItem } from '@/utils/apis/types';
 
 interface IFetchProps {
     url: string;

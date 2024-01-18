@@ -1,9 +1,7 @@
 "use server"
 
-import { cookies } from 'next/headers';
 import { IFetch } from './fetch';
-import { DetailedItem, DetailedReservation } from './types';
-import { ACCESS_TOKEN } from '../../../constants';
+import { DetailedReservation } from './types';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 

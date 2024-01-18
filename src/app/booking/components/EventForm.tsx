@@ -3,8 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { DetailedItem } from "@/utils/apis/types";
 import { EventFormFields, EventFormValueTypes } from "@/app/booking/components/EventFormFields";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger, AutoAlertDialog } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { AlertDialogAction, AlertDialogCancel, AutoAlertDialog } from "@/components/ui/alert-dialog";
 import { useRef, useState } from "react";
 import { createReservation } from "@/utils/apis/reservations";
 import { ErrorType } from "@/utils/apis/fetch";

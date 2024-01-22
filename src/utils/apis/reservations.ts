@@ -30,7 +30,7 @@ export const getReservation = (uuid: string) => {
  */
 export const createReservation = ({...rest}: Omit<DetailedReservation, 'state' | 'created_at' | 'author' | 'id'>) => {
   const body = {
-    ...rest,
+      ...rest,
     author: "index"
   }
   return IFetch<DetailedReservation>({

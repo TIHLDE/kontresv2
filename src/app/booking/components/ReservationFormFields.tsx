@@ -20,7 +20,7 @@ const formSchema = z.object({
 
 export type EventFormValueTypes = z.infer<typeof formSchema>
 
-type EventFormFieldsType = {
+type ReservationFormFieldsType = {
     initialItem: string;
     items: DetailedItem[];
     onSubmit: (values: EventFormValueTypes) => void;
@@ -29,7 +29,7 @@ type EventFormFieldsType = {
 /**
  * Component that contains all of the fields that belong to the reservation form.
  */
-const EventFormFields = ({initialItem, items, onSubmit}: EventFormFieldsType) => {
+const ReservationFormFields = ({initialItem, items, onSubmit}: ReservationFormFieldsType) => {
     const form = useForm<EventFormValueTypes>({
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
@@ -118,4 +118,4 @@ const EventFormFields = ({initialItem, items, onSubmit}: EventFormFieldsType) =>
     )
 }
 
-export { EventFormFields };
+export { ReservationFormFields as EventFormFields };

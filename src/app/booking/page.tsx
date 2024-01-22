@@ -12,7 +12,7 @@ export default async function Page() {
             <Card className="p-4">
                 <EventForm items={items} />
 
-                <div className="mt-10">
+                    <div className="mt-10">
                     <p>Sender inn forespørsel som</p>
                     <Card className="p-2 md:w-fit w-full">
                         <div className="flex gap-5 items-center">

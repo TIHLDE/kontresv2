@@ -24,7 +24,17 @@ export function LoginForm({ redirect }: { redirect: string }){
     })
 
     const handleSubmit = async (data: LoginFormSubmitEventType) => {
-        await loginUser(data.user_id, data.password, redirect).catch((err) => console.error(err))
+        await loginUser(data.user_id, data.password, redirect).catch((err) => {
+            console.error(err)
+            form.setError("user_id", {
+                type: "server",
+                message: "Feil brukernavn eller passord"
+            })
+            form.setError("password", {
+                type: "server",
+                message: "Feil brukernavn eller passord"
+            })
+        })
     }
 
     return (

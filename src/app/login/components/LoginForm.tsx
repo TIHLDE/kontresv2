@@ -24,9 +24,7 @@ export function LoginForm({ redirect }: { redirect: string }){
     })
 
     const handleSubmit = async (data: LoginFormSubmitEventType) => {
-        console.log('submit')
-
-        await loginUser(data.user_id, data.password, redirect)
+        await loginUser(data.user_id, data.password, redirect).catch((err) => console.error(err))
     }
 
     return (

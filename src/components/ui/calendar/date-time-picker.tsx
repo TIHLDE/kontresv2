@@ -1,14 +1,7 @@
 import * as React from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { nb } from "date-fns/locale/nb";
-import {
-  format,
-  setDay as setD,
-  setHours,
-  setMinutes,
-  setMonth,
-  setYear,
-} from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 import { Button } from "@/components/ui/button";
 import {
   Popover,

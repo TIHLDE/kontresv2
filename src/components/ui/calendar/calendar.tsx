@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "../button";
 import { DateTimePicker } from "./date-time-picker";
-
+import { setHours, setMinutes } from "date-fns";
 const weekDays = [
   "Mandag",
   "Tirsdag",
@@ -117,20 +117,32 @@ export default function Calendar() {
       dateAtMousePosition.y = e.currentTarget.offsetHeight;
     }
     setDragEnd(dateAtMousePosition);
-    setStartDate(
-      add(startOfWeek(currentDay, { weekStartsOn: 1 }), {
-        days: dragStart.day,
-        hours: dragStart.hours,
-        minutes: dragStart.minutes,
-      }),
-    );
-    setEndDate(
-      add(startOfWeek(currentDay, { weekStartsOn: 1 }), {
-        days: dateAtMousePosition.day,
-        hours: dateAtMousePosition.hours,
-        minutes: dateAtMousePosition.minutes,
-      }),
-    );
+    if (view == "week") {
+      setStartDate(
+        add(startOfWeek(currentDay, { weekStartsOn: 1 }), {
+          days: dragStart.day,
+          hours: dragStart.hours,
+          minutes: dragStart.minutes,
+        }),
+      );
+      setEndDate(
+        add(startOfWeek(currentDay, { weekStartsOn: 1 }), {
+          days: dateAtMousePosition.day,
+          hours: dateAtMousePosition.hours,
+          minutes: dateAtMousePosition.minutes,
+        }),
+      );
+    } else {
+      setStartDate(
+        setHours(setMinutes(currentDay, dragStart.minutes), dragStart.hours),
+      );
+      setEndDate(
+        setHours(
+          setMinutes(currentDay, dateAtMousePosition.minutes),
+          dateAtMousePosition.hours,
+        ),
+      );
+    }
   }
 
   function PossiblePlaceholder() {

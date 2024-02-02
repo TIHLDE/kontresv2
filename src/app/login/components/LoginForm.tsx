@@ -26,11 +26,7 @@ export function LoginForm({ redirect }: { redirect: string }){
     const handleSubmit = async (data: LoginFormSubmitEventType) => {
         await loginUser(data.user_id, data.password, redirect).catch((err) => {
             console.error(err)
-            form.setError("user_id", {
-                type: "server",
-                message: "Feil brukernavn eller passord"
-            })
-            form.setError("password", {
+            form.setError("root", {
                 type: "server",
                 message: "Feil brukernavn eller passord"
             })
@@ -46,18 +42,17 @@ export function LoginForm({ redirect }: { redirect: string }){
                             <FormControl>
                             <Input placeholder="brukernavn" {...field} />
                             </FormControl>
-                            <FormMessage />
                         </FormItem>
                 )} />
                 <FormField control={form.control} name="password" render={({ field}) => (
                     <FormItem>
                         <FormLabel>Passord</FormLabel>
                         <FormControl>
-                        <Input placeholder="passord" {...field} />
+                        <Input placeholder="passord" type="password" {...field} />
                         </FormControl>
-                        <FormMessage />
                     </FormItem>
                 )} />
+                {form.formState.errors.root && <FormMessage className="my-2">{form.formState.errors.root.message}</FormMessage>}
                 <Button className="w-full" type="submit">Login</Button>
             </form>
         </Form>

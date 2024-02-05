@@ -2,16 +2,7 @@ import CalendarDay from "./calendar-day";
 import { add, format, startOfWeek, getWeek, getYear } from "date-fns";
 import { nb } from "date-fns/locale/nb";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-
-const weekDays = [
-  "Mandag",
-  "Tirsdag",
-  "Onsdag",
-  "Torsdag",
-  "Fredag",
-  "Lørdag",
-  "Søndag",
-];
+import { weekDays } from "@/lib/utils";
 
 export default function CalendarWeekView({
   currentDay,

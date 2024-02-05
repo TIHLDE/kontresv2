@@ -29,7 +29,7 @@ type ReservationFormFieldsType = {
 /**
  * Component that contains all of the fields that belong to the reservation form.
  */
-const ReservationFormFields = ({initialItem, items, onSubmit}: ReservationFormFieldsType) => {
+const ReservationFormFields = ({ initialItem, items, onSubmit }: ReservationFormFieldsType) => {
     const form = useForm<EventFormValueTypes>({
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
@@ -39,21 +39,21 @@ const ReservationFormFields = ({initialItem, items, onSubmit}: ReservationFormFi
     })
 
     return (
-         <Form {...form}>
+        <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
                     control={form.control}
                     name="from"
-                    render={({field, fieldState}) => (
+                    render={({ field, fieldState }) => (
                         <FormItem>
                             <FormLabel>Fra dato</FormLabel>
                             <FormControl>
                                 <DateTimePicker className="flex md:w-fit w-full" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
-                                    form.setValue("from", e.target.value as unknown as Date, {
+                                    form.setValue("from", new Date(e.target.value), {
                                         shouldDirty: true,
                                         shouldTouch: true
                                     })
-                                }}/>
+                                }} />
                             </FormControl>
                         </FormItem>
                     )}
@@ -62,7 +62,7 @@ const ReservationFormFields = ({initialItem, items, onSubmit}: ReservationFormFi
                 <FormField
                     control={form.control}
                     name="to"
-                    render={({field, fieldState}) => (
+                    render={({ field, fieldState }) => (
                         <FormItem>
                             <FormLabel>Til dato</FormLabel>
                             <FormControl>
@@ -71,7 +71,7 @@ const ReservationFormFields = ({initialItem, items, onSubmit}: ReservationFormFi
                                         shouldDirty: true,
                                         shouldTouch: true
                                     })
-                                }}/>
+                                }} />
                             </FormControl>
                         </FormItem>
                     )}
@@ -80,7 +80,7 @@ const ReservationFormFields = ({initialItem, items, onSubmit}: ReservationFormFi
                 <FormField
                     control={form.control}
                     name="item"
-                    render={({field}) => (
+                    render={({ field }) => (
                         <FormItem>
                             <FormLabel>Gjenstand</FormLabel>
                             <FormControl>
@@ -99,7 +99,7 @@ const ReservationFormFields = ({initialItem, items, onSubmit}: ReservationFormFi
                 <FormField
                     control={form.control}
                     name="description"
-                    render={({field}) => (
+                    render={({ field }) => (
                         <FormItem>
                             <FormLabel>Beskrivelse</FormLabel>
                             <FormControl>

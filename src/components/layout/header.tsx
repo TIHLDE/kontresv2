@@ -1,11 +1,19 @@
+import { User } from '@/types/User';
+import { cn } from '@/utils/cn';
+import { userAtom } from '@/utils/userAtom';
+import { useAtom } from 'jotai';
 import Image from 'next/image'
 import _Link from 'next/link'
+import { UserArea } from './user-area';
 
-export default async function Header() {
+interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
+	userData: User;
+}
+
+export default async function Header({ userData, className, ...props }: HeaderProps) {
 	//const navItems = await fetch('')
-
 	return (
-		<header className="p-4 min-h-[80px] backdrop-blur-sm top-0 z-10 sticky w-full bg-background/80 border-b border-border flex justify-start items-center">
+		<header {...props} className={cn("p-4 min-h-[80px] backdrop-blur-sm top-0 sticky w-full bg-background/80 border-b border-border justify-start items-center flex z-50", className)}>
 			<_Link href="/" className="mr-16">
 				<Image
 					src="/tihlde.svg"
@@ -14,11 +22,18 @@ export default async function Header() {
 					height={40}
 				/>
 			</_Link>
-			<nav>
+			<nav className='w-full'>
 				<Link href="/kontoret">Reserver kontoret</Link>
 				<Link href="/soundbox">Reserver soundbox</Link>
 				<Link href="/reservasjoner">Reservasjoner</Link>
 			</nav>
+
+
+			{userData ? (
+				<UserArea username={userData?.user_id ?? ''} image={userData?.image ?? ''} />
+			) : (
+				<p>Hvordan ser du dette??</p>
+			)}
 		</header>
 	)
 }

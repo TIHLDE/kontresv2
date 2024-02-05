@@ -63,7 +63,6 @@ const EventForm = ({ items }: EventFormType) => {
             start_time: values?.from.toISOString() as string,
             end_time: values?.to.toISOString() as string,
         }).then(res => {
-            console.log(res);
             showSuccess();
         }).catch(err => {
             const error = err as Error

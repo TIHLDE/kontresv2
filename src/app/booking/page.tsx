@@ -2,9 +2,13 @@ import { Card } from "@/components/ui/card";
 import EventForm from "./components/ReservationForm";
 import { getItems } from "@/utils/apis/items";
 import { DetailedItem } from "@/utils/apis/types";
+import { getCurrentUserData } from "@/utils/apis/user";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserRound } from "lucide-react";
 
 export default async function Page() {
     const items: DetailedItem[] = await getItems() as DetailedItem[];
+    const userData = await getCurrentUserData();
 
     return (
         <div className="max-w-page mx-auto h-screen mt-16">
@@ -16,7 +20,11 @@ export default async function Page() {
                     <p>Sender inn forespørsel som</p>
                     <Card className="p-2 md:w-fit w-full">
                         <div className="flex gap-5 items-center">
-                            <div className="aspect-square h-20 border-solid border-4 border-gray-300 rounded-lg">Bilde</div>
+                            <Avatar>
+                                <AvatarImage src={userData.image} alt="Profililde" />
+                                <AvatarFallback><UserRound className="text-foreground" /></AvatarFallback>
+                            </Avatar>
+                            <h2>{ userData.first_name }</h2>
                         </div>
                     </Card>
                 </div>

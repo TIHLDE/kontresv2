@@ -2,11 +2,6 @@ import { Card } from "@/components/ui/card";
 import EventForm from "./components/ReservationForm";
 import { getItems } from "@/utils/apis/items";
 import { DetailedItem } from "@/utils/apis/types";
-import { useHydrateAtoms } from "jotai/utils";
-import { userAtom } from "@/utils/userAtom";
-import { User } from "@/types/User";
-import { useAtom } from "jotai";
-import { getUserData } from "@/utils/apis/user";
 import { useUser } from "@/utils/hooks/user";
 
 export default async function Page() {

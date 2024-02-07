@@ -1,3 +1,5 @@
+"use client"
+
 import { User } from '@/types/User';
 import { cn } from '@/utils/cn';
 import { userAtom } from '@/utils/userAtom';
@@ -12,8 +14,7 @@ interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
 	userData: User;
 }
 
-export default async function Header({ userData, className, ...props }: HeaderProps) {
-	//const navItems = await fetch('')
+export default function Header({ userData, className, ...props }: HeaderProps) {
 	return (
 		<header {...props} className={cn("p-4 min-h-[80px] backdrop-blur-sm top-0 sticky w-full bg-background/80 border-b border-border justify-start items-center flex z-50", className)}>
 			<HeaderLink href="/" className="mr-16">

@@ -1,5 +1,4 @@
-import { cookies } from "next/headers"
-import { getUserData } from "../apis/user";
+import { getCurrentUserData, getUserData } from "../apis/user";
 import { useState } from "react";
 import { User } from "@/types/User";
 
@@ -7,20 +6,26 @@ interface StateType extends Partial<User> {
     loading: boolean;
 }
 
-export const useUser = async () => {
-    const [data, setData] = useState<StateType>({
-        loading: true,
-    })
+export const useUser = () => {
+    const [data, setData] = useState<User>()
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
 
-    const userId = cookies().get("user_id");
-    // Get the user data
+    const signOut = () => {
 
-    getUserData(userId?.value ?? '').then((data) => {
-        setData({
-            ...data,
-            loading: false
-        })
-    });
+    }
 
-    return data;
+    const obj = {
+        data,
+        loading,
+        error,
+        signOut
+    }
+
+    getCurrentUserData().then((data) => {
+        setLoading(false);
+        setData(data)
+    }).catch(() => { setError(true) });
+
+    return obj;
 }

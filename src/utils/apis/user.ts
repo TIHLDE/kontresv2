@@ -3,6 +3,7 @@
 import { revalidateTag } from "next/cache";
 import { IFetch } from "./fetch"
 import { User } from "./types";
+import { cookies } from "next/headers";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -28,4 +29,15 @@ export const getUserData = (user_id: User['user_id']) => {
       }
     }
   })
+}
+
+export const getCurrentUserData = async () => {
+  const id = await cookies().get("user_id");
+  return getUserData(id?.value ?? '');
+}
+
+export const signOutUser = () => {
+  // Delete cookies
+  cookies().delete("user_id");
+  cookies().delete("token");
 }

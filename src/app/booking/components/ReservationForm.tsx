@@ -33,6 +33,8 @@ const EventForm = ({ items }: EventFormType) => {
     const to = searchParams.get("to");
     const itemUUID = searchParams.get("itemUUID")
 
+    if (items.length == 0) return;
+
     const defaultItem = items.filter(a => a.id == itemUUID).length > 0 ? itemUUID : items[0].id
 
     const onSubmit = async (values: EventFormValueTypes) => {

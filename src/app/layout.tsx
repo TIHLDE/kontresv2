@@ -5,9 +5,11 @@ import './globals.css'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
 import { userAtom } from '@/utils/userAtom'
-import { getUserData } from '@/utils/apis/TEMP'
 import { useHydrateAtoms } from 'jotai/utils'
 import { ThemeProvider } from '@/components/ui/theme-provider'
+import { getUserData } from '@/utils/apis/user'
+import { cookies, headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,8 +24,8 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode
 }) {
-	const userData = await getUserData("index");
-
+	const userId = cookies().get('user_id');
+	const userData = await getUserData(userId?.value ?? '');
 
 	return (
 		<html lang="en">

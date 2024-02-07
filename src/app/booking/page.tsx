@@ -2,9 +2,18 @@ import { Card } from "@/components/ui/card";
 import EventForm from "./components/ReservationForm";
 import { getItems } from "@/utils/apis/items";
 import { DetailedItem } from "@/utils/apis/types";
+import { useHydrateAtoms } from "jotai/utils";
+import { userAtom } from "@/utils/userAtom";
+import { User } from "@/types/User";
+import { useAtom } from "jotai";
+import { getUserData } from "@/utils/apis/user";
+import { useUser } from "@/utils/hooks/user";
 
 export default async function Page() {
     const items: DetailedItem[] = await getItems() as DetailedItem[];
+    const { loading, first_name } = await useUser()
+
+
 
     return (
         <div className="max-w-page mx-auto h-screen mt-16">
@@ -12,12 +21,12 @@ export default async function Page() {
             <Card className="p-4">
                 <EventForm items={items} />
 
-                    <div className="mt-10">
+                <div className="mt-10">
                     <p>Sender inn forespørsel som</p>
                     <Card className="p-2 md:w-fit w-full">
                         <div className="flex gap-5 items-center">
                             <div className="aspect-square h-20 border-solid border-4 border-gray-300 rounded-lg">Bilde</div>
-                            <h3>Ola Nordmann</h3>
+                            <h3>{loading}</h3>
                         </div>
                     </Card>
                 </div>

@@ -2,10 +2,8 @@
 
 import { User } from '@/types/User';
 import { cn } from '@/utils/cn';
-import { userAtom } from '@/utils/userAtom';
-import { useAtom } from 'jotai';
 import Image from 'next/image'
-import _Link, { LinkProps } from 'next/link'
+import { LinkProps } from 'next/link'
 import { UserArea } from './user-area';
 import Link from 'next/link';
 import { ReactNode } from 'react';

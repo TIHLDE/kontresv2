@@ -31,11 +31,19 @@ export const getUserData = (user_id: User['user_id']) => {
   })
 }
 
+/**
+ * Automatically finds the user id cookie, and gets the associated user data. 
+ */
 export const getCurrentUserData = async () => {
   const id = await cookies().get("user_id");
   return getUserData(id?.value ?? '');
 }
 
+/**
+ * Removes token and user_id cookies, which effectively logs the user out.
+ * The client must also perform a reload for the middleware to redirect to
+ * the login page.
+ */
 export const signOutUser = () => {
   // Delete cookies
   cookies().delete("user_id");

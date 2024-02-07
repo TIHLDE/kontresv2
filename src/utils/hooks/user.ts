@@ -6,6 +6,11 @@ interface StateType extends Partial<User> {
     loading: boolean;
 }
 
+
+/**
+ * The future of this hook is a bit unclear. It will probably be removed in the
+ * future.
+ */
 export const useUser = () => {
     const [data, setData] = useState<User>()
     const [loading, setLoading] = useState(true);

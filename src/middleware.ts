@@ -25,6 +25,7 @@ export const config = {
     * - _next/static (static files)
     * - _next/image (image optimization files)
     * - favicon.ico (favicon file)
+    * - /login
     */
         '/((?!api|login|_next/static|_next/image|_next|.*\\..*|favicon.ico).*)',
 }

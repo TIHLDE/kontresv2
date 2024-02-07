@@ -4,12 +4,9 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
-import { userAtom } from '@/utils/userAtom'
-import { useHydrateAtoms } from 'jotai/utils'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { getUserData } from '@/utils/apis/user'
 import { cookies, headers } from 'next/headers'
-import { redirect } from 'next/navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 

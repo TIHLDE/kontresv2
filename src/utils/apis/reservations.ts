@@ -22,6 +22,16 @@ export const getReservation = (uuid: string) => {
   });
 };
 
+//gets all reservations
+//in progress
+export const getReservations = () => {
+  return IFetch<DetailedReservation>({
+    url: `${baseUrl}/kontres/reservations`,
+    config: {
+        method: "GET"
+    }
+  });
+};
 
 /**
  * Registers a reservation with the backend.

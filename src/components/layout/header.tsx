@@ -21,7 +21,7 @@ export default function Header({ userData, className, ...props }: HeaderProps) {
                 className,
             )}
         >
-            <nav className="flex gap-2 w-full items-center">
+            <nav className="flex gap-4 w-full items-center">
                 <HeaderLink href="/" className="mr-16">
                     <Logo />
                 </HeaderLink>

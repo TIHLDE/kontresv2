@@ -1,8 +1,14 @@
 import { RelativeMousePositionProps } from "@/lib/utils";
-import { DateTimePicker } from "../date-time-picker";
-import {format, toDate} from "date-fns";
+import { format, toDate } from "date-fns";
+import { useRouter } from "next/navigation";
 import { Button } from "../button";
+import { DateTimePicker } from "../date-time-picker";
 export default function PossibleBooking({dragStart, dragEnd, setRelativeMousePosition, view, startDate, setStartDate, endDate, setEndDate}: {dragStart:RelativeMousePositionProps, dragEnd: RelativeMousePositionProps, setRelativeMousePosition: (e: RelativeMousePositionProps|null) => void, view: "week" | "day", startDate: Date | null, setStartDate: (e: Date) => void, endDate: Date | null, setEndDate: (e: Date) => void} ){
+  const router = useRouter();
+  function buildUrl() {
+    return "booking?start=" + format(startDate!, "PPP HH:mm:ss") + "&end=" + format(endDate!, "PPP HH:mm:ss")+"&type=soundboks";
+
+  }
     return (dragStart && dragEnd &&
         <div
           className="rounded-md absolute bg-neutral-400 shadow-sm border z-10"
@@ -29,7 +35,7 @@ export default function PossibleBooking({dragStart, dragEnd, setRelativeMousePos
                 value={format(startDate||new Date(), "PPP HH:mm:ss")}
                   className="mb-4 w-full"
                   onChange={(e) =>{ setStartDate(toDate(e.target.value) || new Date())
-console.log(e.target.value)
+                    console.log(e.target.value)
                   }}
               />
               <div className="text-sm text-neutral-500">Slutt:</div>
@@ -38,7 +44,7 @@ console.log(e.target.value)
                   value={format(endDate||new Date(), "PPP HH:mm:ss")}
                   onChange={(e)=>setEndDate(toDate(e.target.value) || new Date())}
                 />
-              <Button className="w-full">Reserver</Button>
+              <Button className="w-full" onClick={()=>router.push(buildUrl())}>Reserver</Button>
             </div>
           </div>
         </div>

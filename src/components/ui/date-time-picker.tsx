@@ -1,24 +1,24 @@
 "use client";
 
-import * as React from "react";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { nb } from "date-fns/locale/nb"
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar, CalendarProps } from "@/components/ui/calendar";
+import { Calendar } from "@/components/ui/calendar";
+import { InputProps } from "@/components/ui/input";
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { TimePickerSection } from "@/components/ui/time-picker-section";
-import { InputProps } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { format, parse } from "date-fns";
+import { nb } from "date-fns/locale/nb";
+import { Calendar as CalendarIcon } from "lucide-react";
+import * as React from "react";
 
-export function DateTimePicker({ className, ...props }: InputProps) {
-    const [date, setDate] = React.useState<Date>();
-
+export function DateTimePicker({ className, value, ...props }: InputProps) {
+    const [date, setDate] = React.useState<Date|null>(value?parse(value as string, "PPP HH:mm:ss", new Date()):null);
     const handleDateChange = (newDate?: Date) => {
+      if (!newDate) return;
         setDate(newDate);
         if (props.onChange) {
             const event = {
@@ -58,12 +58,12 @@ export function DateTimePicker({ className, ...props }: InputProps) {
                     {...props}
                     mode="single"
                     locale={nb}
-                    selected={date}
+                    selected={date||new Date()}
                     onSelect={handleDateChange}
                     initialFocus
                 />
                 <div className="p-3 border-t border-border">
-                    <TimePickerSection setDate={handleDateChange} date={date} />
+                    <TimePickerSection setDate={handleDateChange} date={date||new Date()} />
                 </div>
             </PopoverContent>
         </Popover>

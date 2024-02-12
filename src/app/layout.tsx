@@ -7,6 +7,7 @@ import Footer from '@/components/layout/footer'
 import { ThemeProvider } from '@/components/ui/theme-provider'
 import { getUserData } from '@/utils/apis/user'
 import { cookies, headers } from 'next/headers'
+import BottomBar from '@/components/layout/bottom-bar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,6 +34,7 @@ export default async function RootLayout({
 				>
 					<Header userData={userData} />
 					{children}
+					<BottomBar className='fixed bottom-0' />
 					<Footer />
 				</ThemeProvider>
 			</body>

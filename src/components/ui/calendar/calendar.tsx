@@ -17,7 +17,7 @@ import CalendarWeekView from "./calendar-week-view";
 import PossibleBooking from "./booking-prompt";
 
 import { setHours, setMinutes, toDate } from "date-fns";
-import {weekDays, RelativeMousePositionProps, getDateAtMousePosition, compareMousePositions} from "@/lib/utils";
+import { weekDays, RelativeMousePositionProps, getDateAtMousePosition, compareMousePositions } from "@/lib/utils";
 import PossiblePlaceholder from "./placeholder";
 
 export default function Calendar() {
@@ -138,20 +138,20 @@ export default function Calendar() {
             timeStart={
               dragStart && !dragEnd
                 ? `${leftPad(dragStart.hours, 2)}:${leftPad(
-                    dragStart.minutes,
-                    2,
-                  )}`
+                  dragStart.minutes,
+                  2,
+                )}`
                 : `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                    relativeMousePosition.minutes,
-                    2,
-                  )}`
+                  relativeMousePosition.minutes,
+                  2,
+                )}`
             }
             timeEnd={
               dragStart && !dragEnd
                 ? `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                    relativeMousePosition.minutes,
-                    2,
-                  )}`
+                  relativeMousePosition.minutes,
+                  2,
+                )}`
                 : null
             }
             position={{
@@ -166,19 +166,19 @@ export default function Calendar() {
           />
         )}
         <PossiblePlaceholder dragStart={dragStart!} view={view} relativeMousePosition={relativeMousePosition!} visible={
-      (!dragEnd &&
-      dragStart &&
-      relativeMousePosition) as boolean
-          } />
+          (!dragEnd &&
+            dragStart &&
+            relativeMousePosition) as boolean
+        } />
         <PossibleBooking
-        startDate={startDate}
-        endDate={endDate}
-        dragStart={dragStart!}
-        dragEnd={dragEnd!}
-        setRelativeMousePosition={setRelativeMousePosition}
-        setEndDate={setEndDate}
-        setStartDate={setStartDate} 
-        view={view}
+          startDate={startDate}
+          endDate={endDate}
+          dragStart={dragStart!}
+          dragEnd={dragEnd!}
+          setRelativeMousePosition={setRelativeMousePosition}
+          setEndDate={setEndDate}
+          setStartDate={setStartDate}
+          view={view}
         />
         {view == "week" ? (
           weekDays.map((_, index) => <CalendarDay key={index} index={index} />)

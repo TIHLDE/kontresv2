@@ -1,10 +1,4 @@
 "use client";
-import { useEffect, useState } from "react";
-import { leftPad } from "../../../lib/utils";
-import CalendarDay from "./calendar-day";
-import CalendarTimePopover from "./calendar-time-popover";
-import { add, startOfWeek, format } from "date-fns";
-import { nb } from "date-fns/locale/nb";
 import {
   Select,
   SelectContent,
@@ -12,12 +6,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import CalendarDayView from "./calendar-day-view";
-import CalendarWeekView from "./calendar-week-view";
+import { add, format, startOfWeek } from "date-fns";
+import { nb } from "date-fns/locale/nb";
+import { useEffect, useState } from "react";
+import { leftPad } from "../../../lib/utils";
 import PossibleBooking from "./booking-prompt";
+import CalendarDay from "./calendar-day";
+import CalendarDayView from "./calendar-day-view";
+import CalendarTimePopover from "./calendar-time-popover";
+import CalendarWeekView from "./calendar-week-view";
 
-import { setHours, setMinutes, toDate } from "date-fns";
-import {weekDays, RelativeMousePositionProps, getDateAtMousePosition, compareMousePositions} from "@/lib/utils";
+import { RelativeMousePositionProps, compareMousePositions, getDateAtMousePosition, weekDays } from "@/lib/utils";
+import { setHours, setMinutes } from "date-fns";
 import PossiblePlaceholder from "./placeholder";
 
 export default function Calendar() {
@@ -41,6 +41,13 @@ export default function Calendar() {
   }, []);
   function updateRelativeMousePosition(e: React.MouseEvent<HTMLDivElement>) {
     setRelativeMousePosition(getDateAtMousePosition(e));
+  }
+
+  function resetChoice() {
+    setDragStart(null);
+    setDragEnd(null);
+    setStartDate(null);
+    setEndDate(null);
   }
 
   function updateDragStart(e: React.MouseEvent<HTMLDivElement>) {
@@ -112,11 +119,13 @@ export default function Calendar() {
       </div>
       {view === "day" ? (
         <CalendarDayView
+          resetChoice={resetChoice}
           currentDay={currentDay}
           setCurrentDay={setCurrentDay}
         />
       ) : (
         <CalendarWeekView
+          resetChoice={resetChoice}
           currentDay={currentDay}
           setCurrentDay={setCurrentDay}
         />

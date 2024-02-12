@@ -11,7 +11,7 @@ export default function PossibleBooking({dragStart, dragEnd, setRelativeMousePos
   }
     return (dragStart && dragEnd &&
         <div
-          className="rounded-md absolute bg-neutral-400 shadow-sm border z-10"
+          className="rounded-md absolute dark:bg-white/30 bg-black/40  shadow-sm border z-10"
           style={{
             top: dragStart.y,
             left: view == "week" ? dragStart.day * (100 / 7) + "%" : "0",
@@ -22,7 +22,7 @@ export default function PossibleBooking({dragStart, dragEnd, setRelativeMousePos
         >
           <div className="relative h-full w-full">
             <div
-              className="absolute top-full left-0 p-4 border rounded-md w-64 bg-white shadow-sm"
+              className="absolute top-full left-0 p-4 border rounded-md w-64 bg-background shadow-sm"
               onMouseDown={(e) => e.stopPropagation()}
               onMouseUp={(e) => e.stopPropagation()}
               onMouseMove={(e) => {

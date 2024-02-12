@@ -1,35 +1,52 @@
+"use client"
+
+import { User } from '@/types/User';
+import { cn } from '@/utils/cn';
 import Image from 'next/image'
-import _Link from 'next/link'
+import { LinkProps } from 'next/link'
+import { UserArea } from './user-area';
+import Link from 'next/link';
+import { ReactNode } from 'react';
 
-export default async function Header() {
-	//const navItems = await fetch('')
+interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
+	userData: User;
+}
 
+export default function Header({ userData, className, ...props }: HeaderProps) {
 	return (
-		<header className="p-4 min-h-[80px] backdrop-blur-sm top-0 z-10 sticky w-full bg-background/80 border-b border-border flex justify-start items-center">
-			<_Link href="/" className="mr-16">
+		<header {...props} className={cn("p-4 min-h-[80px] backdrop-blur-sm top-0 sticky w-full bg-background/80 border-b border-border justify-start items-center flex z-50", className)}>
+			<HeaderLink href="/" className="mr-16">
 				<Image
 					src="/tihlde.svg"
 					alt="tihlde logo"
 					width={200}
 					height={40}
 				/>
-			</_Link>
-			<nav>
-				<Link href="/kontoret">Reserver kontoret</Link>
-				<Link href="/soundbox">Reserver soundbox</Link>
-				<Link href="/reservasjoner">Reservasjoner</Link>
+			</HeaderLink>
+			<nav className='w-full'>
+				<HeaderLink href="/kontoret">Reserver kontoret</HeaderLink>
+				<HeaderLink href="/soundbox">Reserver soundbox</HeaderLink>
+				<HeaderLink href="/reservasjoner">Reservasjoner</HeaderLink>
 			</nav>
+
+
+			{userData ? (
+				<UserArea username={userData?.user_id ?? ''} image={userData?.image ?? ''} />
+			) : (
+				<p>Hvordan ser du dette??</p>
+			)}
 		</header>
 	)
 }
 
-function Link({ href, children }: { href: string; children: React.ReactNode }) {
+function HeaderLink({ href, className, children, ...props }: LinkProps & { children?: ReactNode; className?: string; }) {
 	return (
-		<_Link
+		<Link
 			className="p-2 font-medium hover:bg-primary/5 rounded-md transition-colors duration-150"
 			href={href}
+			{...props}
 		>
 			{children}
-		</_Link>
+		</Link>
 	)
 }

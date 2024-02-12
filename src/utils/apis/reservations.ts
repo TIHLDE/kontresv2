@@ -1,7 +1,7 @@
-"use server"
+'use server';
 
 import { IFetch } from './fetch';
-import { DetailedReservation } from './types';
+import { DetailedReservation, Reservations } from './types';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -14,43 +14,45 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
  * @returns Reservation details
  */
 export const getReservation = (uuid: string) => {
-  return IFetch<DetailedReservation>({
-    url: `${baseUrl}/kontres/reservations/${uuid}/`,
-    config: {
-        method: "GET"
-    }
-  });
+    return IFetch<DetailedReservation>({
+        url: `${baseUrl}/kontres/reservations/${uuid}/`,
+        config: {
+            method: 'GET',
+        },
+    });
 };
 
 //gets all reservations
 //in progress
 export const getReservations = () => {
-  return IFetch<DetailedReservation>({
-    url: `${baseUrl}/kontres/reservations`,
-    config: {
-        method: "GET"
-    }
-  });
+    return IFetch<Reservations>({
+        url: `${baseUrl}/kontres/reservations`,
+        config: {
+            method: 'GET',
+        },
+    });
 };
 
 /**
  * Registers a reservation with the backend.
- * 
+ *
  * @returns Reservation details
  */
-export const createReservation = ({...rest}: Omit<DetailedReservation, 'state' | 'created_at' | 'author' | 'id'>) => {
-  const body = {
-      ...rest,
-    author: "index"
-  }
-  return IFetch<DetailedReservation>({
-    url: `${baseUrl}/kontres/reservations/`,
-    config: {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    }
-  });
-}
+export const createReservation = ({
+    ...rest
+}: Omit<DetailedReservation, 'state' | 'created_at' | 'author' | 'id'>) => {
+    const body = {
+        ...rest,
+        author: 'index',
+    };
+    return IFetch<DetailedReservation>({
+        url: `${baseUrl}/kontres/reservations/`,
+        config: {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        },
+    });
+};

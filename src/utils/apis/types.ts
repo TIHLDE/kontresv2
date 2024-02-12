@@ -7,18 +7,21 @@ export type DetailedReservation = {
     description: string;
     created_at: string;
     author: string;
-  };
-  
-  export type DetailedItem = {
+};
+
+export type Reservations = {
+    reservations: DetailedReservation[];
+};
+
+export type DetailedItem = {
     id: string;
     name: string;
     description: string;
     created_at: string;
     updated_at: string;
-  };
-  
+};
 
-  export type User = {
+export type User = {
     allergy: string;
     email: string;
     first_name: string;
@@ -34,5 +37,4 @@ export type DetailedReservation = {
     accepts_event_rules: boolean;
     allows_photo_by_default: boolean;
     slack_user_id: string;
-  };
-  
+};

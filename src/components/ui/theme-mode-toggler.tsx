@@ -36,11 +36,10 @@ export function MobileModeToggle({ ...props }: ButtonProps) {
                         <Button variant="outline" onClick={() => setTheme("light")}>Light</Button>
                         <Button variant="outline" onClick={() => setTheme("dark")}>Dark</Button>
                         <Button variant="outline" onClick={() => setTheme("system")}>System</Button>
-
                     </div>
 
                     <DrawerFooter>
-                        <DrawerClose>
+                        <DrawerClose asChild>
                             <Button className="w-full">Lukk</Button>
                         </DrawerClose>
                     </DrawerFooter>

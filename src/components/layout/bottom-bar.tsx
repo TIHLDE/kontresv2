@@ -50,7 +50,7 @@ const BottomBar = ({ user, className, ...props }: BottomBarProps) => {
                         <Button variant={"destructive"} onClick={signOut}>Logg ut</Button>
                     </div>
                     <DrawerFooter>
-                        <DrawerClose>
+                        <DrawerClose asChild>
                             <Button className="w-full" onClick={() => { setProfileOpen(false) }}>Lukk</Button>
                         </DrawerClose>
                     </DrawerFooter>

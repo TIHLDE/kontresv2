@@ -1,11 +1,15 @@
 import { getItems } from '../../utils/apis/items';
 import HeaderLink from './header-link';
 
-export default async function BookableItems() {
-    const bookableItems = await getItems();
-    console.log(bookableItems);
+export default async function BookableItems({
+    className,
+}: {
+    className?: string;
+}) {
+    let bookableItems = await getItems();
+    bookableItems = bookableItems.sort((a, b) => a.name.localeCompare(b.name));
     return (
-        <nav>
+        <nav className={className}>
             {bookableItems.map((item, index) => (
                 <HeaderLink key={index} href={'/' + item.id}>
                     {item.name}

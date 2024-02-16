@@ -17,15 +17,15 @@ export default function Header({ userData, className, ...props }: HeaderProps) {
         <header
             {...props}
             className={cn(
-                'p-4 min-h-[80px] backdrop-blur-sm top-0 fixed w-full bg-background/80 border-b border-border justify-start items-center flex z-50',
+                'p-4 py-1 min-h-[80px] backdrop-blur-sm top-0 fixed w-full bg-background/80 border-b border-border justify-start items-center flex z-50',
                 className,
             )}
         >
-            <nav className="flex gap-4 w-full items-center">
+            <nav className="flex gap-6 w-full items-center">
                 <HeaderLink href="/" className="mr-16">
                     <Logo />
                 </HeaderLink>
-                <BookableItems />
+                <BookableItems className="flex gap-6" />
                 <HeaderLink href="/reservation">Reservasjoner</HeaderLink>
                 <HeaderLink href="/booking">Booking</HeaderLink>
             </nav>

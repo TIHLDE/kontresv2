@@ -3,9 +3,11 @@ import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 
+import { getUserData } from '../utils/apis/user';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { cookies } from 'next/headers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,6 +21,8 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const userId = cookies().get('user_id');
+    const userData = await getUserData(userId?.value ?? '');
     return (
         <html lang="en">
             <body className={inter.className}>

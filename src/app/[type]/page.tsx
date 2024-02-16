@@ -9,7 +9,9 @@ interface PageProps {
 export default async function Page({ params: { type } }: PageProps) {
     let { reservations } = await getReservations();
     console.log(reservations);
-    //bookings = bookings.filter((booking) => type === booking.bookable_item);
+    reservations = reservations.filter(
+        (booking) => type === booking.bookable_item,
+    );
     return (
         <div className="pt-20">
             <Calendar type={type} reservations={reservations} />

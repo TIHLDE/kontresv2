@@ -45,10 +45,17 @@ export default function Calendar({ reservations, type }: CalendarProps) {
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>(null);
 
-    useEffect(() => {
+    function checkResizeWindow() {
         if (window.innerWidth < 900) {
             setView('day');
+        } else {
+            setView('week');
         }
+    }
+
+    useEffect(() => {
+        checkResizeWindow();
+        window.addEventListener('resize', checkResizeWindow);
     }, []);
     function updateRelativeMousePosition(e: React.MouseEvent<HTMLDivElement>) {
         setRelativeMousePosition(getDateAtMousePosition(e));
@@ -129,7 +136,7 @@ export default function Calendar({ reservations, type }: CalendarProps) {
 
     return (
         <div
-            className="w-full max-w-7xl flex flex-col mx-auto cursor-pointer select-none py-4"
+            className="w-full max-w-7xl flex flex-col mx-auto cursor-pointer select-none p-4"
             onMouseDown={scrollAtEnds}
         >
             <div className="flex justify-end pt-4">
@@ -214,6 +221,7 @@ export default function Calendar({ reservations, type }: CalendarProps) {
                     }
                 />
                 <ExistingReservations
+                    setRelativeMousePosition={setRelativeMousePosition}
                     currentDay={currentDay}
                     view={view}
                     reservations={reservations}

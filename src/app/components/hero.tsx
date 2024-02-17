@@ -1,17 +1,36 @@
 import { Button } from '@/components/ui/button';
 
-import { ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Hero() {
     return (
-        <div className="h-screen w-full flex flex-col justify-center items-center">
-            <h1 className="text-6xl font-bold m-32">
-                Lyst på noe for deg selv?
+        <div className="h-[110vh] w-full flex flex-col justify-center items-center relative overflow-x-hidden">
+            <Image
+                src="/kontoret.jpg"
+                alt="Hero"
+                width="800"
+                height="800"
+                className="-left-32 hover:-left-8 hover:scale-105 transition-all duration-300 border -translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-full shadow"
+            />
+            <Image
+                src="/soundboks2.jpg"
+                alt="Hero"
+                width="800"
+                height="800"
+                className="-right-24 border hover:right-0 hover:scale-105 transition-all duration-300 translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-full shadow"
+            />
+            <h1 className="text-5xl md:text-7xl font-bold mx-auto text-center">
+                Book TIHLDEs <br /> lokaler og utstyr
             </h1>
-            <div>
+            <p className="text-lg md:text-xl mt-8 mb-12 text-center text-muted-foreground">
+                Her kan du booke kontoret, soundbox og utstyr, <br />
+                om du er medlem i TIHLDE.
+            </p>
+            <div className="flex items-center">
                 <Button className="m-2 p-8 text-lg group">
+                    <ArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform duration-150" />
                     Reserver kontoret{' '}
-                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-150" />
                 </Button>
                 <Button className="m-2 p-8 text-lg group" variant="outline">
                     Reserver soundbox

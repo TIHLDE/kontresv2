@@ -1,7 +1,7 @@
 'use server';
 
 import { IFetch } from './fetch';
-import { DetailedReservation, Reservations } from './types';
+import { DetailedItem, DetailedReservation, Reservations } from './types';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -27,6 +27,15 @@ export const getReservation = (uuid: string) => {
 export const getReservations = () => {
     return IFetch<Reservations>({
         url: `${baseUrl}/kontres/reservations`,
+        config: {
+            method: 'GET',
+        },
+    });
+};
+
+export const getBookableItem = (id: string) => {
+    return IFetch<DetailedItem>({
+        url: `${baseUrl}/kontres/bookable_items/` + id,
         config: {
             method: 'GET',
         },

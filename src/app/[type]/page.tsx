@@ -1,5 +1,8 @@
 import Calendar from '../../components/ui/calendar/calendar';
-import { getReservations } from '../../utils/apis/reservations';
+import {
+    getBookableItem,
+    getReservations,
+} from '../../utils/apis/reservations';
 
 interface PageProps {
     params: {
@@ -8,13 +11,18 @@ interface PageProps {
 }
 export default async function Page({ params: { type } }: PageProps) {
     let { reservations } = await getReservations();
-    console.log(reservations);
+    let item = await getBookableItem(type);
+    console.log('item', item);
     reservations = reservations.filter(
         (booking) => type === booking.bookable_item,
     );
     return (
         <div className="pt-20">
-            <Calendar type={type} reservations={reservations} />
+            <Calendar
+                typeUUID={type}
+                name={item.name}
+                reservations={reservations}
+            />
         </div>
     );
 }

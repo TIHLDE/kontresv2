@@ -32,10 +32,10 @@ export default async function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <Header userData={userData} className="md:flex hidden" />
+                    <Header userData={userData} className="lg:flex hidden" />
                     {children}
                     <BottomBar
-                        className="fixed bottom-0 md:hidden"
+                        className="fixed bottom-0 lg:hidden"
                         user={userData}
                     />
                     <Footer />

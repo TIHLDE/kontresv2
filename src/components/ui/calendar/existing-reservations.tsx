@@ -1,11 +1,16 @@
 import { DetailedReservation } from '../../../utils/apis/types';
 import ReservationShard from './reservation-shard';
 import {
+    add,
     differenceInMinutes,
     getDay,
     getHours,
-    getWeek,
-    getYear,
+    isSameDay,
+    isSameWeek,
+    setHours,
+    setMinutes,
+    setSeconds,
+    startOfDay,
 } from 'date-fns';
 
 interface ExistingReservationsProps {
@@ -21,41 +26,55 @@ export default function ExistingReservations({
     reservations,
     setRelativeMousePosition,
 }: ExistingReservationsProps) {
-    return reservations.map((reservation, index) => {
+    let reservationShards = [];
+
+    for (let reservation of reservations) {
         let start = new Date(reservation.start_time);
         let end = new Date(reservation.end_time);
 
-        if (
-            view === 'week' &&
-            !(
-                getWeek(start) == getWeek(currentDay) &&
-                getYear(start) == getYear(currentDay)
-            )
-        ) {
-            return null;
+        while (true) {
+            if (isSameDay(start, end)) {
+                reservationShards.push({
+                    start,
+                    end,
+                    reservation,
+                });
+                break;
+            } else {
+                reservationShards.push({
+                    start,
+                    end: setHours(setMinutes(setSeconds(start, 59), 59), 23),
+                    reservation,
+                });
+                start = add(startOfDay(start), { days: 1 });
+            }
         }
+    }
 
-        if (
-            view === 'day' &&
-            !(
-                start.getDate() == currentDay.getDate() &&
-                start.getMonth() == currentDay.getMonth() &&
-                start.getFullYear() == currentDay.getFullYear()
-            )
-        ) {
-            return null;
+    reservationShards = reservationShards.filter((reservation) => {
+        console.log('res', reservation);
+        let start = new Date(reservation.reservation!.start_time);
+        let end = new Date(reservation.reservation!.end_time);
+
+        if (view === 'week') {
+            return isSameWeek(start, currentDay);
+        } else {
+            return isSameDay(start, currentDay);
         }
+    });
 
+    return reservationShards.map((res, index) => {
+        let { start, end, reservation } = res;
         return (
             <ReservationShard
                 setRelativeMousePosition={setRelativeMousePosition}
-                top={48 * getHours(start) + 'px'}
-                left={(100 / 7) * getDay(start) + '%'}
+                top={(getHours(start) * 100) / 23 + '%'}
+                left={(100 / 7) * (getDay(start) - 1) + '%'}
                 color="red"
                 key={index}
                 width={100 / 7 + '%'}
-                height={differenceInMinutes(end, start) / 1440 + '%'}
-                reservation={reservation}
+                height={(differenceInMinutes(end, start) * 100) / 1440 + '%'}
+                reservation={reservation!}
             />
         );
     });

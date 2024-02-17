@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import {
     Select,
     SelectContent,
@@ -25,14 +26,21 @@ import {
 } from '@/lib/utils';
 import { add, format, setHours, setMinutes, startOfWeek } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
+import { PlusIcon } from 'lucide-react';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 interface CalendarProps {
-    type: String;
+    typeUUID: string;
+    name: String;
     reservations: DetailedReservation[];
 }
 
-export default function Calendar({ reservations, type }: CalendarProps) {
+export default function Calendar({
+    reservations,
+    name,
+    typeUUID,
+}: CalendarProps) {
     const [relativeMousePosition, setRelativeMousePosition] =
         useState<RelativeMousePositionProps | null>(null);
     const [dragStart, setDragStart] =
@@ -135,119 +143,131 @@ export default function Calendar({ reservations, type }: CalendarProps) {
     }
 
     return (
-        <div
-            className="w-full max-w-7xl flex flex-col mx-auto cursor-pointer select-none p-4"
-            onMouseDown={scrollAtEnds}
-        >
-            <div className="flex justify-end pt-4">
-                <Select
-                    value={view}
-                    onValueChange={(val: 'day' | 'week') => setView(val)}
-                >
-                    <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Visningsmodus" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="day">Dagsvisning</SelectItem>
-                        <SelectItem value="week">Ukesvisning</SelectItem>
-                    </SelectContent>
-                </Select>
-            </div>
-            {view === 'day' ? (
-                <CalendarDayView
-                    resetChoice={resetChoice}
-                    currentDay={currentDay}
-                    setCurrentDay={setCurrentDay}
-                />
-            ) : (
-                <CalendarWeekView
-                    resetChoice={resetChoice}
-                    currentDay={currentDay}
-                    setCurrentDay={setCurrentDay}
-                />
-            )}
+        <>
             <div
-                className="grid grid-cols-7 relative h-full rounded-md border box-border"
-                onMouseMove={updateRelativeMousePosition}
-                onMouseLeave={(e) => {
-                    setRelativeMousePosition(null);
-                    if (dragStart && !dragEnd) {
-                        updateDragEnd(e);
-                    }
-                }}
-                onMouseDown={updateDragStart}
-                onMouseUp={updateDragEnd}
+                className="w-full max-w-7xl flex flex-col mx-auto cursor-pointer select-none p-4"
+                onMouseDown={scrollAtEnds}
             >
-                {relativeMousePosition && (
-                    <CalendarTimePopover
-                        timeStart={
-                            dragStart && !dragEnd
-                                ? `${leftPad(dragStart.hours, 2)}:${leftPad(
-                                      dragStart.minutes,
-                                      2,
-                                  )}`
-                                : `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                                      relativeMousePosition.minutes,
-                                      2,
-                                  )}`
-                        }
-                        timeEnd={
-                            dragStart && !dragEnd
-                                ? `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                                      relativeMousePosition.minutes,
-                                      2,
-                                  )}`
-                                : null
-                        }
-                        position={{
-                            x: relativeMousePosition.x,
-                            y: relativeMousePosition.y,
-                        }}
-                        day={
-                            view == 'week'
-                                ? weekDays[relativeMousePosition.day]
-                                : format(currentDay, 'EEEE', { locale: nb })
-                        }
+                <div className="flex justify-between pt-4 w-full items-center">
+                    <h1 className="text-xl font-semibold">{name}</h1>
+                    <Select
+                        value={view}
+                        onValueChange={(val: 'day' | 'week') => setView(val)}
+                    >
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Visningsmodus" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="day">Dagsvisning</SelectItem>
+                            <SelectItem value="week">Ukesvisning</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                {view === 'day' ? (
+                    <CalendarDayView
+                        resetChoice={resetChoice}
+                        currentDay={currentDay}
+                        setCurrentDay={setCurrentDay}
                     />
-                )}
-                <PossiblePlaceholder
-                    dragStart={dragStart!}
-                    view={view}
-                    relativeMousePosition={relativeMousePosition!}
-                    visible={
-                        (!dragEnd &&
-                            dragStart &&
-                            relativeMousePosition) as boolean
-                    }
-                />
-                <ExistingReservations
-                    setRelativeMousePosition={setRelativeMousePosition}
-                    currentDay={currentDay}
-                    view={view}
-                    reservations={reservations}
-                />
-                <PossibleBooking
-                    startDate={startDate}
-                    endDate={endDate}
-                    dragStart={dragStart!}
-                    dragEnd={dragEnd!}
-                    setRelativeMousePosition={setRelativeMousePosition}
-                    setEndDate={setEndDate}
-                    setStartDate={setStartDate}
-                    view={view}
-                />
-                {view == 'week' ? (
-                    weekDays.map((_, index) => (
-                        <CalendarDay key={index} index={index} />
-                    ))
                 ) : (
-                    <CalendarDay
-                        className={'w-full col-span-7 border-none'}
-                        key={0}
-                        index={0}
+                    <CalendarWeekView
+                        resetChoice={resetChoice}
+                        currentDay={currentDay}
+                        setCurrentDay={setCurrentDay}
                     />
                 )}
+                <div
+                    className="grid grid-cols-7 relative h-full rounded-md border box-border"
+                    onMouseMove={updateRelativeMousePosition}
+                    onMouseLeave={(e) => {
+                        setRelativeMousePosition(null);
+                        if (dragStart && !dragEnd) {
+                            updateDragEnd(e);
+                        }
+                    }}
+                    onMouseDown={updateDragStart}
+                    onMouseUp={updateDragEnd}
+                >
+                    {relativeMousePosition && (
+                        <CalendarTimePopover
+                            timeStart={
+                                dragStart && !dragEnd
+                                    ? `${leftPad(dragStart.hours, 2)}:${leftPad(
+                                          dragStart.minutes,
+                                          2,
+                                      )}`
+                                    : `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
+                                          relativeMousePosition.minutes,
+                                          2,
+                                      )}`
+                            }
+                            timeEnd={
+                                dragStart && !dragEnd
+                                    ? `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
+                                          relativeMousePosition.minutes,
+                                          2,
+                                      )}`
+                                    : null
+                            }
+                            position={{
+                                x: relativeMousePosition.x,
+                                y: relativeMousePosition.y,
+                            }}
+                            day={
+                                view == 'week'
+                                    ? weekDays[relativeMousePosition.day]
+                                    : format(currentDay, 'EEEE', { locale: nb })
+                            }
+                        />
+                    )}
+                    <PossiblePlaceholder
+                        dragStart={dragStart!}
+                        view={view}
+                        relativeMousePosition={relativeMousePosition!}
+                        visible={
+                            (!dragEnd &&
+                                dragStart &&
+                                relativeMousePosition) as boolean
+                        }
+                    />
+                    <ExistingReservations
+                        setRelativeMousePosition={setRelativeMousePosition}
+                        currentDay={currentDay}
+                        view={view}
+                        reservations={reservations}
+                    />
+                    <PossibleBooking
+                        startDate={startDate}
+                        endDate={endDate}
+                        dragStart={dragStart!}
+                        dragEnd={dragEnd!}
+                        setRelativeMousePosition={setRelativeMousePosition}
+                        setEndDate={setEndDate}
+                        setStartDate={setStartDate}
+                        view={view}
+                        typeUUID={typeUUID}
+                    />
+                    {view == 'week' ? (
+                        weekDays.map((_, index) => (
+                            <CalendarDay key={index} index={index} />
+                        ))
+                    ) : (
+                        <CalendarDay
+                            className={'w-full col-span-7 border-none'}
+                            key={0}
+                            index={0}
+                        />
+                    )}
+                </div>
             </div>
-        </div>
+            <Link href="/booking">
+                <Button className="fixed bottom-12 right-12 h-20 w-20 rounded-full">
+                    <PlusIcon
+                        size={24}
+                        className="text-white fill-white stroke-white"
+                    />
+                </Button>
+            </Link>
+        </>
     );
 }

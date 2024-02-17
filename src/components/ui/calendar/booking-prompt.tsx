@@ -13,6 +13,7 @@ export default function PossibleBooking({
     setStartDate,
     endDate,
     setEndDate,
+    typeUUID,
 }: {
     dragStart: RelativeMousePositionProps;
     dragEnd: RelativeMousePositionProps;
@@ -22,15 +23,17 @@ export default function PossibleBooking({
     setStartDate: (e: Date) => void;
     endDate: Date | null;
     setEndDate: (e: Date) => void;
+    typeUUID: string;
 }) {
     const router = useRouter();
     function buildUrl() {
         return (
-            'booking?start=' +
+            'booking?from=' +
             format(startDate!, 'PPP HH:mm:ss') +
-            '&end=' +
+            '&to=' +
             format(endDate!, 'PPP HH:mm:ss') +
-            '&type=soundboks'
+            '&itemUUID=' +
+            typeUUID
         );
     }
     return (
@@ -59,25 +62,18 @@ export default function PossibleBooking({
                     >
                         <div className="text-sm text-neutral-500">Start:</div>
                         <DateTimePicker
-                            value={format(
-                                startDate || new Date(),
-                                'PPP HH:mm:ss',
-                            )}
+                            initialDate={startDate || new Date()}
                             className="mb-4 w-full"
                             onChange={(e) => {
                                 setStartDate(
                                     toDate(e.target.value) || new Date(),
                                 );
-                                console.log(e.target.value);
                             }}
                         />
                         <div className="text-sm text-neutral-500">Slutt:</div>
                         <DateTimePicker
                             className="mb-4 w-full"
-                            value={format(
-                                endDate || new Date(),
-                                'PPP HH:mm:ss',
-                            )}
+                            initialDate={endDate || new Date()}
                             onChange={(e) =>
                                 setEndDate(toDate(e.target.value) || new Date())
                             }

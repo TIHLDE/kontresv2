@@ -11,14 +11,14 @@ export default function Hero() {
                 alt="Hero"
                 width="800"
                 height="800"
-                className="-left-32 hover:-left-8 hover:scale-105 transition-all duration-300 border -translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-full shadow"
+                className="-left-48 hover:-left-0 hover:shadow-2xl hover:scale-105 transition-all duration-300 border -translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-2xl shadow"
             />
             <Image
                 src="/soundboks2.jpg"
                 alt="Hero"
                 width="800"
                 height="800"
-                className="-right-24 border hover:right-0 hover:scale-105 transition-all duration-300 translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-full shadow"
+                className="-right-48 border hover:right-0 hover:shadow-2xl hover:scale-105 transition-all duration-300 translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-2xl shadow"
             />
             <h1 className="text-5xl md:text-7xl font-bold mx-auto text-center">
                 Book TIHLDEs <br /> lokaler og utstyr

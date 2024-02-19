@@ -17,7 +17,7 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from './drawer';
-import ThemeToggleButton from './theme-toggle-button';
+import { ThemeToggleButton } from './theme-toggle-button';
 import { useTheme } from 'next-themes';
 
 interface ModeToggleProps extends ButtonProps {
@@ -30,7 +30,10 @@ export function MobileModeToggle({ className, ...props }: ButtonProps) {
     return (
         <>
             <Drawer>
-                <DrawerTrigger>{/* <ThemeToggleButton /> */}</DrawerTrigger>
+                <DrawerTrigger>
+                    {' '}
+                    <ThemeToggleButton />
+                </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
                         <DrawerTitle>Velg fargetema</DrawerTitle>
@@ -74,7 +77,7 @@ export function ModeToggle({ className, mobile, ...props }: ModeToggleProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <ThemeToggleButton />
+                <ThemeToggleButton {...props} />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setTheme('light')}>

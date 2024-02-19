@@ -1,4 +1,5 @@
 import { DetailedReservation } from '../../../utils/apis/types';
+import Link from 'Next/link';
 
 function hexColorFromUUID(uuid: string) {
     let hash = 0;
@@ -27,21 +28,8 @@ export default function ReservationShard({
     setRelativeMousePosition: (e: any) => void;
 }) {
     return (
-        <div
-            onMouseEnter={(e) => e.stopPropagation()}
-            onMouseOver={(e) => e.stopPropagation()}
-            onMouseLeave={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setRelativeMousePosition(null);
-            }}
-            onMouseDown={(e) => e.stopPropagation()}
-            onMouseUp={(e) => e.stopPropagation()}
-            onMouseMove={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setRelativeMousePosition(null);
-            }}
+        <Link
+            href={'/reservation/' + reservation.id}
             className="absolute rounded-md shadow-lg border z-10"
             style={{
                 top: top,
@@ -51,7 +39,24 @@ export default function ReservationShard({
                 backgroundColor: hexColorFromUUID(reservation.id),
             }}
         >
-            <div className="text-xs text-white"></div>
-        </div>
+            <div
+                onMouseEnter={(e) => e.stopPropagation()}
+                onMouseOver={(e) => e.stopPropagation()}
+                onMouseLeave={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setRelativeMousePosition(null);
+                }}
+                onMouseDown={(e) => e.stopPropagation()}
+                onMouseUp={(e) => e.stopPropagation()}
+                onMouseMove={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setRelativeMousePosition(null);
+                }}
+            >
+                <div className="text-xs text-white"></div>
+            </div>
+        </Link>
     );
 }

@@ -3,6 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { LoadingSpinner } from "@/components/ui/loadingspinner"
 import AutoSelect, { SelectGroupType, SelectOptionType } from "@/components/ui/select"
 import { DetailedItem } from "@/utils/apis/types"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -31,7 +32,7 @@ export type EventFormValueTypes = z.infer<typeof formSchema>
 type ReservationFormFieldsType = {
     items: DetailedItem[];
     initialData?: Partial<z.infer<typeof formSchema>>;
-    onSubmit: (values: EventFormValueTypes) => void;
+    onSubmit: (values: EventFormValueTypes) => Promise<unknown>;
     groups?: SelectOptionType[] | SelectGroupType[];
     groupChangeCallback: Dispatch<SetStateAction<string>>
 }
@@ -48,6 +49,7 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
             application_on_behalf: "0",
         }
     })
+
 
     return (
         <Form {...form}>
@@ -163,8 +165,10 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
                     )}
                 />
 
+
+                {/* Why does the form isLoading state not work?????? FIXME pls */}
                 <div className="mt-5">
-                    <Button type="submit" className="w-full">Reserver</Button>
+                    <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>{form.formState.isLoading ? <LoadingSpinner /> : "Reserver"}</Button>
                 </div>
             </form>
         </Form>

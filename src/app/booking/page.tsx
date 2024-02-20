@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import EventForm from "./components/ReservationForm";
+import ReservationForm from "./components/ReservationForm";
 import { getItems } from "@/utils/apis/items";
 import { DetailedItem } from "@/utils/apis/types";
 import { getCurrentUserData } from "@/utils/apis/user";
@@ -12,19 +12,19 @@ export default async function Page() {
 
     return (
         <div className="max-w-page mx-auto h-screen mt-16">
-            <h1 className="font-semibold my-5 text-3xl w-fit mx-auto md:mx-0">Reserver en gjenstand</h1>
-            <Card className="p-4">
-                <EventForm items={items} />
+            <Card className="p-4 w-fit mx-auto">
+                <h1 className="font-semibold my-3 text-3xl w-fit mx-auto">Reserver en gjenstand</h1>
+                <ReservationForm items={items} />
 
                 <div className="mt-10">
-                    <p>Sender inn forespørsel som</p>
-                    <Card className="p-2 md:w-fit w-full">
+                    <p className="w-full text-center">Sender inn forespørsel som</p>
+                    <Card className="p-2 w-fit mx-auto">
                         <div className="flex gap-5 items-center">
-                            <Avatar>
+                            <Avatar className="rounded-lg">
                                 <AvatarImage src={userData.image} alt="Profililde" />
                                 <AvatarFallback><UserRound className="text-foreground" /></AvatarFallback>
                             </Avatar>
-                            <h2>{ userData.first_name }</h2>
+                            <h2>{userData.first_name}</h2>
                         </div>
                     </Card>
                 </div>

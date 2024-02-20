@@ -18,7 +18,7 @@ type EventFormType = {
 /**
  * Parent wrapper for the entire reservation form
  */
-const EventForm = ({ items }: EventFormType) => {
+const ReservationForm = ({ items }: EventFormType) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorAlertMessage, setErrorAlertMessage] = useState<string>();
@@ -38,6 +38,7 @@ const EventForm = ({ items }: EventFormType) => {
     const defaultItem = items.filter(a => a.id == itemUUID).length > 0 ? itemUUID : items[0].id
 
     const onSubmit = async (values: EventFormValueTypes) => {
+        alert(values.accepted_rules);
         formValues.current = values;
         setAlertOpen(true);
     }
@@ -105,4 +106,4 @@ const EventForm = ({ items }: EventFormType) => {
     )
 }
 
-export default EventForm;
+export default ReservationForm;

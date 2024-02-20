@@ -46,12 +46,6 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const onSubmit = async (values: EventFormValueTypes) => {
         formValues.current = values;
         setAlertOpen(true);
-
-        /* 
-            Tried returning a promise from the onsubmit function to the form, but the form 
-            still didn't recognize that it should set isSubmitting to true. I have no idea
-            what to do. 
-        */
     }
 
     // Shows an error dialog if the form submit process went wrong

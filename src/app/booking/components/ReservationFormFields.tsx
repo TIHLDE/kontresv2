@@ -108,6 +108,9 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
                                     {...field}
                                 />
                             </FormControl>
+                            <FormDescription>
+                                Du kan kun sende inn forespørsler på vegne av grupper du er medlem av
+                            </FormDescription>
                         </FormItem>
                     )}
                 />
@@ -168,7 +171,7 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
 
                 {/* Why does the form isLoading state not work?????? FIXME pls */}
                 <div className="mt-5">
-                    <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>{form.formState.isLoading ? <LoadingSpinner /> : "Reserver"}</Button>
+                    <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? <LoadingSpinner /> : "Reserver"}</Button>
                 </div>
             </form>
         </Form>

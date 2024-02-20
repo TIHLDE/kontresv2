@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { ComboBox } from "@/components/ui/combobox"
 import { DateTimePicker } from "@/components/ui/date-time-picker"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import AutoSelect from "@/components/ui/select"
+import AutoSelect, { SelectGroupType, SelectOptionType } from "@/components/ui/select"
 import { DetailedItem } from "@/utils/apis/types"
 import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
+import { Dispatch, SetStateAction } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
@@ -31,12 +32,14 @@ type ReservationFormFieldsType = {
     items: DetailedItem[];
     initialData?: Partial<z.infer<typeof formSchema>>;
     onSubmit: (values: EventFormValueTypes) => void;
+    groups?: SelectOptionType[] | SelectGroupType[];
+    groupChangeCallback: Dispatch<SetStateAction<string>>
 }
 
 /**
  * Component that contains all of the fields that belong to the reservation form.
  */
-const ReservationFormFields = ({ initialData, items, onSubmit }: ReservationFormFieldsType) => {
+const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback, onSubmit }: ReservationFormFieldsType) => {
     const form = useForm<EventFormValueTypes>({
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
@@ -93,10 +96,13 @@ const ReservationFormFields = ({ initialData, items, onSubmit }: ReservationForm
                             <FormLabel>Send inn søknad på vegne av</FormLabel>
                             <FormControl>
                                 <AutoSelect
-                                    options={[{ label: "Meg selv", value: "0" }, { label: "Index", value: "1" }, { label: "Hovedstyret", value: "2" }]}
+                                    options={groups ?? []}
                                     placeholder="Velg et alternativ"
                                     defaultValue="0"
-                                    onValueChange={field.onChange}
+                                    onValueChange={(e) => {
+                                        groupChangeCallback(e);
+                                        field.onChange(e);
+                                    }}
                                     {...field}
                                 />
                             </FormControl>
@@ -151,7 +157,7 @@ const ReservationFormFields = ({ initialData, items, onSubmit }: ReservationForm
                                 }} />
                             </FormControl>
                             <FormLabel>
-                                Jeg godtar vilkårene for bruk og utlån av TIHLDEs eiendeler
+                                Jeg godtar <Link href={"https://tihlde.org/wiki/tihlde/lover-og-regler/"} className="font-bold underline">vilkårene for bruk og utlån av TIHLDEs eiendeler</Link>
                             </FormLabel>
                         </FormItem>
                     )}

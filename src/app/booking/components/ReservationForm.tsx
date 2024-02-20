@@ -1,28 +1,34 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { DetailedItem } from "@/utils/apis/types";
+import { DetailedItem, Membership } from "@/utils/apis/types";
 import { EventFormFields, EventFormValueTypes } from "@/app/booking/components/ReservationFormFields";
 import { AlertDialogAction, AlertDialogCancel, AutoAlertDialog } from "@/components/ui/alert-dialog";
 import { useRef, useState } from "react";
 import { createReservation } from "@/utils/apis/reservations";
 import { ErrorType } from "@/utils/apis/fetch";
+import { User } from "@/types/User";
+import ApplicantCard from "./ApplicantCard";
 
 
 
 type EventFormType = {
     items: DetailedItem[];
+    groups: Membership[];
+    user: User;
 }
 
 
 /**
  * Parent wrapper for the entire reservation form
  */
-const ReservationForm = ({ items }: EventFormType) => {
+const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorAlertMessage, setErrorAlertMessage] = useState<string>();
     const [successOpen, setSuccessOpen] = useState(false);
+    const [selectedGroup, setSelectedGroup] = useState("0");
+
 
     const formValues = useRef<EventFormValueTypes>();
 
@@ -75,6 +81,19 @@ const ReservationForm = ({ items }: EventFormType) => {
         });
     }
 
+    const formGroups = [{
+        label: "Meg selv",
+        value: "0"
+    }]
+
+    groups.forEach(group => {
+        formGroups.push(
+            {
+                label: group.group.name,
+                value: group.group.name
+            })
+    })
+
     return (
         <>
             <AutoAlertDialog open={successOpen} title="Gratulerer!" description="Reservasjonen er blitt lagt inn 🥳" footerButtons={
@@ -100,12 +119,23 @@ const ReservationForm = ({ items }: EventFormType) => {
                     }}>Prøv på nytt</AlertDialogAction>
                 </>
             } />
+
             <EventFormFields initialData={{
                 item: defaultItem ?? '',
                 from: new Date(from ?? ''),
                 to: new Date(to ?? '')
 
-            }} items={items} onSubmit={onSubmit} />
+            }}
+                items={items}
+                groups={formGroups}
+                onSubmit={onSubmit}
+                groupChangeCallback={setSelectedGroup}
+            />
+
+            <ApplicantCard image={selectedGroup != "0" ? groups.find(group => group.group.name === selectedGroup)?.group.image ?? '' : user.image} label={
+                selectedGroup != "0" ? groups.find(group => group.group.name === selectedGroup)?.group.name ?? '' : user.first_name
+            } />
+
         </>
     )
 }

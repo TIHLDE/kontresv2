@@ -38,7 +38,6 @@ const ReservationForm = ({ items }: EventFormType) => {
     const defaultItem = items.filter(a => a.id == itemUUID).length > 0 ? itemUUID : items[0].id
 
     const onSubmit = async (values: EventFormValueTypes) => {
-        alert(values.accepted_rules);
         formValues.current = values;
         setAlertOpen(true);
     }
@@ -101,7 +100,12 @@ const ReservationForm = ({ items }: EventFormType) => {
                     }}>Prøv på nytt</AlertDialogAction>
                 </>
             } />
-            <EventFormFields initialItem={defaultItem ?? ""} items={items} onSubmit={onSubmit} />
+            <EventFormFields initialData={{
+                item: defaultItem ?? '',
+                from: new Date(from ?? ''),
+                to: new Date(to ?? '')
+
+            }} items={items} onSubmit={onSubmit} />
         </>
     )
 }

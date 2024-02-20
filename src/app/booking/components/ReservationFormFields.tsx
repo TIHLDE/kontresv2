@@ -28,20 +28,20 @@ const formSchema = z.object({
 export type EventFormValueTypes = z.infer<typeof formSchema>
 
 type ReservationFormFieldsType = {
-    initialItem: string;
     items: DetailedItem[];
+    initialData?: Partial<z.infer<typeof formSchema>>;
     onSubmit: (values: EventFormValueTypes) => void;
 }
 
 /**
  * Component that contains all of the fields that belong to the reservation form.
  */
-const ReservationFormFields = ({ initialItem, items, onSubmit }: ReservationFormFieldsType) => {
+const ReservationFormFields = ({ initialData, items, onSubmit }: ReservationFormFieldsType) => {
     const form = useForm<EventFormValueTypes>({
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
         defaultValues: {
-            item: initialItem as string,
+            item: initialData?.item,
             application_on_behalf: "0",
         }
     })
@@ -118,7 +118,7 @@ const ReservationFormFields = ({ initialItem, items, onSubmit }: ReservationForm
                                             value: item.id
                                         }
                                     ))
-                                )} placeholder={"Velg en gjenstand"} defaultValue={initialItem as string} onValueChange={field.onChange}{...field} className="w-full" />
+                                )} placeholder={"Velg en gjenstand"} defaultValue={initialData?.item as string} onValueChange={field.onChange}{...field} className="w-full" />
                             </FormControl>
                         </FormItem>
                     )}

@@ -42,6 +42,7 @@ const ReservationFormFields = ({ initialItem, items, onSubmit }: ReservationForm
         shouldUnregister: false,
         defaultValues: {
             item: initialItem as string,
+            application_on_behalf: "0",
         }
     })
 
@@ -91,9 +92,13 @@ const ReservationFormFields = ({ initialItem, items, onSubmit }: ReservationForm
                         <FormItem className="my-2">
                             <FormLabel>Send inn søknad på vegne av</FormLabel>
                             <FormControl>
-                                <ComboBox items={[{ label: "Meg selv", value: "0" }, { label: "Index", value: "1" }]} buttonProps={{
-                                    className: "flex space-y-1 w-full"
-                                }} placeholder="Meg selv" />
+                                <AutoSelect
+                                    options={[{ label: "Meg selv", value: "0" }, { label: "Index", value: "1" }, { label: "Hovedstyret", value: "2" }]}
+                                    placeholder="Velg et alternativ"
+                                    defaultValue="0"
+                                    onValueChange={field.onChange}
+                                    {...field}
+                                />
                             </FormControl>
                         </FormItem>
                     )}

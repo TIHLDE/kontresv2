@@ -1,5 +1,7 @@
 import { Button } from '@/components/ui/button';
 
+import WelcomeTitle from "@/app/components/welcometitle";
+
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
@@ -20,9 +22,7 @@ export default function Hero() {
                 height="800"
                 className="-right-48 border hover:right-0 hover:shadow-2xl hover:scale-105 transition-all duration-300 translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-2xl shadow"
             />
-            <h1 className="text-5xl md:text-7xl font-bold mx-auto text-center">
-                Book TIHLDEs <br /> lokaler og utstyr
-            </h1>
+            <WelcomeTitle />
             <p className="text-lg md:text-xl mt-8 mb-12 text-center text-muted-foreground">
                 Her kan du booke kontoret, soundbox og utstyr, <br />
                 om du er medlem i TIHLDE.

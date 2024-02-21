@@ -1,0 +1,28 @@
+@property --position {
+    syntax: '<percentage>';
+    initial-value: 0%;
+    inherits: false;
+}
+
+@keyframes slide-in {
+    to {
+        --position: 100%;
+    }
+}
+
+
+.title {
+    background: -webkit-linear-gradient(16deg,#4285f4 calc(var(--position) - 100%),
+    #9b72cb calc(var(--position) - 91%),#d96570 calc(var(--position) - 80%),
+    #d96570 calc(var(--position) - 76%),#9b72cb calc(var(--position) - 65%),
+    #4285f4 calc(var(--position) - 56%),#d96570 calc(var(--position) - 50%),
+    #d96570 calc(var(--position) - 44%),theme('colors.background') calc(var(--position) - 25%),
+    theme('colors.background') var(--position));
+
+    animation: slide-in 3s ease-in-out both;
+
+    -webkit-text-fill-color: transparent;
+    background-size: 400% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+}

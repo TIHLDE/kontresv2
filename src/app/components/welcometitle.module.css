@@ -1,15 +1,19 @@
-@property --position {
-    syntax: '<percentage>';
-    initial-value: 0%;
-    inherits: false;
-}
+
 
 @keyframes slide-in {
+    from {
+        --position: 0%;
+    }
     to {
         --position: 100%;
     }
 }
 
+@property --position {
+    syntax: "<percentage>";
+    initial-value: 0%;
+    inherits: false;
+}
 
 .title {
     background: -webkit-linear-gradient(16deg,#4285f4 calc(var(--position) - 100%),

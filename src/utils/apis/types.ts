@@ -7,6 +7,7 @@ export type DetailedReservation = {
   description: string;
   created_at: string;
   author: string;
+  group: string;
 };
 
 export type DetailedItem = {

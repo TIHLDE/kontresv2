@@ -64,12 +64,14 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
 
     const submitReservation = () => {
         const values = formValues.current;
+        const group = values?.application_on_behalf === "0" ? undefined : values?.application_on_behalf;
         // Use the values stored in the state hook
         createReservation({
             bookable_item: values?.item as string,
             description: values?.description as string,
             start_time: values?.from.toISOString() as string,
             end_time: values?.to.toISOString() as string,
+            group: group as string,
         }).then(res => {
             showSuccess();
         }).catch(err => {

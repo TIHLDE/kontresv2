@@ -9,6 +9,25 @@
     }
 }
 
+@keyframes text-slide {
+    from {
+        transform: translateX(-1rem);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 @property --position {
     syntax: "<percentage>";
     initial-value: 0%;
@@ -23,10 +42,14 @@
     #d96570 calc(var(--position) - 44%),theme('colors.background') calc(var(--position) - 25%),
     theme('colors.background') var(--position));
 
-    animation: slide-in 3s ease-in-out -.8s both;
+    animation: slide-in 3s ease-in-out -.8s both, text-slide .5s ease-out both .2s;
 
     -webkit-text-fill-color: transparent;
     background-size: 400% 100%;
     background-clip: text;
     -webkit-background-clip: text;
+}
+
+.action {
+    animation: fade-in .5s ease-in-out .8s both;
 }

@@ -23,7 +23,7 @@
     #d96570 calc(var(--position) - 44%),theme('colors.background') calc(var(--position) - 25%),
     theme('colors.background') var(--position));
 
-    animation: slide-in 3s ease-in-out both;
+    animation: slide-in 3s ease-in-out -.8s both;
 
     -webkit-text-fill-color: transparent;
     background-size: 400% 100%;

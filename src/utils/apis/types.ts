@@ -1,6 +1,6 @@
 export type DetailedReservation = {
   id: string;
-  bookable_item: string;
+  bookable_item: Item;
   start_time: string;
   end_time: string;
   state: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
@@ -9,6 +9,12 @@ export type DetailedReservation = {
   author: string;
   group: string;
 };
+
+export type Item = {
+  id: string;
+  name: string;
+  description: string;
+}
 
 export type DetailedItem = {
   id: string;

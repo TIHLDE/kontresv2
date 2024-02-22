@@ -38,7 +38,7 @@ export const getReservations = () => {
  * 
  * @returns Reservation details
  */
-export const createReservation = ({...rest}: Omit<DetailedReservation, 'state' | 'created_at' | 'author' | 'id'>) => {
+export const createReservation = ({ ...rest }: Omit<DetailedReservation, 'state' | 'created_at' | 'author' | 'id' | 'bookable_item'> & { bookable_item: { id: string } }) => {
   const body = {
       ...rest,
     author: "index"

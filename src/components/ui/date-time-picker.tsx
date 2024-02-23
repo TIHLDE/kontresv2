@@ -26,7 +26,6 @@ export function DateTimePicker({
         initialDate ||
         (typeof value !== 'undefined' ? new Date(value as string) : null),
     );
-    console.log('date', date);
     const handleDateChange = (newDate?: Date) => {
         if (!newDate) return;
         setDate(newDate);

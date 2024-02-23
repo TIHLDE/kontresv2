@@ -3,11 +3,13 @@ export type DetailedReservation = {
   bookable_item_detail: DetailedItem;
   start_time: string;
   end_time: string;
-  state: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
+  state: ReservationState;
   description: string;
   author_detail: User;
   group_detail: BaseGroup | undefined;
 } & BaseModel;
+
+export type ReservationState = 'CONFIRMED' | 'PENDING' | 'CANCELLED';
 
 export type PostReservation = {
   bookable_item: string;

@@ -33,7 +33,9 @@ export default async function RootLayout({
                     disableTransitionOnChange
                 >
                     <Header userData={userData} className="lg:flex hidden" />
-                    {children}
+                    <div className='py-24'>
+                        {children}
+                    </div>
                     <BottomBar
                         className="fixed bottom-0 lg:hidden"
                         user={userData}

@@ -17,51 +17,36 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from './drawer';
-import { ThemeToggleButton } from './theme-toggle-button';
 import { useTheme } from 'next-themes';
+import React from 'react';
+import { MoonIcon, SunIcon } from 'lucide-react';
 
 interface ModeToggleProps extends ButtonProps {
     mobile?: boolean;
 }
 
-export function MobileModeToggle({ className, ...props }: ButtonProps) {
+export function MobileModeToggle({ ...props }: ButtonProps) {
     const { setTheme } = useTheme();
 
     return (
         <>
             <Drawer>
-                <DrawerTrigger>
-                    {' '}
-                    <ThemeToggleButton />
+                <DrawerTrigger asChild>
+                    <ThemeToggleButton {...props} />
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
                         <DrawerTitle>Velg fargetema</DrawerTitle>
                     </DrawerHeader>
 
-                    <div className="flex flex-col gap-3 px-4">
-                        <Button
-                            variant="outline"
-                            onClick={() => setTheme('light')}
-                        >
-                            Light
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() => setTheme('dark')}
-                        >
-                            Dark
-                        </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() => setTheme('system')}
-                        >
-                            System
-                        </Button>
+                    <div className="flex flex-col gap-3 px-4" >
+                        <Button variant="outline" onClick={() => setTheme("light")}>Light</Button>
+                        <Button variant="outline" onClick={() => setTheme("dark")}>Dark</Button>
+                        <Button variant="outline" onClick={() => setTheme("system")}>System</Button>
                     </div>
 
                     <DrawerFooter>
-                        <DrawerClose>
+                        <DrawerClose asChild>
                             <Button className="w-full">Lukk</Button>
                         </DrawerClose>
                     </DrawerFooter>
@@ -71,8 +56,8 @@ export function MobileModeToggle({ className, ...props }: ButtonProps) {
     );
 }
 
-export function ModeToggle({ className, mobile, ...props }: ModeToggleProps) {
-    const { setTheme } = useTheme();
+export function ModeToggle({ mobile, ...props }: ModeToggleProps) {
+    const { setTheme } = useTheme()
 
     return (
         <DropdownMenu>
@@ -93,3 +78,16 @@ export function ModeToggle({ className, mobile, ...props }: ModeToggleProps) {
         </DropdownMenu>
     );
 }
+
+const ThemeToggleButton = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, ...props }, ref) => {
+
+    return (
+        <Button variant="outline" size="icon" {...props} className="className" ref={ref}>
+            <SunIcon className="h-8 w-8 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <MoonIcon className="absolute h-8 w-8 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+        </Button>
+    )
+});
+
+ThemeToggleButton.displayName = "ThemeToggleButton";

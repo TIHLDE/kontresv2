@@ -30,6 +30,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "cmdk": "^0.2.1",
     "date-fns": "^3.2.0",
     "jotai": "^2.6.4",
     "lucide-react": "^0.307.0",

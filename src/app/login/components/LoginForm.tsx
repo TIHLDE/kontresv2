@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { loginUser } from "../actions"
 import { Button } from "@/components/ui/button"
+import { LoadingSpinner } from "@/components/ui/loadingspinner"
 
 type LoginFormSubmitEventType = z.infer<typeof formSchema>
 
@@ -14,7 +15,7 @@ const formSchema = z.object({
     password: z.string(),
 })
 
-export function LoginForm({ redirect }: { redirect: string }){
+export function LoginForm({ redirect }: { redirect: string }) {
     const form = useForm<LoginFormSubmitEventType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -36,24 +37,24 @@ export function LoginForm({ redirect }: { redirect: string }){
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>
-                <FormField control={form.control} name="user_id" render={({ field}) => (
+                <FormField control={form.control} name="user_id" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Brukernavn</FormLabel>
-                            <FormControl>
+                        <FormControl>
                             <Input placeholder="brukernavn" {...field} />
-                            </FormControl>
-                        </FormItem>
+                        </FormControl>
+                    </FormItem>
                 )} />
-                <FormField control={form.control} name="password" render={({ field}) => (
+                <FormField control={form.control} name="password" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Passord</FormLabel>
                         <FormControl>
-                        <Input placeholder="passord" type="password" {...field} />
+                            <Input placeholder="passord" type="password" {...field} />
                         </FormControl>
                     </FormItem>
                 )} />
                 {form.formState.errors.root && <FormMessage className="my-2">{form.formState.errors.root.message}</FormMessage>}
-                <Button className="w-full" type="submit">Login</Button>
+                <Button className="w-full" type="submit" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? <LoadingSpinner /> : "Logg inn"}</Button>
             </form>
         </Form>
     )

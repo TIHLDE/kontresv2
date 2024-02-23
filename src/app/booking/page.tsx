@@ -1,42 +1,20 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card } from '@/components/ui/card';
-
-import { getItems } from '@/utils/apis/items';
-import { DetailedItem } from '@/utils/apis/types';
-import { getCurrentUserData } from '@/utils/apis/user';
-
-import EventForm from './components/ReservationForm';
-import { UserRound } from 'lucide-react';
+import { Card } from "@/components/ui/card";
+import ReservationForm from "./components/ReservationForm";
+import { getItems } from "@/utils/apis/items";
+import { DetailedItem } from "@/utils/apis/types";
+import { getCurrentUserData } from "@/utils/apis/user";
+import { getGroupMemberships } from "@/utils/apis/groups";
 
 export default async function Page() {
     const items: DetailedItem[] = (await getItems()) as DetailedItem[];
     const userData = await getCurrentUserData();
+    const groups = (await getGroupMemberships(userData.user_id)).results;
 
     return (
-        <div className="max-w-page mx-auto my-16">
-            <h1 className="font-semibold my-5 text-3xl w-fit mx-auto md:mx-0 pt-12">
-                Reserver en gjenstand
-            </h1>
-            <Card className="p-4">
-                <EventForm items={items} />
-
-                <div className="mt-10">
-                    <p>Sender inn forespørsel som</p>
-                    <Card className="p-2 md:w-fit w-full">
-                        <div className="flex gap-5 items-center">
-                            <Avatar>
-                                <AvatarImage
-                                    src={userData.image}
-                                    alt="Profililde"
-                                />
-                                <AvatarFallback>
-                                    <UserRound className="text-foreground" />
-                                </AvatarFallback>
-                            </Avatar>
-                            <h2>{userData.first_name}</h2>
-                        </div>
-                    </Card>
-                </div>
+        <div className="max-w-page mx-auto h-screen mt-16">
+            <Card className="p-4 w-fit mx-auto">
+                <h1 className="font-semibold my-3 text-3xl w-fit mx-auto">Reserver en gjenstand</h1>
+                <ReservationForm items={items} groups={groups} user={userData} />
             </Card>
         </div>
     );

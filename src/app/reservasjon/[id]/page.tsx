@@ -1,6 +1,6 @@
 import { Card } from '@/components/ui/card';
 
-import { getReservation } from '@/utils/apis/reservations';
+import { getReservation, setReservationState } from '@/utils/apis/reservations';
 
 import Image from 'next/image';
 import AdminButtons from './components/AdminButtons';
@@ -17,6 +17,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
     // Fetch the current user data too see if they are an admin
     const currentUser = await getCurrentUserData();
+
+
 
 
     return (
@@ -50,7 +52,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <p>{reservation.description}</p>
                     </Card>
                 </div>
-                <AdminButtons />
+                <AdminButtons reservationId={id} start_time={reservation.start_time} end_time={reservation.end_time} />
             </Card>
         </div>
     );

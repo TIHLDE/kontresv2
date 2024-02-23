@@ -1,7 +1,7 @@
 'use server';
 
 import { IFetch } from './fetch';
-import { DetailedItem, DetailedReservation, PostReservation } from './types';
+import { DetailedItem, DetailedReservation, PostReservation, ReservationState } from './types';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -26,7 +26,7 @@ export const getReservation = (uuid: string) => {
 //in progress
 export const getReservations = () => {
     return IFetch<DetailedReservation[]>({
-        url: `${baseUrl}/kontres/reservations`,
+        url: `${baseUrl}/kontres/reservations/`,
         config: {
             method: 'GET',
         },
@@ -64,3 +64,21 @@ export const createReservation = ({
         },
     });
 };
+
+/**
+ * Updates the state of a reservation to the given state.
+ */
+export const setReservationState = (uuid: string, start_time: string, end_time: string, state: ReservationState) => {
+    return IFetch<DetailedReservation>({
+        url: `${baseUrl}/kontres/reservations/${uuid}/`,
+        config: {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                state,
+            }),
+        },
+    });
+}

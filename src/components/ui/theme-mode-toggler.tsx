@@ -1,18 +1,25 @@
-"use client"
+'use client';
 
-import * as React from "react"
-
-import { useTheme } from "next-themes"
-
-import { Button, ButtonProps } from "@/components/ui/button"
+import { Button, ButtonProps } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { MoonIcon, SunIcon } from "lucide-react"
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "./drawer"
+} from '@/components/ui/dropdown-menu';
+
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from './drawer';
+import { useTheme } from 'next-themes';
+import React from 'react';
+import { MoonIcon, SunIcon } from 'lucide-react';
 
 interface ModeToggleProps extends ButtonProps {
     mobile?: boolean;
@@ -44,10 +51,9 @@ export function MobileModeToggle({ ...props }: ButtonProps) {
                         </DrawerClose>
                     </DrawerFooter>
                 </DrawerContent>
-
             </Drawer>
         </>
-    )
+    );
 }
 
 export function ModeToggle({ mobile, ...props }: ModeToggleProps) {
@@ -59,18 +65,18 @@ export function ModeToggle({ mobile, ...props }: ModeToggleProps) {
                 <ThemeToggleButton {...props} />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setTheme("light")}>
+                <DropdownMenuItem onClick={() => setTheme('light')}>
                     Light
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                <DropdownMenuItem onClick={() => setTheme('dark')}>
                     Dark
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setTheme("system")}>
+                <DropdownMenuItem onClick={() => setTheme('system')}>
                     System
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }
 
 const ThemeToggleButton = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, ...props }, ref) => {

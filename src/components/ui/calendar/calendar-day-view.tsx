@@ -5,15 +5,18 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 export default function CalendarDayView({
   currentDay,
   setCurrentDay,
+  resetChoice,
 }: {
   currentDay: Date;
   setCurrentDay: (date: Date) => void;
+  resetChoice: () => void;
 }) {
   return (
     <div className="flex w-full justify-center gap-4 py-2">
       <button
         onClick={() => {
           setCurrentDay(add(currentDay, { days: -1 }));
+          resetChoice();
         }}
       >
         <ChevronLeftIcon />
@@ -24,6 +27,7 @@ export default function CalendarDayView({
       <button
         onClick={() => {
           setCurrentDay(add(currentDay, { days: 1 }));
+          resetChoice();
         }}
       >
         <ChevronRightIcon />

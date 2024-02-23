@@ -1,7 +1,18 @@
+import BookableItems from '../ui/bookable-items';
+import HeaderLink from '../ui/header-link';
+import Logo from '../ui/logo';
+
 export default function Footer() {
-  return (
-    <footer className='h-screen w-full'>
-      <div className='rounded-md bg-accent h-full'></div>
-    </footer>
-  );
+    return (
+        <footer className="">
+            <nav className="flex gap-6 w-full items-center p-4 text-zinc-500 dark:text-zinc-600 border-t border-border">
+                <HeaderLink href="/" className="mr-auto">
+                    <Logo />
+                </HeaderLink>
+                <BookableItems className={'flex ml-auto gap-6'} />
+                <HeaderLink href="/reservation">Reservasjoner</HeaderLink>
+                <HeaderLink href="/booking">Booking</HeaderLink>
+            </nav>
+        </footer>
+    );
 }

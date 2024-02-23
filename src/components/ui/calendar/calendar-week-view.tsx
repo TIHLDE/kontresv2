@@ -1,15 +1,16 @@
-import CalendarDay from "./calendar-day";
-import { add, format, startOfWeek, getWeek, getYear } from "date-fns";
+import { weekDays } from "@/lib/utils";
+import { add, format, getWeek, getYear, startOfWeek } from "date-fns";
 import { nb } from "date-fns/locale/nb";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { weekDays } from "@/lib/utils";
 
 export default function CalendarWeekView({
   currentDay,
   setCurrentDay,
+  resetChoice
 }: {
   currentDay: Date;
   setCurrentDay: (date: Date) => void;
+  resetChoice: () => void;
 }) {
   return (
     <>
@@ -17,6 +18,7 @@ export default function CalendarWeekView({
         <button
           onClick={() => {
             setCurrentDay(add(currentDay, { weeks: -1 }));
+            resetChoice();
           }}
         >
           <ChevronLeftIcon />
@@ -27,6 +29,7 @@ export default function CalendarWeekView({
         <button
           onClick={() => {
             setCurrentDay(add(currentDay, { weeks: 1 }));
+            resetChoice();
           }}
         >
           <ChevronRightIcon />

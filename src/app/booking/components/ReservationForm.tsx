@@ -45,6 +45,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
         return parse(date, 'PPP HH:mm:ss', new Date());
     };
 
+
     const searchParams = useSearchParams();
     const from = searchParams.get('from');
     const to = searchParams.get('to');
@@ -174,8 +175,8 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
             <EventFormFields
                 initialData={{
                     item: defaultItem ?? '',
-                    from: new Date(from ?? ''),
-                    to: new Date(to ?? ''),
+                    from: parseDate(from ?? ''),
+                    to: parseDate(to ?? ''),
                 }}
                 items={items}
                 groups={formGroups}

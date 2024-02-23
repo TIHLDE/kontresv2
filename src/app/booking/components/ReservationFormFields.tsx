@@ -44,8 +44,8 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
         defaultValues: {
-            item: initialData?.item,
             application_on_behalf: "0",
+            ...initialData
         }
     })
 

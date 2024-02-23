@@ -22,18 +22,10 @@ export function DateTimePicker({
     value,
     ...props
 }: InputProps) {
-    console.log(
-        'initialDate',
-        initialDate,
-        typeof value !== 'undefined',
-        initialDate ||
-            (typeof value !== 'undefined' ? new Date(value as string) : null),
-    );
     const [date, setDate] = React.useState<Date | null>(
         initialDate ||
-            (typeof value !== 'undefined' ? new Date(value as string) : null),
+        (typeof value !== 'undefined' ? new Date(value as string) : null),
     );
-    console.log('date', date);
     const handleDateChange = (newDate?: Date) => {
         if (!newDate) return;
         setDate(newDate);

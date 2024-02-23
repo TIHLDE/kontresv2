@@ -52,7 +52,6 @@ export default function ExistingReservations({
     }
 
     reservationShards = reservationShards.filter((reservation) => {
-        console.log('res', reservation);
         let start = new Date(reservation.reservation!.start_time);
         let end = new Date(reservation.reservation!.end_time);
 

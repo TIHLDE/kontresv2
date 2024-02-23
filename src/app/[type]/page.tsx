@@ -12,7 +12,6 @@ interface PageProps {
 export default async function Page({ params: { type } }: PageProps) {
     let { reservations } = await getReservations();
     let item = await getBookableItem(type);
-    console.log('item', item);
     reservations = reservations.filter(
         (booking) => type === booking.bookable_item,
     );

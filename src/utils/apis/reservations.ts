@@ -1,7 +1,7 @@
 'use server';
 
 import { IFetch } from './fetch';
-import { DetailedItem, DetailedReservation, Reservations } from './types';
+import { DetailedItem, DetailedReservation } from './types';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -25,7 +25,7 @@ export const getReservation = (uuid: string) => {
 //gets all reservations
 //in progress
 export const getReservations = () => {
-    return IFetch<Reservations>({
+    return IFetch<DetailedReservation[]>({
         url: `${baseUrl}/kontres/reservations`,
         config: {
             method: 'GET',

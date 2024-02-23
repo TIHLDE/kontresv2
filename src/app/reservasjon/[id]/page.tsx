@@ -15,9 +15,18 @@ const Page = async ({ params }: { params: { id: string } }) => {
     // Get the booking data
     const id = params.id;
     const reservation = await getReservation(id);
-    const user = await getUserData(reservation.author);
+    const user = reservation.author_detail;
     const from = new Date(reservation.start_time);
     const to = new Date(reservation.end_time);
+
+    let state;
+    if (reservation.state === 'CONFIRMED') {
+        state = 'Bekreftet';
+    } else if (reservation.state === 'PENDING') {
+        state = 'Avventer';
+    } else if (reservation.state === 'CANCELLED') {
+        state = 'Avslått';
+    }
 
     return (
         <div className="max-w-page mx-auto h-screen mt-16 md:w-2/5">
@@ -38,7 +47,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                 <h1 className="font-semibold my-3 text-3xl w-fit mx-auto mt-10 text-center">
                     Reservasjon av{' '}
                     <span className="lowercase">
-                        {reservation.bookable_item.name}
+                        {reservation.bookable_item_detail.name}
                     </span>
                 </h1>
                 <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
@@ -72,7 +81,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
                                 <h2 className="font-semibold text-xl text-nowrap">
                                     På vegne av
                                 </h2>
-                                <ProfilePill className="w-full" label={reservation.group} image={"https://upload.wikimedia.org/wikipedia/commons/b/b1/Hot_dog_with_mustard.png"} />
+                                <ProfilePill className="w-full" label={reservation.group_detail?.name} image={reservation.group_detail?.image ?? ''} />
+                            </div>
+                            <div>
+                                <h2 className="font-semibold text-xl text-nowrap">
+                                    Status
+                                </h2>
+                                <span className={`${reservation.state === 'PENDING' && 'text-yellow-500'} 
+                                                ${reservation.state === 'CONFIRMED' && 'text-green-500'} 
+                                                ${reservation.state === 'CANCELLED' && 'text-red-500'}`}>{state}</span>
                             </div>
                         </div>
                     </Card>

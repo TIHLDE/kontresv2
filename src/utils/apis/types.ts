@@ -5,7 +5,7 @@ export type DetailedReservation = {
   end_time: string;
   state: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
   description: string;
-  author_detail: string;
+  author_detail: User;
   group_detail: BaseGroup | undefined;
 } & BaseModel;
 

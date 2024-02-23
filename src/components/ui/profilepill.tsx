@@ -10,7 +10,7 @@ interface ProfilePillProps extends Omit<React.HTMLProps<HTMLDivElement>, "ref"> 
 
 const ProfilePill = ({ label, image, className, ...props }: ProfilePillProps) => {
     return (
-        <Card {...props} className={cn("flex p-1 items-center gap-3", className)}>
+        <Card {...props} className={cn("flex p-1 pr-3 items-center gap-3", className)}>
             <Avatar className="rounded-lg">
                 <AvatarImage
                     src={image}

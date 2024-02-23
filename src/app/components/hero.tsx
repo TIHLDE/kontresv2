@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <div className="h-[110vh] w-full flex flex-col justify-center items-center relative overflow-x-hidden">
+    <div className="h-[100vh] w-full flex flex-col justify-center items-center relative overflow-x-hidden">
       <WelcomeTitle />
 
       <div className={`flex flex-col ${styles.action}`}>
@@ -17,7 +17,7 @@ export default function Hero() {
           Her kan du booke kontoret, soundbox og utstyr, <br />
           om du er medlem i TIHLDE.
         </p>
-        <div className="flex items-center">
+        <div className="flex items-center flex-col md:flex-row">
           <Button className="m-2 p-8 text-lg group">
             <ArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform duration-150" />
             Reserver kontoret{' '}

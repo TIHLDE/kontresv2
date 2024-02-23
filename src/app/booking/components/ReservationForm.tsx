@@ -42,7 +42,15 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const router = useRouter();
 
     const parseDate = (date: string) => {
-        return parse(date, 'PPP HH:mm:ss', new Date());
+        if (!date) return new Date();
+
+        try {
+            return parse(date, 'PPP HH:mm:ss', new Date());
+        } catch (error) {
+            // do nothing
+        }
+
+        return new Date();
     };
 
 

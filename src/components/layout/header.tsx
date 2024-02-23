@@ -13,7 +13,7 @@ interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
 
 export default function Header({ userData, className, ...props }: HeaderProps) {
     return (
-        <HeaderWrapper>
+        <HeaderWrapper className='md:flex hidden'>
             <nav className="flex gap-6 w-full items-center">
                 <HeaderLink href="/" className="mr-16">
                     <Logo />

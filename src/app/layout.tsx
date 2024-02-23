@@ -38,7 +38,7 @@ export default async function RootLayout({
                         className="fixed bottom-0 lg:hidden"
                         user={userData}
                     />
-                    <Footer />
+                    {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
                 </ThemeProvider>
             </body>
         </html>

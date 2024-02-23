@@ -85,7 +85,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 : values?.application_on_behalf;
         // Use the values stored in the state hook
         createReservation({
-            bookable_item: { id: values?.item as string },
+            bookable_item: values?.item as string,
             description: values?.description as string,
             start_time: values?.from.toISOString() as string,
             end_time: values?.to.toISOString() as string,

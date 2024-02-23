@@ -20,10 +20,7 @@ import {
 import { useTheme } from 'next-themes';
 import React from 'react';
 import { MoonIcon, SunIcon } from 'lucide-react';
-
-interface ModeToggleProps extends ButtonProps {
-    mobile?: boolean;
-}
+import { cn } from '@/utils/cn';
 
 export function MobileModeToggle({ ...props }: ButtonProps) {
     const { setTheme } = useTheme();
@@ -32,7 +29,7 @@ export function MobileModeToggle({ ...props }: ButtonProps) {
         <>
             <Drawer>
                 <DrawerTrigger asChild>
-                    <ThemeToggleButton {...props} />
+                    <ThemeToggleButton {...props} mobile={true} />
                 </DrawerTrigger>
                 <DrawerContent>
                     <DrawerHeader>
@@ -56,7 +53,7 @@ export function MobileModeToggle({ ...props }: ButtonProps) {
     );
 }
 
-export function ModeToggle({ mobile, ...props }: ModeToggleProps) {
+export function ModeToggle({ ...props }: ButtonProps) {
     const { setTheme } = useTheme()
 
     return (
@@ -79,12 +76,16 @@ export function ModeToggle({ mobile, ...props }: ModeToggleProps) {
     );
 }
 
-const ThemeToggleButton = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, ...props }, ref) => {
+interface ThemeToggleButtonProps extends ButtonProps {
+    mobile?: boolean;
+}
+
+const ThemeToggleButton = React.forwardRef<HTMLButtonElement, ThemeToggleButtonProps>(({ className, mobile, ...props }, ref) => {
 
     return (
-        <Button variant="outline" size="icon" {...props} className="className" ref={ref}>
-            <SunIcon className="h-8 w-8 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <MoonIcon className="absolute h-8 w-8 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <Button variant="outline" size="icon" {...props} className={cn(className, `${mobile ? '[&>*]:h-8 [&>*]:w-8' : '[&>*]:h-5 [&>*]:w-5'}`)} ref={ref}>
+            <SunIcon className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <MoonIcon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
         </Button>
     )

@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <div className="h-[110vh] w-full flex flex-col justify-center items-center relative overflow-x-hidden">
+    <div className="h-[100vh] w-full flex flex-col justify-center items-center relative overflow-x-hidden">
       <WelcomeTitle />
 
       <div className={`flex flex-col ${styles.action}`}>

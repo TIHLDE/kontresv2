@@ -10,10 +10,10 @@ interface PageProps {
     };
 }
 export default async function Page({ params: { type } }: PageProps) {
-    let { reservations } = await getReservations();
+    let reservations = await getReservations();
     let item = await getBookableItem(type);
     reservations = reservations?.filter(
-        (booking) => type === booking.bookable_item,
+        (booking) => type === booking.bookable_item_detail.id,
     ) ?? [];
     return (
         <div className="pt-20">

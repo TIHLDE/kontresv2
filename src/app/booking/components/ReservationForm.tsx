@@ -1,5 +1,7 @@
 'use client';
 
+import { User } from '@/types/User';
+
 import {
     AlertDialogAction,
     AlertDialogCancel,
@@ -8,8 +10,9 @@ import {
 
 import { ErrorType } from '@/utils/apis/fetch';
 import { createReservation } from '@/utils/apis/reservations';
-import { DetailedItem } from '@/utils/apis/types';
+import { DetailedItem, Membership } from '@/utils/apis/types';
 
+import ApplicantCard from './ApplicantCard';
 import {
     EventFormFields,
     EventFormValueTypes,
@@ -20,16 +23,19 @@ import { useRef, useState } from 'react';
 
 type EventFormType = {
     items: DetailedItem[];
+    groups: Membership[];
+    user: User;
 };
 
 /**
  * Parent wrapper for the entire reservation form
  */
-const EventForm = ({ items }: EventFormType) => {
+const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorAlertMessage, setErrorAlertMessage] = useState<string>();
     const [successOpen, setSuccessOpen] = useState(false);
+    const [selectedGroup, setSelectedGroup] = useState('0');
 
     const formValues = useRef<EventFormValueTypes>();
 
@@ -38,6 +44,7 @@ const EventForm = ({ items }: EventFormType) => {
     const parseDate = (date: string) => {
         return parse(date, 'PPP HH:mm:ss', new Date());
     };
+
 
     const searchParams = useSearchParams();
     const from = searchParams.get('from');
@@ -72,12 +79,17 @@ const EventForm = ({ items }: EventFormType) => {
 
     const submitReservation = () => {
         const values = formValues.current;
+        const group =
+            values?.application_on_behalf === '0'
+                ? undefined
+                : values?.application_on_behalf;
         // Use the values stored in the state hook
         createReservation({
             bookable_item: values?.item as string,
             description: values?.description as string,
             start_time: values?.from.toISOString() as string,
             end_time: values?.to.toISOString() as string,
+            group: group as string,
         })
             .then((res) => {
                 showSuccess();
@@ -93,6 +105,20 @@ const EventForm = ({ items }: EventFormType) => {
                 showError(body);
             });
     };
+
+    const formGroups = [
+        {
+            label: 'Meg selv',
+            value: '0',
+        },
+    ];
+
+    groups.forEach((group) => {
+        formGroups.push({
+            label: group.group.name,
+            value: group.group.slug,
+        });
+    });
 
     return (
         <>
@@ -145,15 +171,37 @@ const EventForm = ({ items }: EventFormType) => {
                     </>
                 }
             />
+
             <EventFormFields
-                initialFrom={from ? parseDate(from) : undefined}
-                initialTo={to ? parseDate(to) : undefined}
-                initialItem={defaultItem ?? ''}
+                initialData={{
+                    item: defaultItem ?? '',
+                    from: parseDate(from ?? ''),
+                    to: parseDate(to ?? ''),
+                }}
                 items={items}
+                groups={formGroups}
                 onSubmit={onSubmit}
+                groupChangeCallback={setSelectedGroup}
+            />
+
+            <ApplicantCard
+                image={
+                    selectedGroup != '0'
+                        ? groups.find(
+                            (group) => group.group.slug === selectedGroup,
+                        )?.group.image ?? ''
+                        : user.image
+                }
+                label={
+                    selectedGroup != '0'
+                        ? groups.find(
+                            (group) => group.group.slug === selectedGroup,
+                        )?.group.name ?? ''
+                        : user.first_name
+                }
             />
         </>
     );
 };
 
-export default EventForm;
+export default ReservationForm;

@@ -78,7 +78,7 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
                         <FormItem>
                             <FormLabel>Til dato</FormLabel>
                             <FormControl>
-                                <DateTimePicker className="flex w-full" {...field} value={field.value ? field.value.toISOString() : undefined} onChange={(e) => {
+                                <DateTimePicker className="flex w-full" {...field} value={field.value ? field.value : undefined} onChange={(e) => {
                                     form.setValue("to", e.target.value as unknown as Date, {
                                         shouldDirty: true,
                                         shouldTouch: true

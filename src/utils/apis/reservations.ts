@@ -1,7 +1,7 @@
 'use server';
 
 import { IFetch } from './fetch';
-import { DetailedItem, DetailedReservation } from './types';
+import { DetailedItem, DetailedReservation, PostReservation } from './types';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -49,10 +49,9 @@ export const getBookableItem = (id: string) => {
  */
 export const createReservation = ({
     ...rest
-}: Omit<DetailedReservation, 'state' | 'created_at' | 'author' | 'id'>) => {
+}: PostReservation) => {
     const body = {
-        ...rest,
-        author: 'index',
+        ...rest
     };
     return IFetch<DetailedReservation>({
         url: `${baseUrl}/kontres/reservations/`,

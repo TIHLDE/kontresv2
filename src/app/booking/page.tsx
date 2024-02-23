@@ -6,7 +6,7 @@ import { getCurrentUserData } from "@/utils/apis/user";
 import { getGroupMemberships } from "@/utils/apis/groups";
 
 export default async function Page() {
-    const items: DetailedItem[] = await getItems() as DetailedItem[];
+    const items: DetailedItem[] = (await getItems()) as DetailedItem[];
     const userData = await getCurrentUserData();
     const groups = (await getGroupMemberships(userData.user_id)).results;
 
@@ -17,5 +17,5 @@ export default async function Page() {
                 <ReservationForm items={items} groups={groups} user={userData} />
             </Card>
         </div>
-    )
+    );
 }

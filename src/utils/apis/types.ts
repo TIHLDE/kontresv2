@@ -1,28 +1,32 @@
 export type DetailedReservation = {
   id: string;
-  bookable_item: Item;
+  bookable_item_detail: DetailedItem;
   start_time: string;
   end_time: string;
   state: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
   description: string;
-  created_at: string;
-  author: string;
-  group: string;
-};
+  author_detail: string;
+  group_detail: BaseGroup | undefined;
+} & BaseModel;
 
-export type Item = {
-  id: string;
-  name: string;
-  description: string;
+export type PostReservation = {
+  bookable_item: string;
+  group: string;
+} & Omit<DetailedReservation, 'state' | 'id' | 'author_detail' | 'bookable_item_detail' | 'group_detail' | keyof BaseModel>;
+
+/**
+ * Base type for all models.
+ */
+export type BaseModel = {
+  created_at: string;
+  updated_at: string;
 }
 
 export type DetailedItem = {
   id: string;
   name: string;
   description: string;
-  created_at: string;
-  updated_at: string;
-};
+} & BaseModel;
 
 
 export type User = {
@@ -41,7 +45,7 @@ export type User = {
   accepts_event_rules: boolean;
   allows_photo_by_default: boolean;
   slack_user_id: string;
-};
+} & BaseModel;
 
 export interface PaginationResponse<T> {
   count: number;
@@ -54,8 +58,7 @@ export type Membership = {
   user: User;
   membership_type: MembershipType;
   group: BaseGroup;
-  created_at: string;
-};
+} & BaseModel;
 
 export enum MembershipType {
   LEADER = 'LEADER',
@@ -69,7 +72,7 @@ export type BaseGroup = {
   image: string | null;
   image_alt: string | null;
   viewer_is_member: boolean;
-};
+} & BaseModel;
 
 export enum GroupType {
   TIHLDE = 'TIHLDE',

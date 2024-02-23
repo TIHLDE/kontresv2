@@ -12,7 +12,6 @@ import { Dispatch, SetStateAction } from "react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-
 const formSchema = z.object({
     from: z.date(),
     to: z.date(),
@@ -23,11 +22,11 @@ const formSchema = z.object({
     }),
     application_on_behalf: z.string(),
     description: z.string().min(10, {
-        message: "Beskrivelsen må være mer enn 10 tegn lang"
-    })
-})
+        message: 'Beskrivelsen må være mer enn 10 tegn lang',
+    }),
+});
 
-export type EventFormValueTypes = z.infer<typeof formSchema>
+export type EventFormValueTypes = z.infer<typeof formSchema>;
 
 type ReservationFormFieldsType = {
     items: DetailedItem[];
@@ -45,8 +44,8 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
         defaultValues: {
-            item: initialData?.item,
             application_on_behalf: "0",
+            ...initialData
         }
     })
 
@@ -67,12 +66,12 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
                                         shouldTouch: true
                                     })
                                 }} />
-                            </FormControl>
-                        </FormItem>
+                            </FormControl >
+                        </FormItem >
                     )}
                 />
 
-                <FormField
+                < FormField
                     control={form.control}
                     name="to"
                     render={({ field, fieldState }) => (
@@ -85,12 +84,12 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
                                         shouldTouch: true
                                     })
                                 }} />
-                            </FormControl>
-                        </FormItem>
+                            </FormControl >
+                        </FormItem >
                     )}
                 />
 
-                <FormField
+                < FormField
                     control={form.control}
                     name="application_on_behalf"
                     render={({ field }) => (
@@ -130,24 +129,22 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
                                         }
                                     ))
                                 )} placeholder={"Velg en gjenstand"} defaultValue={initialData?.item as string} onValueChange={field.onChange}{...field} className="w-full" />
-                            </FormControl>
+                            </FormControl >
                         </FormItem>
                     )}
                 />
-                <FormField
+                < FormField
                     control={form.control}
                     name="description"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Beskrivelse</FormLabel>
                             <FormControl>
-                                <Input type="text" {...field} className="w-full" />
+                                <Input {...field} />
                             </FormControl>
-                            <FormDescription>Forklar hvorfor akkurat <span className="font-bold italic">du</span> skal få innvilget søknaden!</FormDescription>
                         </FormItem>
                     )}
                 />
-
                 <FormField
                     control={form.control}
                     name="accepted_rules"
@@ -168,14 +165,12 @@ const ReservationFormFields = ({ initialData, items, groups, groupChangeCallback
                     )}
                 />
 
-
-                {/* Why does the form isLoading state not work?????? FIXME pls */}
                 <div className="mt-5">
                     <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>{form.formState.isSubmitting ? <LoadingSpinner /> : "Reserver"}</Button>
-                </div>
-            </form>
-        </Form>
-    )
-}
+                </div >
+            </form >
+        </Form >
+    );
+};
 
 export { ReservationFormFields as EventFormFields };

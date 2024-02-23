@@ -17,6 +17,7 @@ import {
     EventFormFields,
     EventFormValueTypes,
 } from '@/app/booking/components/ReservationFormFields';
+import { parse } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 
@@ -39,6 +40,11 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const formValues = useRef<EventFormValueTypes>();
 
     const router = useRouter();
+
+    const parseDate = (date: string) => {
+        return parse(date, 'PPP HH:mm:ss', new Date());
+    };
+
 
     const searchParams = useSearchParams();
     const from = searchParams.get('from');
@@ -169,8 +175,8 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
             <EventFormFields
                 initialData={{
                     item: defaultItem ?? '',
-                    from: new Date(from ?? ''),
-                    to: new Date(to ?? ''),
+                    from: parseDate(from ?? ''),
+                    to: parseDate(to ?? ''),
                 }}
                 items={items}
                 groups={formGroups}
@@ -182,15 +188,15 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 image={
                     selectedGroup != '0'
                         ? groups.find(
-                              (group) => group.group.slug === selectedGroup,
-                          )?.group.image ?? ''
+                            (group) => group.group.slug === selectedGroup,
+                        )?.group.image ?? ''
                         : user.image
                 }
                 label={
                     selectedGroup != '0'
                         ? groups.find(
-                              (group) => group.group.slug === selectedGroup,
-                          )?.group.name ?? ''
+                            (group) => group.group.slug === selectedGroup,
+                        )?.group.name ?? ''
                         : user.first_name
                 }
             />

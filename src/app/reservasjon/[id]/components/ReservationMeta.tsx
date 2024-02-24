@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card"
-import ProfilePill from "@/components/ui/profilepill"
+import UserProfilePill from "@/components/ui/profilepill"
 import { User } from "@/types/User";
 import { BaseGroup, ReservationState } from "@/utils/apis/types";
 import { format } from "date-fns"
@@ -59,7 +59,7 @@ const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps)
                     <h2 className="font-semibold text-xl">
                         Skrevet av
                     </h2>
-                    <ProfilePill label={user.first_name} image={user.image} />
+                    <UserProfilePill user={user} />
 
                 </div>
                 {
@@ -69,7 +69,7 @@ const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps)
                             <h2 className="font-semibold text-xl text-nowrap">
                                 På vegne av
                             </h2>
-                            <ProfilePill className="w-full" label={group.name} image={group.image ?? ''} />
+                            {/* <UserProfilePill className="w-full" label={group.name} image={group.image ?? ''} /> */}
                         </div>
                     )
                 }

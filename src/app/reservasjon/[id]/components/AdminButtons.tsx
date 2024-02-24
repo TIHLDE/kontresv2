@@ -74,6 +74,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             setAcceptLoading(false);
             buttonPop.run({ ref: acceptRef })
             informSuccess();
+            setState(mapObject[data.state])
         }).catch(err => {
             informFailure();
             setAcceptLoading(false);

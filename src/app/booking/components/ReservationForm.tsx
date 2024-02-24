@@ -187,6 +187,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 groupChangeCallback={setSelectedGroup}
             />
 
+
             <ApplicantCard
                 image={
                     selectedGroup != '0'

@@ -36,25 +36,36 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
 
     const { toast } = useToast();
 
+
+    const informSuccess = () => {
+        toast({
+            title: "Vellykket!",
+            description: "Endringene er lagret.",
+        })
+    }
+
+    const informFailure = () => {
+        toast({
+            title: "Noe gikk galt.",
+            description: "Kunne ikke lagre endringene.",
+            variant: "destructive"
+        })
+    }
+
+
     const onReject = () => {
         // Reject the reservation
         setRejectLoading(true);
         setReservationState(reservationId, 'CANCELLED').then((data) => {
             setRejectLoading(false);
             buttonPop.run({ ref: rejectRef })
+            informSuccess();
             setState(mapObject[data.state])
         }).catch(err => {
-            toast({
-                title: "Noe gikk galt.",
-                description: "Kunne ikke avslå reservasjonen",
-                variant: "destructive"
-            })
-
+            informFailure();
             setRejectLoading(false);
         });
     }
-
-
 
     const onAccept = () => {
         // Accept the reservation
@@ -62,14 +73,9 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         setReservationState(reservationId, 'CONFIRMED').then((data) => {
             setAcceptLoading(false);
             buttonPop.run({ ref: acceptRef })
-            setState(mapObject[data.state])
+            informSuccess();
         }).catch(err => {
-            toast({
-                title: "Noe gikk galt.",
-                description: "Kunne ikke bekrefte reservasjonen",
-                variant: "destructive"
-            })
-
+            informFailure();
             setAcceptLoading(false);
         });
     }
@@ -78,7 +84,6 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         <div className="w-full flex flex-col md:flex-row gap-3 p-5">
             <Button ref={acceptRef} className="w-full" onClick={onAccept} disabled={acceptLoading || rejectLoading}>{acceptLoading ? <LoadingSpinner /> : 'Godkjenn'}</Button>
             <Button ref={rejectRef} className="w-full" onClick={onReject} variant={"destructive"} disabled={acceptLoading || rejectLoading}>{rejectLoading ? <LoadingSpinner /> : 'Avslå'}</Button>
-            <Toaster />
         </div>
     )
 }

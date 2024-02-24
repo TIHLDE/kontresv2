@@ -8,6 +8,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
 import { getItems } from '@/utils/apis/items';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -47,6 +48,7 @@ export default async function RootLayout({
                 >
                     <Header userData={userData} items={items} className="lg:flex hidden" />
                     <div className='py-24'>
+                        <Toaster />
                         {children}
                     </div>
                     <BottomBar

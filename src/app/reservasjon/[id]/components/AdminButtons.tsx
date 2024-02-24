@@ -8,6 +8,8 @@ import { ReservationState } from "@/utils/apis/types";
 import { useRef, useState } from "react";
 import { LoadingSpinner } from "@/components/ui/loadingspinner";
 import { useButtonPop } from "@/utils/animations/buttonPop";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 
 interface AdminButtonsProps {
     reservationId: string;
@@ -32,6 +34,8 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
 
     const [state, setState] = useAtom(stateAtom);
 
+    const { toast } = useToast();
+
     const onReject = () => {
         // Reject the reservation
         setRejectLoading(true);
@@ -39,7 +43,15 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             setRejectLoading(false);
             buttonPop.run({ ref: rejectRef })
             setState(mapObject[data.state])
-        }).catch(err => alert(err));
+        }).catch(err => {
+            toast({
+                title: "Noe gikk galt.",
+                description: "Kunne ikke avslå reservasjonen",
+                variant: "destructive"
+            })
+
+            setRejectLoading(false);
+        });
     }
 
 
@@ -51,13 +63,22 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             setAcceptLoading(false);
             buttonPop.run({ ref: acceptRef })
             setState(mapObject[data.state])
-        }).catch(err => alert(err));
+        }).catch(err => {
+            toast({
+                title: "Noe gikk galt.",
+                description: "Kunne ikke bekrefte reservasjonen",
+                variant: "destructive"
+            })
+
+            setAcceptLoading(false);
+        });
     }
 
     return (
         <div className="w-full flex flex-col md:flex-row gap-3 p-5">
             <Button ref={acceptRef} className="w-full" onClick={onAccept} disabled={acceptLoading || rejectLoading}>{acceptLoading ? <LoadingSpinner /> : 'Godkjenn'}</Button>
             <Button ref={rejectRef} className="w-full" onClick={onReject} variant={"destructive"} disabled={acceptLoading || rejectLoading}>{rejectLoading ? <LoadingSpinner /> : 'Avslå'}</Button>
+            <Toaster />
         </div>
     )
 }

@@ -6,12 +6,14 @@ import BookableItems from '../ui/bookable-items';
 import HeaderLink from '../ui/header-link';
 import HeaderWrapper from './header-wrapper';
 import { UserArea } from './user-area';
+import { DetailedItem } from '@/utils/apis/types';
 
 interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
     userData?: User;
+    items?: DetailedItem[];
 }
 
-export default function Header({ userData, className, ...props }: HeaderProps) {
+export default function Header({ userData, items, className, ...props }: HeaderProps) {
     if (!userData) return;
     return (
         <HeaderWrapper className='md:flex hidden'>
@@ -19,7 +21,7 @@ export default function Header({ userData, className, ...props }: HeaderProps) {
                 <HeaderLink href="/" className="mr-16">
                     <Logo />
                 </HeaderLink>
-                <BookableItems className="flex gap-6" />
+                <BookableItems className="flex gap-6" items={items} />
                 <HeaderLink href="/reservation">Reservasjoner</HeaderLink>
                 <HeaderLink href="/booking">Booking</HeaderLink>
             </nav>

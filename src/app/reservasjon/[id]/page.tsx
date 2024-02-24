@@ -16,7 +16,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const to = new Date(reservation.end_time);
 
     // Fetch the current user data too see if they are an admin
-    const currentUser = await getCurrentUserData();
+    const currentUser = await getCurrentUserData(); // <= TO BE IMPLEMENTED
 
     return (
         <div className="max-w-page mx-auto min-h-screen md:w-2/5">

@@ -7,6 +7,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
+import { getItems } from '@/utils/apis/items';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,6 +29,13 @@ export default async function RootLayout({
         console.error(error);
     }
 
+    let items;
+    try {
+        items = await getItems();
+    } catch (error) {
+        console.error(error);
+    }
+
     return (
         <html lang="en">
             <body className={inter.className}>
@@ -37,7 +45,7 @@ export default async function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <Header userData={userData} className="lg:flex hidden" />
+                    <Header userData={userData} items={items} className="lg:flex hidden" />
                     <div className='py-24'>
                         {children}
                     </div>

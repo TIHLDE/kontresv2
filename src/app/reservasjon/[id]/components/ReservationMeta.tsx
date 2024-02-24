@@ -18,8 +18,8 @@ interface ReservationMetaProps {
 }
 
 
-export type StateAtomType = 'Bekreftet' | 'Avventer' | 'Avslått';
-export const stateAtom = atom<StateAtomType>('Bekreftet');
+export type StateAtomType = 'Bekreftet' | 'Avventer' | 'Avslått' | 'Laster';
+export const stateAtom = atom<StateAtomType>('Laster');
 
 const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps) => {
     const [stateText, setStateText] = useAtom(stateAtom);

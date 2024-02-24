@@ -4,11 +4,12 @@ import { revalidateTag } from "next/cache";
 import { IFetch } from "./fetch"
 import { User } from "./types";
 import { cookies } from "next/headers";
+import { ACCESS_TOKEN } from "../../../constants";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 export const getUser = (user_id: string, password: string) => {
-  return IFetch<string>({
+  return IFetch<{ token: string }>({
     url: `${baseUrl}/auth/login`, config: {
       method: "POST", body: JSON.stringify({ user_id, password }), headers: {
         "Content-Type": "application/json"
@@ -47,5 +48,5 @@ export const getCurrentUserData = async () => {
 export const signOutUser = () => {
   // Delete cookies
   cookies().delete("user_id");
-  cookies().delete("token");
+  cookies().delete(ACCESS_TOKEN);
 }

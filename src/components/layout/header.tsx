@@ -8,10 +8,11 @@ import HeaderWrapper from './header-wrapper';
 import { UserArea } from './user-area';
 
 interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
-    userData: User;
+    userData?: User;
 }
 
 export default function Header({ userData, className, ...props }: HeaderProps) {
+    if (!userData) return;
     return (
         <HeaderWrapper className='md:flex hidden'>
             <nav className="flex gap-6 w-full items-center">

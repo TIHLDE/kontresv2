@@ -1,9 +1,13 @@
+"use client";
+
 import { Card } from "@/components/ui/card"
 import ProfilePill from "@/components/ui/profilepill"
 import { User } from "@/types/User";
 import { BaseGroup, ReservationState } from "@/utils/apis/types";
 import { format } from "date-fns"
 import { nb } from "date-fns/locale/nb";
+import { atom, useAtom } from 'jotai';
+import { useEffect } from "react";
 
 interface ReservationMetaProps {
     from: string;
@@ -13,15 +17,23 @@ interface ReservationMetaProps {
     state: ReservationState;
 }
 
+
+export type StateAtomType = 'Bekreftet' | 'Avventer' | 'Avslått';
+export const stateAtom = atom<StateAtomType>('Bekreftet');
+
 const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps) => {
-    let stateText;
-    if (state === 'CONFIRMED') {
-        stateText = 'Bekreftet';
-    } else if (state === 'PENDING') {
-        stateText = 'Avventer';
-    } else if (state === 'CANCELLED') {
-        stateText = 'Avslått';
-    }
+    const [stateText, setStateText] = useAtom(stateAtom);
+
+    useEffect(() => {
+        if (state === 'CONFIRMED') {
+            setStateText('Bekreftet');
+        } else if (state === 'PENDING') {
+            setStateText('Avventer');
+        } else if (state === 'CANCELLED') {
+            setStateText('Avslått');
+        }
+    }, [state, setStateText])
+
 
     return (
         <Card>
@@ -65,9 +77,9 @@ const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps)
                     <h2 className="font-semibold text-xl text-nowrap">
                         Status
                     </h2>
-                    <span className={`${state === 'PENDING' && 'text-yellow-500'} 
-                                                ${state === 'CONFIRMED' && 'text-green-500'} 
-                                                ${state === 'CANCELLED' && 'text-red-500'}`}>{stateText}</span>
+                    <span className={`${stateText === "Avventer" && 'text-yellow-500'} 
+                                                ${stateText === "Bekreftet" && 'text-green-500'} 
+                                                ${stateText === "Avslått" && 'text-red-500'}`}>{stateText}</span>
                 </div>
             </div>
         </Card>

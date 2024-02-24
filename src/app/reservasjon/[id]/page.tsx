@@ -18,9 +18,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
     // Fetch the current user data too see if they are an admin
     const currentUser = await getCurrentUserData();
 
-
-
-
     return (
         <div className="max-w-page mx-auto min-h-screen md:w-2/5">
             <Card className="overflow-hidden">
@@ -52,7 +49,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <p>{reservation.description}</p>
                     </Card>
                 </div>
-                <AdminButtons reservationId={id} start_time={reservation.start_time} end_time={reservation.end_time} />
+                <AdminButtons reservationId={id} />
             </Card>
         </div>
     );

@@ -68,7 +68,7 @@ export const createReservation = ({
 /**
  * Updates the state of a reservation to the given state.
  */
-export const setReservationState = (uuid: string, start_time: string, end_time: string, state: ReservationState) => {
+export const setReservationState = (uuid: string, state: ReservationState) => {
     return IFetch<DetailedReservation>({
         url: `${baseUrl}/kontres/reservations/${uuid}/`,
         config: {

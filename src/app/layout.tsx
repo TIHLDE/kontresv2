@@ -1,5 +1,4 @@
 import BottomBar from '@/components/layout/bottom-bar';
-import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 
@@ -22,7 +21,13 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     const userId = cookies().get('user_id');
-    const userData = await getUserData(userId?.value ?? '');
+    let userData;
+    try {
+        userData = await getUserData(userId?.value ?? '');
+    } catch (error) {
+        console.error(error);
+    }
+
     return (
         <html lang="en">
             <body className={inter.className}>

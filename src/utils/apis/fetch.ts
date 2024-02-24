@@ -16,7 +16,7 @@ export interface ErrorType {
 
 export const IFetch = <T extends unknown>({ url, config }: IFetchProps) => {
   let headers: HeadersInit = {}
-  headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string ?? "606d9b0894c798fa511d85f876fd8611b7109e32"; // <= Token for INDEX user in dev db
+  headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string;
   headers = {
     ...headers,
     ...config?.headers

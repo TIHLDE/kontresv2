@@ -10,6 +10,24 @@
     }
 }
 
+@keyframes shake {
+    0% {
+        transform: translate(0);
+    }
+    25% {
+        transform: translate(-5px, 0);
+    }
+    100% {
+        transform: translate(0);
+    }
+
+}
+
+.shake {
+    animation: shake .1s cubic-bezier(0.510, -0.120, 0.410, 1.650);
+    animation-iteration-count: 5;
+}
+
 .buttonPop {
     animation: button-pop .5s cubic-bezier(0.510, -0.120, 0.410, 1.650);
 }

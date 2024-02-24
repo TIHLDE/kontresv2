@@ -10,6 +10,7 @@ import { LoadingSpinner } from "@/components/ui/loadingspinner";
 import { useButtonPop } from "@/utils/animations/buttonPop";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
+import { useShake } from "@/utils/animations/shake";
 
 interface AdminButtonsProps {
     reservationId: string;
@@ -31,6 +32,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
     const rejectRef = useRef<HTMLButtonElement | null>(null);
 
     const buttonPop = useButtonPop();
+    const shake = useShake();
 
     const [state, setState] = useAtom(stateAtom);
 
@@ -58,12 +60,13 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         setRejectLoading(true);
         setReservationState(reservationId, 'CANCELLED').then((data) => {
             setRejectLoading(false);
-            buttonPop.run({ ref: rejectRef })
             informSuccess();
+            buttonPop.run({ ref: rejectRef })
             setState(mapObject[data.state])
         }).catch(err => {
             informFailure();
             setRejectLoading(false);
+            shake.run({ ref: rejectRef })
         });
     }
 
@@ -78,6 +81,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         }).catch(err => {
             informFailure();
             setAcceptLoading(false);
+            shake.run({ ref: acceptRef })
         });
     }
 

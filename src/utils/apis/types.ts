@@ -86,3 +86,30 @@ export enum GroupType {
   INTERESTGROUP = 'INTERESTGROUP',
   OTHER = 'OTHER',
 }
+
+export type UserPermissions = {
+  permissions: Record<PermissionApp, Permissions>;
+}
+
+export enum PermissionApp {
+  CHEATSHEET = 'cheatsheet',
+  EVENT = 'event',
+  GROUP = 'group',
+  JOBPOST = 'jobpost',
+  NEWS = 'news',
+  PAGE = 'page',
+  STRIKE = 'strike',
+  USER = 'user',
+  GALLERY = 'album',
+  PICTURE = 'picture',
+  FORMS = 'form',
+  TODDEL = 'toddel',
+  BANNERS = 'banner',
+}
+
+export interface Permissions {
+  write: boolean;
+  read: boolean;
+  write_all?: boolean;
+  destroy?: boolean;
+}

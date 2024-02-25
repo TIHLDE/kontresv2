@@ -5,8 +5,8 @@ import { getReservation, setReservationState } from '@/utils/apis/reservations';
 import Image from 'next/image';
 import AdminButtons from './components/AdminButtons';
 import ReservationMeta from './components/ReservationMeta';
-import { BaseGroup } from '@/utils/apis/types';
-import { getCurrentUserData } from '@/utils/apis/user';
+import { BaseGroup, PermissionApp } from '@/utils/apis/types';
+import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
 
 const Page = async ({ params }: { params: { id: string } }) => {
     // Get the booking data
@@ -15,8 +15,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const from = new Date(reservation.start_time);
     const to = new Date(reservation.end_time);
 
-    // Fetch the current user data too see if they are an admin
-    const currentUser = await getCurrentUserData(); // <= TO BE IMPLEMENTED
+    // Check if admin
+    const admin = await checkUserPermissions([
+        PermissionApp.USER
+    ])
+
+    console.log("Admin?: ", admin)
 
     return (
         <div className="max-w-page mx-auto min-h-screen md:w-2/5">
@@ -49,7 +53,8 @@ const Page = async ({ params }: { params: { id: string } }) => {
                         <p>{reservation.description}</p>
                     </Card>
                 </div>
-                <AdminButtons reservationId={id} />
+                {admin ? <AdminButtons reservationId={id} /> : undefined}
+
             </Card>
         </div>
     );

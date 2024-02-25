@@ -2,7 +2,7 @@
 
 import { revalidateTag } from "next/cache";
 import { IFetch } from "./fetch"
-import { User } from "./types";
+import { PermissionApp, User, UserPermissions } from "./types";
 import { cookies } from "next/headers";
 import { ACCESS_TOKEN } from "../../../constants";
 
@@ -49,4 +49,22 @@ export const signOutUser = () => {
   // Delete cookies
   cookies().delete("user_id");
   cookies().delete(ACCESS_TOKEN);
+}
+
+export const getUserPermissions = () => {
+  return IFetch<UserPermissions>({
+    url: `${baseUrl}/users/me/permissions`,
+    config: {
+      method: 'GET',
+      next: {
+        tags: ["user_permissions"]
+      }
+    }
+  })
+}
+
+export const checkUserPermissions = (apps: PermissionApp[]) => {
+  return getUserPermissions().then(perms => (
+    apps.some(app => perms?.permissions?.[app].write ?? perms?.permissions?.[app].write_all)
+  ))
 }

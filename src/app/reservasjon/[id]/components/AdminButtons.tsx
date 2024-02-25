@@ -7,7 +7,7 @@ import { StateAtomType, stateAtom } from "./ReservationMeta";
 import { ReservationState } from "@/utils/apis/types";
 import { useRef, useState } from "react";
 import { LoadingSpinner } from "@/components/ui/loadingspinner";
-import { useButtonPop } from "@/utils/animations/buttonPop";
+import { usePop } from "@/utils/animations/buttonPop";
 import { useToast } from "@/components/ui/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { useShake } from "@/utils/animations/shake";
@@ -31,7 +31,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
     const acceptRef = useRef<HTMLButtonElement | null>(null);
     const rejectRef = useRef<HTMLButtonElement | null>(null);
 
-    const buttonPop = useButtonPop();
+    const pop = usePop();
     const shake = useShake();
 
     const [state, setState] = useAtom(stateAtom);
@@ -61,7 +61,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         setReservationState(reservationId, 'CANCELLED').then((data) => {
             setRejectLoading(false);
             informSuccess();
-            buttonPop.run({ ref: rejectRef })
+            pop.run({ ref: rejectRef })
             setState(mapObject[data.state])
         }).catch(err => {
             informFailure();
@@ -75,7 +75,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         setAcceptLoading(true);
         setReservationState(reservationId, 'CONFIRMED').then((data) => {
             setAcceptLoading(false);
-            buttonPop.run({ ref: acceptRef })
+            pop.run({ ref: acceptRef })
             informSuccess();
             setState(mapObject[data.state])
         }).catch(err => {

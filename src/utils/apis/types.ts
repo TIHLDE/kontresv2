@@ -113,3 +113,12 @@ export interface Permissions {
   write_all?: boolean;
   destroy?: boolean;
 }
+
+export const AdminPermissions = [
+  PermissionApp.USER
+]
+
+export const validationTags = {
+  reservations: 'reservations',
+  bookableItems: 'bookableItems',
+}

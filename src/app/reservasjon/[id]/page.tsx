@@ -1,13 +1,12 @@
 import { Card } from '@/components/ui/card';
 
-import { getReservation, setReservationState } from '@/utils/apis/reservations';
+import { getReservation } from '@/utils/apis/reservations';
 
 import Image from 'next/image';
 import AdminButtons from './components/AdminButtons';
 import ReservationMeta from './components/ReservationMeta';
 import { BaseGroup, PermissionApp } from '@/utils/apis/types';
-import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
-import { useToast } from '@/components/ui/use-toast';
+import { checkUserPermissions } from '@/utils/apis/user';
 
 const Page = async ({ params }: { params: { id: string } }) => {
     // Get the booking data

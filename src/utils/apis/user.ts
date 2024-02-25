@@ -1,6 +1,5 @@
 "use server"
 
-import { revalidateTag } from "next/cache";
 import { IFetch } from "./fetch"
 import { PermissionApp, User, UserPermissions } from "./types";
 import { cookies } from "next/headers";

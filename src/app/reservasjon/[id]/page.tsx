@@ -7,6 +7,7 @@ import AdminButtons from './components/AdminButtons';
 import ReservationMeta from './components/ReservationMeta';
 import { BaseGroup, PermissionApp } from '@/utils/apis/types';
 import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
+import { useToast } from '@/components/ui/use-toast';
 
 const Page = async ({ params }: { params: { id: string } }) => {
     // Get the booking data
@@ -16,11 +17,14 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const to = new Date(reservation.end_time);
 
     // Check if admin
-    const admin = await checkUserPermissions([
-        PermissionApp.USER
-    ])
-
-    console.log("Admin?: ", admin)
+    let admin: boolean;
+    try {
+        admin = await checkUserPermissions([
+            PermissionApp.USER
+        ])
+    } catch (error) {
+        admin = false;
+    }
 
     return (
         <div className="max-w-page mx-auto min-h-screen md:w-2/5">

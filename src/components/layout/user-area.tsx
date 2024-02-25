@@ -60,7 +60,7 @@ export const UserArea = ({
                         >
                             Logg ut
                         </Button>
-                        <Button className="w-full">Kule ting</Button>
+                        {/* <Button className="w-full">Kule ting</Button> */}
                     </div>
                 </PopoverContent>
             </Popover>

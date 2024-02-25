@@ -3,11 +3,13 @@ export type DetailedReservation = {
   bookable_item_detail: DetailedItem;
   start_time: string;
   end_time: string;
-  state: 'CONFIRMED' | 'PENDING' | 'CANCELLED';
+  state: ReservationState;
   description: string;
-  author_detail: string;
+  author_detail: User;
   group_detail: BaseGroup | undefined;
 } & BaseModel;
+
+export type ReservationState = 'CONFIRMED' | 'PENDING' | 'CANCELLED';
 
 export type PostReservation = {
   bookable_item: string;
@@ -83,4 +85,31 @@ export enum GroupType {
   STUDY = 'STUDY',
   INTERESTGROUP = 'INTERESTGROUP',
   OTHER = 'OTHER',
+}
+
+export type UserPermissions = {
+  permissions: Record<PermissionApp, Permissions>;
+}
+
+export enum PermissionApp {
+  CHEATSHEET = 'cheatsheet',
+  EVENT = 'event',
+  GROUP = 'group',
+  JOBPOST = 'jobpost',
+  NEWS = 'news',
+  PAGE = 'page',
+  STRIKE = 'strike',
+  USER = 'user',
+  GALLERY = 'album',
+  PICTURE = 'picture',
+  FORMS = 'form',
+  TODDEL = 'toddel',
+  BANNERS = 'banner',
+}
+
+export interface Permissions {
+  write: boolean;
+  read: boolean;
+  write_all?: boolean;
+  destroy?: boolean;
 }

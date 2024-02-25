@@ -20,6 +20,8 @@ import {
 import { parse } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
+import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/components/ui/use-toast';
 
 type EventFormType = {
     items: DetailedItem[];
@@ -34,8 +36,9 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const [alertOpen, setAlertOpen] = useState(false);
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorAlertMessage, setErrorAlertMessage] = useState<string>();
-    const [successOpen, setSuccessOpen] = useState(false);
     const [selectedGroup, setSelectedGroup] = useState('0');
+
+    const { toast } = useToast();
 
     const formValues = useRef<EventFormValueTypes>();
 
@@ -78,7 +81,12 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     };
 
     const showSuccess = () => {
-        setSuccessOpen(true);
+        toast({
+            title: "Gratulerer!",
+            description: "Reservasjonen er blitt lagt inn 🥳",
+        })
+
+        redirect();
     };
 
     const redirect = () => {
@@ -131,19 +139,6 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     return (
         <>
             <AutoAlertDialog
-                open={successOpen}
-                title="Gratulerer!"
-                description="Reservasjonen er blitt lagt inn 🥳"
-                footerButtons={
-                    <>
-                        <AlertDialogAction onClick={redirect}>
-                            Supert!
-                        </AlertDialogAction>
-                    </>
-                }
-            />
-
-            <AutoAlertDialog
                 open={alertOpen}
                 title={'Er du sikker på at du vil legge inn reservasjonen?'}
                 footerButtons={
@@ -191,6 +186,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 onSubmit={onSubmit}
                 groupChangeCallback={setSelectedGroup}
             />
+
 
             <ApplicantCard
                 image={

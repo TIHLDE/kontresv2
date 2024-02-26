@@ -1,7 +1,8 @@
 "use server"
 
+import { revalidateTag } from "next/cache";
 import { IFetch } from "./fetch";
-import { DetailedItem } from "./types";
+import { DetailedItem, validationTags } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -18,24 +19,49 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
  * @returns Item details
  */
 export const getItem = (uuid: string) => {
-    return IFetch<DetailedItem[]>({
-      url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
-      config: {
-          method: "GET"
+  return IFetch<DetailedItem[]>({
+    url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
+    config: {
+      method: "GET"
+    }
+  });
+};
+
+/**
+ * Gets all items in the database.
+ *
+ * @returns A list of all reservalble items
+ */
+export const getItems = () => {
+  return IFetch<DetailedItem[]>({
+    url: `${baseUrl}/kontres/bookable_items/`,
+    config: {
+      method: "GET",
+      next: {
+        tags: [validationTags.bookableItems]
       }
-    });
-  };
-  
-  /**
-   * Gets all items in the database.
-   *
-   * @returns A list of all reservalble items
-   */
-  export const getItems = () => {
-    return IFetch<DetailedItem[]>({
-      url: `${baseUrl}/kontres/bookable_items/`,
-      config: {
-          method: "GET"
-      }
-    });
-  };
+    }
+  });
+};
+
+
+
+/**
+ * Registers a new bookable item in backend
+ */
+export const createItem = (data: Omit<DetailedItem, 'id' | 'updated_at' | 'created_at'>) => {
+  return IFetch<DetailedItem>({
+    url: `${baseUrl}/kontres/bookable_items/`,
+    config: {
+      body: JSON.stringify(data),
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  });
+}
+
+export const invalidateItems = () => {
+  revalidateTag(validationTags.bookableItems);
+}

@@ -28,6 +28,7 @@ export type DetailedItem = {
   id: string;
   name: string;
   description: string;
+  allows_alcohol: boolean;
 } & BaseModel;
 
 

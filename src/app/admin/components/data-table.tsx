@@ -21,7 +21,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import React, { useState } from "react"
 import { Input } from "@/components/ui/input"
 
 type DataTableProps<TData, TValue> = {
@@ -31,6 +31,7 @@ type DataTableProps<TData, TValue> = {
     search?: boolean;
     filterProperty?: keyof TData;
     searchPlaceholder?: string;
+    headerItem?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -38,7 +39,8 @@ export function DataTable<TData, TValue>({
     data,
     rowClickCallback,
     searchPlaceholder,
-    filterProperty
+    filterProperty,
+    headerItem,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -69,6 +71,7 @@ export function DataTable<TData, TValue>({
                     }
                     className="max-w-sm"
                 />
+                {headerItem}
             </div>
             <div className="rounded-md border">
                 <Table>

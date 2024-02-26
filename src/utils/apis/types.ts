@@ -13,6 +13,10 @@ export type Reservations = {
     reservations: DetailedReservation[];
 };
 
+export type ErrorMessage = {
+    message: string;
+};
+
 export type DetailedItem = {
     id: string;
     name: string;
@@ -37,4 +41,53 @@ export type User = {
     accepts_event_rules: boolean;
     allows_photo_by_default: boolean;
     slack_user_id: string;
+};
+
+export type Memberships = {
+    count: number;
+    next: null;
+    previous: null;
+    results: Membership[];
+};
+
+export type Membership = {
+    group: Group;
+    membership_type: string;
+    created_at: string;
+    expiration_date: string;
+    user: GroupUser;
+};
+
+export type Group = {
+    name: string;
+    slug: string;
+    type: string;
+    viewer_is_member: boolean;
+    image: string;
+    image_alt: string | null;
+};
+
+export type GroupUser = {
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    gender: number;
+    image: string;
+    study: Study;
+    studyyear: StudyYear;
+};
+
+export type Study = {
+    group: Group;
+    membership_type: string;
+    created_at: string;
+    expiration_date: string | null;
+};
+
+export type StudyYear = {
+    group: Group;
+    membership_type: string;
+    created_at: string;
+    expiration_date: string | null;
 };

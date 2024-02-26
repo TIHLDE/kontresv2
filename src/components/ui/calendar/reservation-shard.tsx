@@ -55,7 +55,9 @@ export default function ReservationShard({
                     setRelativeMousePosition(null);
                 }}
             >
-                <div className="text-xs text-white"></div>
+                <div className="text-sm text-white m-2 overflow-hidden ">
+                    {reservation.description}
+                </div>
             </div>
         </Link>
     );

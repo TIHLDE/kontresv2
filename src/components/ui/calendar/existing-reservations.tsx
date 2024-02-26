@@ -29,6 +29,7 @@ export default function ExistingReservations({
     let reservationShards = [];
 
     for (let reservation of reservations) {
+        console.log('res', reservation);
         let start = new Date(reservation.start_time);
         let end = new Date(reservation.end_time);
 
@@ -57,7 +58,7 @@ export default function ExistingReservations({
         let end = new Date(reservation.reservation!.end_time);
 
         if (view === 'week') {
-            return isSameWeek(start, currentDay);
+            return isSameWeek(start, currentDay, { weekStartsOn: 1 });
         } else {
             return isSameDay(start, currentDay);
         }

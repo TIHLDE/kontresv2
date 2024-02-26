@@ -11,14 +11,14 @@ export default function Hero() {
                 alt="Hero"
                 width="800"
                 height="800"
-                className="-left-48 hover:-left-0 hover:shadow-2xl hover:scale-105 transition-all duration-300 border -translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-2xl shadow"
+                className="-left-48 hidden hover:-left-0 hover:shadow-2xl hover:scale-105 transition-all duration-300 border -translate-x-1/2 lg:block absolute top-1/2 -translate-y-1/2 rounded-2xl shadow"
             />
             <Image
                 src="/soundboks2.jpg"
                 alt="Hero"
                 width="800"
                 height="800"
-                className="-right-48 border hover:right-0 hover:shadow-2xl hover:scale-105 transition-all duration-300 translate-x-1/2 absolute top-1/2 -translate-y-1/2 rounded-2xl shadow"
+                className="-right-48 hidden border hover:right-0 hover:shadow-2xl hover:scale-105 transition-all duration-300 translate-x-1/2 lg:block absolute top-1/2 -translate-y-1/2 rounded-2xl shadow"
             />
             <h1 className="text-5xl md:text-7xl font-bold mx-auto text-center">
                 Book TIHLDEs <br /> lokaler og utstyr
@@ -27,7 +27,7 @@ export default function Hero() {
                 Her kan du booke kontoret, soundbox og utstyr, <br />
                 om du er medlem i TIHLDE.
             </p>
-            <div className="flex items-center">
+            <div className="flex flex-col md:flex-row items-center">
                 <Button className="m-2 p-8 text-lg group">
                     <ArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform duration-150" />
                     Reserver kontoret{' '}

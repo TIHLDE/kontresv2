@@ -1,7 +1,7 @@
 "use client"
 
 import { DetailedReservation } from "@/utils/apis/types";
-import { columns } from "./columns"
+import { reservationColumns } from "./reservationColumns"
 import { DataTable } from "./data-table"
 import { useRouter } from "next/navigation";
 
@@ -17,7 +17,7 @@ const ReservationsList = ({ reservations }: ReservationsListProps) => {
     }
 
     return (
-        <DataTable columns={columns} data={reservations} rowClickCallback={rowClickCallback} />
+        <DataTable searchPlaceholder={"Søk etter brukere..."} search={true} columns={reservationColumns} data={reservations} rowClickCallback={rowClickCallback} />
     )
 }
 

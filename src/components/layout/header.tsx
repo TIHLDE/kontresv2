@@ -33,7 +33,6 @@ export default async function Header({ userData, items, className, ...props }: H
                     <Logo />
                 </HeaderLink>
                 <BookableItems className="flex gap-6" items={items} />
-                <HeaderLink href="/reservation">Reservasjoner</HeaderLink>
                 <HeaderLink href="/booking">Booking</HeaderLink>
             </nav>
 

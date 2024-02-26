@@ -6,8 +6,10 @@ import { DetailedReservation, User } from "@/utils/apis/types";
 import { getCurrentUserData } from "@/utils/apis/user";
 import { DataTable } from "./components/data-table";
 import { getReservations } from "@/utils/apis/reservations";
-import { columns } from "./components/columns";
+import { reservationColumns } from "./components/reservationColumns";
 import ReservationsList from "./components/ReservationsList";
+import ItemsList from "./components/ItemsList";
+import { getItems } from "@/utils/apis/items";
 
 const Admin = async () => {
     // Get the user
@@ -19,6 +21,7 @@ const Admin = async () => {
     }
 
     const reservations = await getReservations();
+    const items = await getItems();
 
     return (
         <div className="max-w-page mx-auto min-h-screen md:w-full">
@@ -32,7 +35,9 @@ const Admin = async () => {
                         <TabsContent value="reservations">
                             <ReservationsList reservations={reservations} />
                         </TabsContent>
-                        <TabsContent value="items">Gjenstander</TabsContent>
+                        <TabsContent value="items">
+                            <ItemsList items={items} />
+                        </TabsContent>
                     </Tabs>
                 </div>
             </Card>

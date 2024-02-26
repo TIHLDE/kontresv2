@@ -8,11 +8,11 @@ import { cn } from "@/utils/cn"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 
-const HeaderButton = ({ className, ...props }: ButtonProps) => {
+export const HeaderButton = ({ className, ...props }: ButtonProps) => {
     return <Button className={cn("px-0 hover:bg-transparent", className)} {...props} />
 }
 
-export const columns: ColumnDef<DetailedReservation>[] = [
+export const reservationColumns: ColumnDef<DetailedReservation>[] = [
     {
         accessorKey: "author_detail",
         accessorFn: (data) => {

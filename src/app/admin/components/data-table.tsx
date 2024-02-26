@@ -23,18 +23,22 @@ import {
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
-import { DetailedReservation } from "@/utils/apis/types"
 
-interface DataTableProps<TData, TValue> {
+type DataTableProps<TData, TValue> = {
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     rowClickCallback?: (data: TData) => void;
+    search?: boolean;
+    filterProperty?: keyof TData;
+    searchPlaceholder?: string;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-    rowClickCallback
+    rowClickCallback,
+    searchPlaceholder,
+    filterProperty
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -58,10 +62,10 @@ export function DataTable<TData, TValue>({
         <div>
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Søk etter brukere..."
-                    value={(table.getColumn("author_detail")?.getFilterValue() as string) ?? ""}
+                    placeholder={searchPlaceholder ?? "Søk..."}
+                    value={(table.getColumn(filterProperty as string)?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("author_detail")?.setFilterValue(event.target.value)
+                        table.getColumn(filterProperty as string)?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />

@@ -1,6 +1,7 @@
 import { getUserData } from "@/utils/apis/user";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { ACCESS_TOKEN } from "../constants";
 
 export async function middleware(req: NextRequest) {
     const isAuthenticated = await checkUserAuth();
@@ -12,9 +13,16 @@ export async function middleware(req: NextRequest) {
 }
 const checkUserAuth = async () => {
     // Check if user is authenticated
-    const userId = cookies().get("user_id");
-    if (!userId?.value) return false;
-    const userData = await getUserData(userId?.value ?? '');
+    const userId = cookies().get("user_id")?.value;
+    const token = cookies().get(ACCESS_TOKEN)?.value;
+    if (!userId || !token) return false;
+    let userData;
+    try {
+        userData = await getUserData(userId ?? '');
+    } catch (error) {
+        return false;
+    }
+
     return Boolean(userData?.first_name);
 }
 

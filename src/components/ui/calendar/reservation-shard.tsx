@@ -1,5 +1,7 @@
+'use client';
+
 import { DetailedReservation } from '../../../utils/apis/types';
-import Link from 'Next/link';
+import { useRouter } from 'next/navigation';
 
 function hexColorFromUUID(uuid: string) {
     let hash = 0;
@@ -27,9 +29,28 @@ export default function ReservationShard({
     reservation: DetailedReservation;
     setRelativeMousePosition: (e: any) => void;
 }) {
+    const router = useRouter();
+
     return (
-        <Link
-            href={'/reservation/' + reservation.id}
+        <div
+            onMouseEnter={(e) => e.stopPropagation()}
+            onMouseOver={(e) => e.stopPropagation()}
+            onMouseLeave={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setRelativeMousePosition(null);
+            }}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+            onMouseMove={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setRelativeMousePosition(null);
+            }}
+            onClick={(e) => {
+                router.push(`/reservasjon/${reservation.id}`);
+                e.stopPropagation();
+            }}
             className="absolute rounded-md shadow-lg border z-10"
             style={{
                 top: top,
@@ -39,26 +60,20 @@ export default function ReservationShard({
                 backgroundColor: hexColorFromUUID(reservation.id),
             }}
         >
-            <div
-                onMouseEnter={(e) => e.stopPropagation()}
-                onMouseOver={(e) => e.stopPropagation()}
-                onMouseLeave={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setRelativeMousePosition(null);
-                }}
-                onMouseDown={(e) => e.stopPropagation()}
-                onMouseUp={(e) => e.stopPropagation()}
-                onMouseMove={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setRelativeMousePosition(null);
-                }}
-            >
-                <div className="text-sm text-white m-2 overflow-hidden ">
-                    {reservation.description}
-                </div>
+            <div className="text-xs text-white p-2">
+                {/* Temporary calendar details */}
+                <h2>@{reservation?.author_detail.user_id}</h2>
+                {reservation?.group_detail && (
+                    <h2>
+                        På vegne av{' '}
+                        <span className="underline">
+                            {reservation?.group_detail?.name}
+                        </span>
+                    </h2>
+                )}
+                <p className="mt-2">{reservation?.start_time}</p>
+                <p className="mt-1">{reservation?.end_time}</p>
             </div>
-        </Link>
+        </div>
     );
 }

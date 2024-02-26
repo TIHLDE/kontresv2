@@ -13,7 +13,9 @@ export default async function Page({ params: { type } }: PageProps) {
     let reservationRequest = await getReservations();
 
     let item = await getBookableItem(type);
-
+    reservationRequest = reservationRequest?.filter(
+        (booking) => type === booking.bookable_item_detail.id,
+    ) ?? [];
     return (
         <div className="lg:pt-20">
             <Calendar

@@ -1,13 +1,14 @@
 'use server';
 
+import { ACCESS_TOKEN } from '../../../constants';
 import { IFetch } from './fetch';
-import { Memberships, User } from './types';
+import { PermissionApp, User, UserPermissions } from './types';
 import { cookies } from 'next/headers';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
 export const getUser = (user_id: string, password: string) => {
-    return IFetch<string>({
+    return IFetch<{ token: string }>({
         url: `${baseUrl}/auth/login`,
         config: {
             method: 'POST',
@@ -34,26 +35,6 @@ export const getUserData = (user_id: User['user_id']) => {
     });
 };
 
-export const getUserMemberships = () => {
-    return IFetch<Memberships>({
-        url: `${baseUrl}/users/me/memberships`,
-        config: {
-            method: 'GET',
-            next: {
-                revalidate: 0,
-            },
-        },
-    });
-};
-
-export const isAdmin = async () => {
-    const memberships = (await getUserMemberships()).results.map(
-        (membership) => membership.group.slug,
-    );
-
-    return memberships.includes('hs') || memberships.includes('index');
-};
-
 /**
  * Automatically finds the user id cookie, and gets the associated user data.
  */
@@ -70,5 +51,27 @@ export const getCurrentUserData = async () => {
 export const signOutUser = () => {
     // Delete cookies
     cookies().delete('user_id');
-    cookies().delete('token');
+    cookies().delete(ACCESS_TOKEN);
+};
+
+export const getUserPermissions = () => {
+    return IFetch<UserPermissions>({
+        url: `${baseUrl}/users/me/permissions`,
+        config: {
+            method: 'GET',
+            next: {
+                tags: ['user_permissions'],
+            },
+        },
+    });
+};
+
+export const checkUserPermissions = (apps: PermissionApp[]) => {
+    return getUserPermissions().then((perms) =>
+        apps.some(
+            (app) =>
+                perms?.permissions?.[app].write ??
+                perms?.permissions?.[app].write_all,
+        ),
+    );
 };

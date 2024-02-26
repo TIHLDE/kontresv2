@@ -193,20 +193,20 @@ export default function Calendar({
                             timeStart={
                                 dragStart && !dragEnd
                                     ? `${leftPad(dragStart.hours, 2)}:${leftPad(
-                                          dragStart.minutes,
-                                          2,
-                                      )}`
+                                        dragStart.minutes,
+                                        2,
+                                    )}`
                                     : `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                                          relativeMousePosition.minutes,
-                                          2,
-                                      )}`
+                                        relativeMousePosition.minutes,
+                                        2,
+                                    )}`
                             }
                             timeEnd={
                                 dragStart && !dragEnd
                                     ? `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                                          relativeMousePosition.minutes,
-                                          2,
-                                      )}`
+                                        relativeMousePosition.minutes,
+                                        2,
+                                    )}`
                                     : null
                             }
                             position={{

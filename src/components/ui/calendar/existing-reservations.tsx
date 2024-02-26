@@ -29,7 +29,6 @@ export default function ExistingReservations({
     let reservationShards = [];
 
     for (let reservation of reservations) {
-        console.log('res', reservation);
         let start = new Date(reservation.start_time);
         let end = new Date(reservation.end_time);
 
@@ -53,9 +52,7 @@ export default function ExistingReservations({
     }
 
     reservationShards = reservationShards.filter((reservation) => {
-        console.log('res', reservation);
         let start = new Date(reservation.reservation!.start_time);
-        let end = new Date(reservation.reservation!.end_time);
 
         if (view === 'week') {
             return isSameWeek(start, currentDay, { weekStartsOn: 1 });
@@ -70,7 +67,10 @@ export default function ExistingReservations({
             <ReservationShard
                 setRelativeMousePosition={setRelativeMousePosition}
                 top={(getHours(start) * 100) / 23 + '%'}
-                left={(100 / 7) * (getDay(start) - 1) + '%'}
+                left={
+                    (100 / 7) * (getDay(start) == 0 ? 6 : getDay(start) - 1) +
+                    '%'
+                }
                 color="red"
                 key={index}
                 width={100 / 7 + '%'}

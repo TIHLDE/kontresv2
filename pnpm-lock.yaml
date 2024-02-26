@@ -83,6 +83,9 @@ dependencies:
   date-fns:
     specifier: ^3.2.0
     version: 3.2.0
+  debounce:
+    specifier: ^2.0.0
+    version: 2.0.0
   jotai:
     specifier: ^2.6.4
     version: 2.6.4(@types/react@18.2.47)(react@18.2.0)
@@ -2429,6 +2432,11 @@ packages:
 
   /date-fns@3.2.0:
     resolution: {integrity: sha512-E4KWKavANzeuusPi0jUjpuI22SURAznGkx7eZV+4i6x2A+IZxAMcajgkvuDAU1bg40+xuhW1zRdVIIM/4khuIg==}
+    dev: false
+
+  /debounce@2.0.0:
+    resolution: {integrity: sha512-xRetU6gL1VJbs85Mc4FoEGSjQxzpdxRyFhe3lmWFyy2EzydIcD4xzUvRJMD+NPDfMwKNhxa3PvsIOU32luIWeA==}
+    engines: {node: '>=18'}
     dev: false
 
   /debug@3.2.7:

@@ -17,7 +17,6 @@ const ItemActions = ({ item }: { item: DetailedItem }) => {
     const { toast } = useToast();
 
     const onSubmit = (e: ItemFormValueTypes) => {
-        console.log(e.description);
         return updateItem(item.id, e as DetailedItem).then(() => {
             toast({
                 title: "Gjenstand oppdatert!",

@@ -20,12 +20,14 @@ export type ItemFormValueTypes = z.infer<typeof formSchema>;
 
 export interface CreateItemFormProps {
     onSubmit: (values: ItemFormValueTypes) => Promise<unknown>;
+    initialData?: Partial<ItemFormValueTypes>;
 }
 
-export const CreateItemForm = ({ onSubmit }: CreateItemFormProps) => {
+export const CreateItemForm = ({ onSubmit, initialData }: CreateItemFormProps) => {
     const form = useForm<ItemFormValueTypes>({
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
+        defaultValues: initialData
     })
 
     return (
@@ -71,7 +73,7 @@ export const CreateItemForm = ({ onSubmit }: CreateItemFormProps) => {
                     render={({ field: { value, ...rest } }) => (
                         <FormItem className="flex items-center space-x-2">
                             <FormControl>
-                                <Checkbox {...rest} checked={value} onCheckedChange={(e) => {
+                                <Checkbox checked={value} {...rest} onCheckedChange={(e) => {
                                     form.setValue("allows_alcohol", Boolean(e.valueOf()), {
                                         shouldDirty: true,
                                         shouldTouch: true

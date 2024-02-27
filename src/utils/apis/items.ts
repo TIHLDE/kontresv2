@@ -62,6 +62,29 @@ export const createItem = (data: Omit<DetailedItem, 'id' | 'updated_at' | 'creat
   });
 }
 
+export const updateItem = (uuid: string, data: Omit<DetailedItem, 'id' | 'updated_at' | 'created_at'>) => {
+  return IFetch<DetailedItem>({
+    url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
+    config: {
+      body: JSON.stringify(data),
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  });
+}
+
+
+export const deleteItem = (uuid: string) => {
+  return IFetch({
+    url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
+    config: {
+      method: "DELETE"
+    }
+  });
+}
+
 export const invalidateItems = () => {
   revalidateTag(validationTags.bookableItems);
 }

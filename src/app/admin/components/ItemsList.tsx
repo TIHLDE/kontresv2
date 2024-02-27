@@ -27,7 +27,7 @@ const CreateItem = () => {
     const [open, setOpen] = useState(false);
 
     const onSubmit = (e: ItemFormValueTypes) => {
-        return createItem(e).then(() => {
+        return createItem(e as DetailedItem).then(() => {
             invalidateItems();
             toast({
                 title: "Gjenstand opprettet!",
@@ -35,12 +35,17 @@ const CreateItem = () => {
             })
 
             setOpen(false);
+        }).catch(err => {
+            toast({
+                title: "Noe gikk galt",
+                description: "Kunne ikke opprette gjenstanden. " + err,
+                variant: "destructive"
+            })
         })
     }
 
     return (
         <div className="w-full justify-end flex">
-            <Toaster />
             <Dialog onOpenChange={(open) => { setOpen(open) }} open={open}>
                 <DialogTrigger asChild>
                     <Button><Plus className="w-5 h-5 mr-1" />Opprett ny</Button>

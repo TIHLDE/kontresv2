@@ -9,8 +9,8 @@ import { useForm } from "react-hook-form";
 import * as z from "zod"
 
 const formSchema = z.object({
-    name: z.string(),
-    description: z.string(),
+    name: z.string().min(1),
+    description: z.string().min(1),
     image: z.string().url().optional(),
     allows_alcohol: z.boolean().optional(),
 });

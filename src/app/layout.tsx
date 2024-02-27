@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/ui/theme-provider';
 
 import { getUserData } from '../utils/apis/user';
 import './globals.css';
+import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
@@ -39,7 +40,7 @@ export default async function RootLayout({
 
     return (
         <html lang="en">
-            <body className={inter.className}>
+            <body className={cn(inter.className, 'overflow-x-hidden')}>
                 <ThemeProvider
                     attribute="class"
                     defaultTheme="system"

@@ -52,10 +52,11 @@ const ItemActions = ({ item }: { item: DetailedItem }) => {
     }
 
     return (
-        <div className="flex gap-3 justify-end">
+        <div className="flex gap-3 justify-end place-content-center">
+            {/* Item row dropdown menu */}
             <DropdownMenu>
                 <DropdownMenuTrigger>
-                    <Button variant={"ghost"}>
+                    <Button variant={"ghost"} className="h-8 w-8 p-0">
                         <MoreHorizontal className="w-4 h-4" />
                         <span className="sr-only">Vis flere handlinger</span>
                     </Button>
@@ -68,6 +69,7 @@ const ItemActions = ({ item }: { item: DetailedItem }) => {
                 </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* Edit item dialog */}
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
                 <DialogContent>
                     <DialogHeader>
@@ -81,6 +83,7 @@ const ItemActions = ({ item }: { item: DetailedItem }) => {
                 </DialogContent>
             </Dialog>
 
+            {/* Delete item dialog */}
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

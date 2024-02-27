@@ -13,7 +13,7 @@ import ItemActions from "./item-actions"
 export const itemColumns: ColumnDef<DetailedItem>[] = [
     {
         accessorKey: "name",
-        header: "Gjenstand"
+        header: "Gjenstand",
     },
     {
         accessorKey: "description",

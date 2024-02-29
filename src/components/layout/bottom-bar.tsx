@@ -38,9 +38,18 @@ const BottomBar = ({ user, className, ...props }: BottomBarProps) => {
 
     return (
         <motion.div
+            initial={{
+                y: '200%',
+            }}
+            animate={{
+                y: 0,
+            }}
+            transition={{
+                delay: 0.4,
+            }}
             className={cn(
                 className,
-                'w-3/4 gap-5 bg-background border border-border py-3 place-content-center items-center flex rounded-3xl shadow-md',
+                'w-3/4 gap-5 bg-background border border-border py-3 place-content-center items-center flex rounded-3xl shadow-lg',
             )}
             drag
             dragConstraints={{
@@ -59,7 +68,7 @@ const BottomBar = ({ user, className, ...props }: BottomBarProps) => {
                 size={'lg'}
                 className="px-0"
             >
-                <Avatar className="w-full h-full">
+                <Avatar className="w-full h-full aspect-square">
                     <AvatarImage src={user?.image} alt="Profililde" />
                     <AvatarFallback>
                         <UserRound className="text-foreground" />

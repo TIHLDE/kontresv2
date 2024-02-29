@@ -1,14 +1,15 @@
 import BottomBar from '@/components/layout/bottom-bar';
 import Header from '@/components/layout/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
+
+import { getItems } from '@/utils/apis/items';
 
 import { getUserData } from '../utils/apis/user';
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { cookies } from 'next/headers';
-import { getItems } from '@/utils/apis/items';
-import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -46,8 +47,12 @@ export default async function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <Header userData={userData} items={items} className="lg:flex hidden" />
-                    <div className='py-24'>
+                    <Header
+                        userData={userData}
+                        items={items}
+                        className="lg:flex hidden"
+                    />
+                    <div className="py-page">
                         <Toaster />
                         {children}
                     </div>

@@ -11,6 +11,8 @@ import { Separator } from '@/components/ui/separator';
 import { DetailedItem } from '@/utils/apis/types';
 import { signOutUser } from '@/utils/apis/user';
 
+
+
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
@@ -72,9 +74,9 @@ const BottomBar = ({
                 y: 0,
                 ...(narrow
                     ? {
-                          width: '4.5rem',
-                          height: '4.5rem',
-                          borderRadius: '20rem',
+                          width: '5rem',
+                          height: '5rem',
+                          borderRadius: '2.5rem',
                       }
                     : {
                           width: '75%',

@@ -261,10 +261,9 @@ export default function Calendar({
                 </div>
             </div>
             <Link href="/booking">
-                <Button className="fixed bottom-12 right-12 h-20 w-20 rounded-full">
+                <Button className="fixed bottom-5 right-12 h-20 w-20 rounded-full shadow-lg">
                     <PlusIcon
                         size={24}
-                        className="text-white fill-white stroke-white"
                     />
                 </Button>
             </Link>

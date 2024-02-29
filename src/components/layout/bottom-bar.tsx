@@ -6,6 +6,8 @@ import { User } from '@/types/User';
 
 import { Separator } from '@/components/ui/separator';
 
+
+
 import { DetailedItem } from '@/utils/apis/types';
 import { signOutUser } from '@/utils/apis/user';
 
@@ -29,9 +31,9 @@ import {
     useTransform,
     useVelocity,
 } from 'framer-motion';
-import { Menu, UserRound } from 'lucide-react';
+import { ArrowLeft, Menu, UserRound } from 'lucide-react';
 import { PlusIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface BottomBarProps extends React.HTMLProps<HTMLDivElement> {
@@ -40,10 +42,17 @@ interface BottomBarProps extends React.HTMLProps<HTMLDivElement> {
     admin?: boolean;
 }
 
-const BottomBar = ({ user, admin, className, items, ...props }: BottomBarProps) => {
+const BottomBar = ({
+    user,
+    admin,
+    className,
+    items,
+    ...props
+}: BottomBarProps) => {
     const [profileOpen, setProfileOpen] = useState(false);
     const [moreOpen, setMoreOpen] = useState(false);
     const router = useRouter();
+    const path = usePathname();
 
     const { scrollYProgress } = useScroll();
 
@@ -53,10 +62,25 @@ const BottomBar = ({ user, admin, className, items, ...props }: BottomBarProps) 
     const [scope, animate] = useAnimate();
 
     useEffect(() => {
+        let regex =
+            /\/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/i;
+        let narrow = path.match(regex);
+
         animate(
             scope.current,
             {
                 y: 0,
+                ...(narrow
+                    ? {
+                          width: '4.5rem',
+                          height: '4.5rem',
+                          borderRadius: '20rem',
+                      }
+                    : {
+                          width: '75%',
+                          height: '5.5rem',
+                          borderRadius: '1.5rem',
+                      }),
             },
             {
                 duration: 1,
@@ -64,7 +88,27 @@ const BottomBar = ({ user, admin, className, items, ...props }: BottomBarProps) 
                 delay: 0.4,
             },
         );
-    }, [animate, scope]);
+
+        animate(
+            'button#small-hide',
+            { y: narrow ? 200 : 0 },
+            {
+                duration: 1,
+                type: 'spring',
+                delay: 0.4,
+            },
+        );
+
+        animate(
+            'button#small-show',
+            { y: narrow ? 0 : 200, display: narrow ? 'block' : 'none' },
+            {
+                duration: 1,
+                type: 'spring',
+                delay: 0.4,
+            },
+        );
+    }, [animate, scope, path]);
 
     const signOut = () => {
         setProfileOpen(false);
@@ -82,7 +126,7 @@ const BottomBar = ({ user, admin, className, items, ...props }: BottomBarProps) 
             ref={scope}
             className={cn(
                 className,
-                'w-3/4 gap-5 bg-background border border-border py-3 place-content-center items-center flex rounded-3xl shadow-lg',
+                'overflow-hidden gap-5 bg-background border border-border place-content-center items-center flex shadow-lg mx-auto',
             )}
             initial={{ y: '200%' }}
             transition={{
@@ -104,6 +148,16 @@ const BottomBar = ({ user, admin, className, items, ...props }: BottomBarProps) 
         >
             <Button
                 variant={'ghost'}
+                onClick={router.back}
+                id="small-show"
+                className="absolute"
+                aria-label="Gå tilbake"
+            >
+                <ArrowLeft />
+            </Button>
+            <Button
+                id="small-hide"
+                variant={'ghost'}
                 onClick={() => {
                     if (!user) return;
                     setProfileOpen(!profileOpen);
@@ -121,6 +175,7 @@ const BottomBar = ({ user, admin, className, items, ...props }: BottomBarProps) 
 
             <Button
                 className="aspect-square rounded-full h-16 shadow-md"
+                id="small-hide"
                 onClick={() => setMoreOpen(!moreOpen)}
             >
                 <Menu />
@@ -130,7 +185,7 @@ const BottomBar = ({ user, admin, className, items, ...props }: BottomBarProps) 
                     rotate: scrollSpring,
                 }}
             >
-                <MobileModeToggle variant={'ghost'} />
+                <MobileModeToggle variant={'ghost'} id="small-hide" />
             </motion.div>
 
             <Drawer

@@ -66,7 +66,7 @@ export default async function RootLayout({
                         <Toaster />
                         {children}
                     </div>
-                    <div className="lg:hidden fixed bottom-5 w-full flex place-content-center">
+                    <div className="lg:hidden fixed bottom-5 w-full flex">
                         <BottomBar
                             user={userData}
                             items={items}

@@ -16,7 +16,7 @@ export default async function Page({ params: { type } }: PageProps) {
         (booking) => type === booking.bookable_item_detail.id,
     ) ?? [];
     return (
-        <div className="pt-20">
+        <div className="md:pt-20">
             <Calendar
                 typeUUID={type}
                 name={item.name}

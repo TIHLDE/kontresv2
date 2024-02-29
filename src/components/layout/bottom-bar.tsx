@@ -107,7 +107,7 @@ const BottomBar = ({
 
     const goToCalendar = (uuid?: string) => {
         setMoreOpen(false);
-        router.push(`${uuid}`);
+        router.push(`/${uuid}`);
     };
 
     const goToAdmin = () => {

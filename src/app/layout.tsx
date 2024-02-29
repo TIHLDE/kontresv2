@@ -62,11 +62,11 @@ export default async function RootLayout({
                         items={items}
                         className="lg:flex hidden"
                     />
-                    <div className="md:py-page">
+                    <div className="md:py-page pt-8 pb-32">
                         <Toaster />
                         {children}
                     </div>
-                    <div className="lg:hidden fixed bottom-5 w-full flex">
+                    <div className="lg:hidden fixed bottom-5 w-full flex z-10">
                         <BottomBar
                             user={userData}
                             items={items}

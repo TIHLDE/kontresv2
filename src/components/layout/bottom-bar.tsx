@@ -15,28 +15,15 @@ import { signOutUser } from '@/utils/apis/user';
 
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-} from '../ui/drawer';
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '../ui/drawer';
 import { MobileModeToggle, ModeToggle } from '../ui/theme-mode-toggler';
 import { cn } from '@/lib/utils';
-import {
-    motion,
-    useAnimate,
-    useScroll,
-    useSpring,
-    useTransform,
-    useVelocity,
-} from 'framer-motion';
+import { motion, useAnimate, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion';
 import { ArrowLeft, Menu, UserRound } from 'lucide-react';
 import { PlusIcon } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
 
 interface BottomBarProps extends React.HTMLProps<HTMLDivElement> {
     user?: User;
@@ -65,7 +52,7 @@ const BottomBar = ({
 
     useEffect(() => {
         let regex =
-            /\/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}/i;
+            /^\/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/i;
         let narrow = path.match(regex);
 
         animate(
@@ -121,6 +108,11 @@ const BottomBar = ({
     const goToCalendar = (uuid?: string) => {
         setMoreOpen(false);
         router.push(`${uuid}`);
+    };
+
+    const goToAdmin = () => {
+        setProfileOpen(false);
+        router.push('/admin');
     };
 
     return (
@@ -200,7 +192,14 @@ const BottomBar = ({
                     </DrawerHeader>
 
                     <div className="flex flex-col gap-2 p-4">
-                        {}
+                        {admin ? (
+                            <Button
+                                variant="outline"
+                                onClick={goToAdmin}
+                            >
+                                Admin
+                            </Button>
+                        ) : undefined}
                         <Button variant={'destructive'} onClick={signOut}>
                             Logg ut
                         </Button>

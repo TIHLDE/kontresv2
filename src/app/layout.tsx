@@ -52,14 +52,13 @@ export default async function RootLayout({
                         items={items}
                         className="lg:flex hidden"
                     />
-                    <div className="py-page">
+                    <div className="md:py-page">
                         <Toaster />
                         {children}
                     </div>
-                    <BottomBar
-                        className="fixed bottom-0 lg:hidden"
-                        user={userData}
-                    />
+                    <div className="lg:hidden fixed bottom-5 w-full flex place-content-center">
+                        <BottomBar user={userData} />
+                    </div>
                     {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
                 </ThemeProvider>
             </body>

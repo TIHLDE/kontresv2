@@ -17,7 +17,7 @@ export default function Hero() {
                 </p>
                 <div className="flex items-center flex-col md:flex-row w-2/3 md:w-fit mx-auto">
                     <Button className="m-2 p-8 text-lg group w-full">
-                        <ArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform duration-150 w-8" />
+                        <ArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform duration-150 min-w-8" />
                         Reserver kontoret{' '}
                     </Button>
                     <Button
@@ -25,7 +25,7 @@ export default function Hero() {
                         variant="outline"
                     >
                         Reserver soundbox
-                        <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-150 w-8" />
+                        <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-150 min-w-8" />
                     </Button>
                 </div>
             </div>

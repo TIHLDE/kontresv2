@@ -1,9 +1,7 @@
-import BottomBar from '@/components/layout/bottom-bar';
+import BottomBar from '@/components/layout/bottom-bar/bottom-bar';
 import Header from '@/components/layout/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-
-
 
 import { getItems } from '@/utils/apis/items';
 import { PermissionApp } from '@/utils/apis/types';

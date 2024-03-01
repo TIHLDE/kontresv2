@@ -143,6 +143,7 @@ const BottomBar = ({
             }}
             dragElastic={0.3}
         >
+            {/* The back button, which is only shown in narrow mode */}
             <Button
                 variant={'ghost'}
                 onClick={router.back}
@@ -152,6 +153,8 @@ const BottomBar = ({
             >
                 <ArrowLeft />
             </Button>
+
+            {/* Profile button */}
             <Button
                 id="small-hide"
                 variant={'ghost'}
@@ -170,6 +173,7 @@ const BottomBar = ({
                 </Avatar>
             </Button>
 
+            {/* More button (Burger menu button) */}
             <Button
                 className="aspect-square rounded-full h-16 shadow-md"
                 id="small-hide"
@@ -177,6 +181,8 @@ const BottomBar = ({
             >
                 <Menu />
             </Button>
+
+            {/* Theme button (with rotation based on scroll) */}
             <motion.div
                 style={{
                     rotate: scrollSpring,
@@ -184,7 +190,11 @@ const BottomBar = ({
             >
                 <MobileModeToggle variant={'ghost'} id="small-hide" />
             </motion.div>
+
+            {/* Drawer for the hamburger menu button */}
             <More items={items} open={moreOpen} setOpen={setMoreOpen} />
+
+            {/* Drawer for the profile button */}
             <Profile
                 open={profileOpen}
                 setOpen={setProfileOpen}

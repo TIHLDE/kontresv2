@@ -10,9 +10,10 @@ interface PageProps {
     };
 }
 export default async function Page({ params: { type } }: PageProps) {
-    let reservations = await getReservations();
+    let reservationRequest = await getReservations();
+
     let item = await getBookableItem(type);
-    reservations = reservations?.filter(
+    reservationRequest = reservationRequest?.filter(
         (booking) => type === booking.bookable_item_detail.id,
     ) ?? [];
     return (
@@ -20,7 +21,7 @@ export default async function Page({ params: { type } }: PageProps) {
             <Calendar
                 typeUUID={type}
                 name={item.name}
-                reservations={reservations}
+                reservations={reservationRequest}
             />
         </div>
     );

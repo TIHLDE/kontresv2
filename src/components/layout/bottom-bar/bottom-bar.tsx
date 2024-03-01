@@ -62,10 +62,10 @@ const BottomBar = ({
         let narrow = false;
         let calendarPath =
             /^\/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/i;
-        narrow = narrow ?? path.match(calendarPath);
+        narrow = narrow || calendarPath.test(path);
 
         // let someOtherPath = /\/some-other-path/; // Example of another path
-        // narrow = narrow ?? path.match(someOtherPath);
+        // narrow = narrow || someOtherPath.test(path);
 
         // ^ This code can be expanded to include multiple paths. Just be sure to use the proper
         //  regex pattern for the path you want to match.

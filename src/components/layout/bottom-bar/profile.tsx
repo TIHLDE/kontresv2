@@ -1,0 +1,72 @@
+'use client';
+
+import { User } from '@/types/User';
+
+import { Button } from '@/components/ui/button';
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+} from '@/components/ui/drawer';
+
+import { signOutUser } from '@/utils/apis/user';
+
+import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction } from 'react';
+
+interface ProfileProps {
+    user?: User;
+    admin?: boolean;
+    open: boolean;
+    setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const Profile = ({ user, admin, open, setOpen }: ProfileProps) => {
+    const router = useRouter();
+
+    const signOut = () => {
+        setOpen(false);
+        signOutUser();
+        router.refresh();
+    };
+    const goToAdmin = () => {
+        setOpen(false);
+        router.push('/admin');
+    };
+
+    return (
+        <Drawer open={open} onOpenChange={(open) => setOpen(open)}>
+            <DrawerContent>
+                <DrawerHeader>
+                    <DrawerTitle>Hei, {user?.first_name}!</DrawerTitle>
+                </DrawerHeader>
+
+                <div className="flex flex-col gap-2 p-4">
+                    {admin ? (
+                        <Button variant="outline" onClick={goToAdmin}>
+                            Admin
+                        </Button>
+                    ) : undefined}
+                    <Button variant={'destructive'} onClick={signOut}>
+                        Logg ut
+                    </Button>
+                </div>
+                <DrawerFooter>
+                    <DrawerClose asChild>
+                        <Button
+                            className="w-full"
+                            onClick={() => setOpen(false)}
+                        >
+                            Lukk
+                        </Button>
+                    </DrawerClose>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
+    );
+};
+
+export default Profile;

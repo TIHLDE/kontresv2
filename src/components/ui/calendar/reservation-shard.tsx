@@ -1,7 +1,7 @@
-"use client"
+'use client';
 
-import { useRouter } from 'next/navigation';
 import { DetailedReservation } from '../../../utils/apis/types';
+import { useRouter } from 'next/navigation';
 
 function hexColorFromUUID(uuid: string) {
     let hash = 0;
@@ -63,9 +63,16 @@ export default function ReservationShard({
             <div className="text-xs text-white p-2">
                 {/* Temporary calendar details */}
                 <h2>@{reservation?.author_detail.user_id}</h2>
-                {reservation?.group_detail && <h2>På vegne av <span className='underline'>{reservation?.group_detail?.name}</span></h2>}
-                <p className='mt-2'>{reservation?.start_time}</p>
-                <p className='mt-1'>{reservation?.end_time}</p>
+                {reservation?.group_detail && (
+                    <h2>
+                        På vegne av{' '}
+                        <span className="underline">
+                            {reservation?.group_detail?.name}
+                        </span>
+                    </h2>
+                )}
+                <p className="mt-2">{reservation?.start_time}</p>
+                <p className="mt-1">{reservation?.end_time}</p>
             </div>
         </div>
     );

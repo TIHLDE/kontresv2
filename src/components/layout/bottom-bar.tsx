@@ -120,7 +120,7 @@ const BottomBar = ({
             ref={scope}
             className={cn(
                 className,
-                'overflow-hidden gap-5 bg-background border border-border place-content-center items-center flex shadow-lg mx-auto',
+                'overflow-hidden gap-5 bg-background/50 backdrop-blur-md border border-border place-content-center items-center flex shadow-lg mx-auto',
             )}
             initial={{ y: '200%' }}
             transition={{

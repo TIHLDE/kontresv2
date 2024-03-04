@@ -1,5 +1,5 @@
 import BottomBar from '@/components/layout/bottom-bar/bottom-bar';
-import Header from '@/components/layout/header';
+import Header from '@/components/layout/header/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 

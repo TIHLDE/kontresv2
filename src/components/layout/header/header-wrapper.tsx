@@ -1,11 +1,9 @@
 'use client';
 
-import { cn } from '../../lib/utils';
+import { cn } from '../../../lib/utils';
 import { useEffect, useState } from 'react';
 
-interface HeaderWrapperProps extends React.HTMLProps<HTMLHeadElement> {
-
-}
+interface HeaderWrapperProps extends React.HTMLProps<HTMLHeadElement> {}
 
 export default function HeaderWrapper({
     children,
@@ -31,7 +29,8 @@ export default function HeaderWrapper({
         <header
             className={cn(
                 'p-4 py-1 min-h-[80px] backdrop-blur-sm top-0 transition-all duration-300 fixed w-full bg-background/80 border-border justify-start items-center flex z-50',
-                isScrolled ? 'border-b' : '', className,
+                isScrolled ? 'border-b' : '',
+                className,
             )}
             {...props}
         >

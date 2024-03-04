@@ -1,13 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+
 
 import { leftPad } from '../../../lib/utils';
 import { DetailedReservation } from '../../../utils/apis/types';
@@ -18,17 +14,14 @@ import CalendarTimePopover from './calendar-time-popover';
 import CalendarWeekView from './calendar-week-view';
 import ExistingReservations from './existing-reservations';
 import PossiblePlaceholder from './placeholder';
-import {
-    RelativeMousePositionProps,
-    compareMousePositions,
-    getDateAtMousePosition,
-    weekDays,
-} from '@/lib/utils';
+import { RelativeMousePositionProps, compareMousePositions, getDateAtMousePosition, weekDays } from '@/lib/utils';
 import { add, format, setHours, setMinutes, startOfWeek } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
+import { motion } from 'framer-motion';
 import { PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+
 
 interface CalendarProps {
     typeUUID: string;
@@ -193,20 +186,20 @@ export default function Calendar({
                             timeStart={
                                 dragStart && !dragEnd
                                     ? `${leftPad(dragStart.hours, 2)}:${leftPad(
-                                        dragStart.minutes,
-                                        2,
-                                    )}`
+                                          dragStart.minutes,
+                                          2,
+                                      )}`
                                     : `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                                        relativeMousePosition.minutes,
-                                        2,
-                                    )}`
+                                          relativeMousePosition.minutes,
+                                          2,
+                                      )}`
                             }
                             timeEnd={
                                 dragStart && !dragEnd
                                     ? `${leftPad(relativeMousePosition.hours, 2)}:${leftPad(
-                                        relativeMousePosition.minutes,
-                                        2,
-                                    )}`
+                                          relativeMousePosition.minutes,
+                                          2,
+                                      )}`
                                     : null
                             }
                             position={{
@@ -260,14 +253,21 @@ export default function Calendar({
                     )}
                 </div>
             </div>
-            <Link href="/booking">
-                <Button className="fixed bottom-20 lg:bottom-12 right-12 h-16 w-16 shadow-2xl rounded-full">
-                    <PlusIcon
-                        size={24}
-                        className="text-white fill-white stroke-white"
-                    />
-                </Button>
-            </Link>
+            <motion.div
+                initial={{ y: '200%' }}
+                animate={{ y: 0 }}
+                transition={{
+                    type: 'spring',
+                    delay: 0.5,
+                }}
+                className="fixed bottom-5 right-12 z-20"
+            >
+                <Link href="/booking">
+                    <Button className="h-20 w-20 rounded-full shadow-lg ">
+                        <PlusIcon size={24} />
+                    </Button>
+                </Link>
+            </motion.div>
         </>
     );
 }

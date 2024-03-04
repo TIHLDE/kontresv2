@@ -1,11 +1,12 @@
-import BottomBar from '@/components/layout/bottom-bar';
+import BottomBar from '@/components/layout/bottom-bar/bottom-bar';
 import Header from '@/components/layout/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 
 import { getItems } from '@/utils/apis/items';
+import { PermissionApp } from '@/utils/apis/types';
 
-import { getUserData } from '../utils/apis/user';
+import { checkUserPermissions, getUserData } from '../utils/apis/user';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -39,6 +40,13 @@ export default async function RootLayout({
         console.error(error);
     }
 
+    let admin;
+    try {
+        admin = await checkUserPermissions([PermissionApp.USER]);
+    } catch (error) {
+        console.error(error);
+    }
+
     return (
         <html lang="en">
             <body className={cn(inter.className, 'overflow-x-hidden')}>
@@ -53,14 +61,17 @@ export default async function RootLayout({
                         items={items}
                         className="lg:flex hidden"
                     />
-                    <div className="py-page">
+                    <div className="md:py-page pt-8 pb-32">
                         <Toaster />
                         {children}
                     </div>
-                    <BottomBar
-                        className="fixed bottom-0 lg:hidden"
-                        user={userData}
-                    />
+                    <div className="lg:hidden fixed bottom-5 w-full flex z-10">
+                        <BottomBar
+                            user={userData}
+                            items={items}
+                            admin={admin}
+                        />
+                    </div>
                     {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
                 </ThemeProvider>
             </body>

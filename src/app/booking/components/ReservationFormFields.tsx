@@ -19,7 +19,7 @@ import AutoSelect, {
 import { DetailedItem } from '@/utils/apis/types';
 import { getUsers } from '@/utils/apis/user';
 
-import { UserAutocomplete } from './UserAutocomplete';
+import UserAutocomplete from './UserAutocomplete';
 import { zodResolver } from '@hookform/resolvers/zod';
 import debounce from 'debounce';
 import Link from 'next/link';
@@ -200,7 +200,7 @@ const ReservationFormFields = ({
                         </FormItem>
                     )}
                 />
-                {true && (
+                {selectedItem?.allows_alcohol && (
                     <>
                         <FormField
                             control={form.control}
@@ -245,21 +245,6 @@ const ReservationFormFields = ({
                                         <FormLabel>Edruvakt sin id</FormLabel>
                                         <FormControl>
                                             <UserAutocomplete {...field} />
-                                            {/* <Input
-                                                {...field}
-                                                onChange={debounce(
-                                                    async (
-                                                        e: React.ChangeEvent<HTMLInputElement>,
-                                                    ) => {
-                                                        const data =
-                                                            await getUsers(
-                                                                e.target.value,
-                                                            );
-                                                        console.log(data);
-                                                    },
-                                                    500,
-                                                )}
-                                            /> */}
                                         </FormControl>
                                     </FormItem>
                                 )}

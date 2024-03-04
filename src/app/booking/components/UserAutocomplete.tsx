@@ -28,7 +28,11 @@ export default function UserAutocomplete(props: any) {
     return (
         <Combobox value={selectedUser} onChange={setSelectedUser}>
             <div className="relative">
-                <Combobox.Input onChange={debouncedChange} as={Input} />
+                <Combobox.Input
+                    onChange={debouncedChange}
+                    as={Input}
+                    {...props}
+                />
                 <Combobox.Options className="absolute mt-1 rounded-lg w-full z-10 border border-border bg-white dark:bg-zinc-900">
                     {users.map((user) => (
                         <Combobox.Option

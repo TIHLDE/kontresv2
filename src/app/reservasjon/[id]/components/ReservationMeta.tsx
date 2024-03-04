@@ -17,6 +17,11 @@ interface ReservationMetaProps {
     state: ReservationState;
 }
 
+export const stateMap: { [key in ReservationState]: StateAtomType } = {
+    CANCELLED: "Avslått",
+    CONFIRMED: "Bekreftet",
+    PENDING: "Avventer"
+}
 
 export type StateAtomType = 'Bekreftet' | 'Avventer' | 'Avslått' | 'Laster';
 export const stateAtom = atom<StateAtomType>('Laster');
@@ -25,13 +30,7 @@ const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps)
     const [stateText, setStateText] = useAtom(stateAtom);
 
     useEffect(() => {
-        if (state === 'CONFIRMED') {
-            setStateText('Bekreftet');
-        } else if (state === 'PENDING') {
-            setStateText('Avventer');
-        } else if (state === 'CANCELLED') {
-            setStateText('Avslått');
-        }
+        setStateText(stateMap[state])
     }, [state, setStateText])
 
 

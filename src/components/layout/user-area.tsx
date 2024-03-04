@@ -12,27 +12,38 @@ import { cn } from '@/utils/cn';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ModeToggle } from '../ui/theme-mode-toggler';
-import { UserRound } from 'lucide-react';
+import { Settings, UserRound } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useState } from 'react';
 
 interface UserAreaProps extends React.HTMLProps<HTMLDivElement> {
     username: string;
     image: string;
+    admin?: boolean;
 }
 
 export const UserArea = ({
     username,
     image,
+    admin,
     className,
     ...props
 }: UserAreaProps) => {
     // const { data, loading, error, signOut } = useUser();
     const router = useRouter();
+    const [open, setOpen] = useState(false);
 
     const signOut = () => {
+        setOpen(false);
         signOutUser();
         router.refresh();
     };
+
+    const goToAdmin = () => {
+        setOpen(false);
+        router.push('/admin');
+    }
     return (
         <div
             {...props}
@@ -41,7 +52,7 @@ export const UserArea = ({
                 className,
             )}
         >
-            <Popover>
+            <Popover onOpenChange={(open) => setOpen(open)} open={open}>
                 <PopoverTrigger>
                     <Avatar>
                         <AvatarImage src={image} alt={'profilbilde'} />
@@ -60,7 +71,12 @@ export const UserArea = ({
                         >
                             Logg ut
                         </Button>
-                        {/* <Button className="w-full">Kule ting</Button> */}
+                        {
+                            admin ? <Button className="w-full" onClick={goToAdmin}>
+                                Admin
+                            </Button> : undefined
+                        }
+
                     </div>
                 </PopoverContent>
             </Popover>

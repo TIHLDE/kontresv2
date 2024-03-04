@@ -28,6 +28,7 @@ export type DetailedItem = {
   id: string;
   name: string;
   description: string;
+  allows_alcohol: boolean;
 } & BaseModel;
 
 
@@ -112,4 +113,13 @@ export interface Permissions {
   read: boolean;
   write_all?: boolean;
   destroy?: boolean;
+}
+
+export const AdminPermissions = [
+  PermissionApp.USER
+]
+
+export const validationTags = {
+  reservations: 'reservations',
+  bookableItems: 'bookableItems',
 }

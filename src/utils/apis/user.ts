@@ -75,3 +75,18 @@ export const checkUserPermissions = (apps: PermissionApp[]) => {
         ),
     );
 };
+
+export const checkUserAuth = async () => {
+    // Check if user is authenticated
+    const userId = cookies().get('user_id')?.value;
+    const token = cookies().get(ACCESS_TOKEN)?.value;
+    if (!userId || !token) return false;
+    let userData;
+    try {
+        userData = await getUserData(userId ?? '');
+    } catch (error) {
+        return false;
+    }
+
+    return Boolean(userData?.first_name);
+};

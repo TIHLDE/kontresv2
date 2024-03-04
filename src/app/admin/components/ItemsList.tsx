@@ -1,67 +1,11 @@
-"use client"
+import { getItems } from '@/utils/apis/items';
 
-import { DetailedItem } from "@/utils/apis/types";
-import { DataTable } from "./data-table"
-import { itemColumns } from "./itemColumns"
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { DialogDescription } from "@radix-ui/react-dialog";
-import CreateItemForm, { ItemFormValueTypes } from "./create-item-form";
-import { createItem, invalidateItems } from "@/utils/apis/items";
-import { useToast } from "@/components/ui/use-toast";
-import { Toaster } from "@/components/ui/toaster";
-import { useState } from "react";
+import ItemsTable from './ItemsTable';
 
-const ItemsList = ({
-    items
-}: { items: DetailedItem[] }) => {
+const ItemsList = async () => {
+    const items = await getItems();
 
-    return (
-        <DataTable columns={itemColumns} data={items} search filterProperty="name" headerItem={<CreateItem />} searchPlaceholder="Søk etter navn..." />
-    )
-}
-
-const CreateItem = () => {
-    const { toast } = useToast();
-    const [open, setOpen] = useState(false);
-
-    const onSubmit = (e: ItemFormValueTypes) => {
-        return createItem(e as DetailedItem).then(() => {
-            invalidateItems();
-            toast({
-                title: "Gjenstand opprettet!",
-                description: "Den er nå tilgjengelig for alle."
-            })
-
-            setOpen(false);
-        }).catch(err => {
-            toast({
-                title: "Noe gikk galt",
-                description: "Kunne ikke opprette gjenstanden. " + err,
-                variant: "destructive"
-            })
-        })
-    }
-
-    return (
-        <div className="w-full justify-end flex">
-            <Dialog onOpenChange={(open) => { setOpen(open) }} open={open}>
-                <DialogTrigger asChild>
-                    <Button><Plus className="w-5 h-5 mr-1" />Opprett ny</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Opprett en ny gjenstand</DialogTitle>
-                        <DialogDescription>
-                            Her kan du legge inn en ny gjenstand.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <CreateItemForm onSubmit={onSubmit} />
-                </DialogContent>
-            </Dialog>
-        </div>
-    )
-}
+    return <ItemsTable data={items} />;
+};
 
 export default ItemsList;

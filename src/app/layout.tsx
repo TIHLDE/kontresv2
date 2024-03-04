@@ -6,7 +6,11 @@ import { Toaster } from '@/components/ui/toaster';
 import { getItems } from '@/utils/apis/items';
 import { PermissionApp } from '@/utils/apis/types';
 
-import { checkUserPermissions, getUserData } from '../utils/apis/user';
+import {
+    checkUserAuth,
+    checkUserPermissions,
+    getUserData,
+} from '../utils/apis/user';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -25,28 +29,6 @@ export default async function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const userId = cookies().get('user_id');
-    let userData;
-    try {
-        userData = await getUserData(userId?.value ?? '');
-    } catch (error) {
-        console.error(error);
-    }
-
-    let items;
-    try {
-        items = await getItems();
-    } catch (error) {
-        console.error(error);
-    }
-
-    let admin;
-    try {
-        admin = await checkUserPermissions([PermissionApp.USER]);
-    } catch (error) {
-        console.error(error);
-    }
-
     return (
         <html lang="en">
             <body className={cn(inter.className, 'overflow-x-hidden')}>
@@ -56,21 +38,13 @@ export default async function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <Header
-                        userData={userData}
-                        items={items}
-                        className="lg:flex hidden"
-                    />
+                    <Header className="lg:flex hidden" />
                     <div className="md:py-page pt-8 pb-32">
                         <Toaster />
                         {children}
                     </div>
                     <div className="lg:hidden fixed bottom-5 w-full flex z-10">
-                        <BottomBar
-                            user={userData}
-                            items={items}
-                            admin={admin}
-                        />
+                        <BottomBar />
                     </div>
                     {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
                 </ThemeProvider>

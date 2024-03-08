@@ -1,37 +1,69 @@
-import Image from "next/image"
+import { getItems } from '@/utils/apis/items';
+import { cn } from '@/utils/cn';
 
-const ImageSection = () => {
+import Image from 'next/image';
+
+const ImageSection = async () => {
+    let items;
+    try {
+        items = await getItems();
+    } catch (e) {
+        console.error(e);
+    }
+
     return (
-        <div className="[&_img]:md:w-1/3 [&_img]:w-full [&>div]:md:gap-10 [&>div]:gap-5">
-            <div className='w-full flex md:flex-row flex-col items-center justify-center'>
-                <div className='flex flex-col gap-3'>
-                    <h2 className='font-semibold text-3xl'>Kontoret blablabla</h2>
-                    <span className='text-foreground'>Kontoret er et fint kontor osvosv</span>
-                </div>
-                <Image
-                    src="/kontoret.jpg"
-                    alt="Hero"
-                    width="800"
-                    height="800"
-                    className="border hover:shadow-2xl hover:scale-105 transition-all duration-300 rounded-2xl shadow"
+        <div className="">
+            {items?.map((item, i) => (
+                <ImageTextCard
+                    key={item.id}
+                    image={'/soundboks2.jpg'}
+                    title={item.name}
+                    description={item.description}
+                    align={i % 2 === 0 ? 'right' : 'left'}
                 />
-            </div>
-            <div className='w-full flex md:flex-row flex-col  items-center justify-center mt-10'>
-                <Image
-                    src="/soundboks2.jpg"
-                    alt="Hero"
-                    width="800"
-                    height="800"
-                    className="md:order-1 order-2 border hover:shadow-2xl hover:scale-105 transition-all duration-300 rounded-2xl shadow"
-                />
-                <div className='flex flex-col gap-3 md:order-2 order-1'>
-
-                    <h2 className='font-semibold text-3xl'>Soundboks blablabla</h2>
-                    <span className='text-foreground'>Lager masse lyd etcetc</span>
-                </div>
-            </div>
+            ))}
         </div>
-    )
+    );
+};
+
+interface ImageTextCardProps extends React.HTMLProps<HTMLDivElement> {
+    image?: string;
+    title?: string;
+    description?: string;
+    align?: 'left' | 'right';
 }
+
+const ImageTextCard = ({
+    image,
+    title,
+    description,
+    className,
+    align = 'left',
+    ...props
+}: ImageTextCardProps) => {
+    return (
+        <div
+            {...props}
+            className={cn(
+                'w-full flex flex-col items-center justify-center md:gap-10 gap-5 md:flex-row',
+                className,
+            )}
+        >
+            <div
+                className={`flex flex-col gap-3 ${align === 'right' ? 'order-1' : 'order-2'}`}
+            >
+                <h2 className="font-semibold text-3xl">{title}</h2>
+                <span className="text-foreground">{description}</span>
+            </div>
+            <Image
+                src={image ?? ''}
+                alt="Hero"
+                width="800"
+                height="800"
+                className={`border hover:shadow-2xl hover:scale-105 transition-all w-full duration-300 rounded-2xl shadow md:w-1/3 ${align === 'right' ? 'order-2' : 'order-1'}`}
+            />
+        </div>
+    );
+};
 
 export default ImageSection;

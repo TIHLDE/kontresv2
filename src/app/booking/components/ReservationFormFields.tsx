@@ -17,11 +17,9 @@ import AutoSelect, {
 } from '@/components/ui/select';
 
 import { DetailedItem } from '@/utils/apis/types';
-import { getUsers } from '@/utils/apis/user';
 
 import UserAutocomplete from './UserAutocomplete';
 import { zodResolver } from '@hookform/resolvers/zod';
-import debounce from 'debounce';
 import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
@@ -225,9 +223,10 @@ const ReservationFormFields = ({
                                     </FormControl>
                                     <FormLabel className="!my-0">
                                         Vi skal servere alkohol på arrangementet
-                                        og har fyllt ut{' '}
+                                        og har fylt ut{' '}
                                         <Link
                                             href="https://hjelp.ntnu.no/tas/public/ssp/content/serviceflow?unid=8f090c9e58444762876750db1104178d&from=aef98c8c-3eb9-4e29-8439-e79834d88223&openedFromService=true"
+                                            target="_blank"
                                             className="font-bold underline"
                                         >
                                             søknad hos NTNU
@@ -241,7 +240,7 @@ const ReservationFormFields = ({
                                 control={form.control}
                                 name="sober_watch_id"
                                 render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className="mb-4">
                                         <FormLabel>Edruvakt sin id</FormLabel>
                                         <FormControl>
                                             <UserAutocomplete {...field} />

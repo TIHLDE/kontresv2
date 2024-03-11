@@ -33,7 +33,7 @@ export default function UserAutocomplete({ onChange, value, ...rest }: any) {
                     {users.map((user) => (
                         <Combobox.Option
                             key={user.user_id}
-                            value={`${user.first_name} ${user.last_name}`}
+                            value={user.user_id}
                             as={Fragment}
                         >
                             {() => (

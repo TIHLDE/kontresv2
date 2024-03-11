@@ -37,7 +37,7 @@ const formSchema = z.object({
     description: z.string().min(10, {
         message: 'Beskrivelsen må være mer enn 10 tegn lang',
     }),
-    sober_watch: z.boolean().optional(),
+    alcohol_agreement: z.boolean().optional(),
     sober_watch_id: z.string().optional(),
 });
 
@@ -202,7 +202,7 @@ const ReservationFormFields = ({
                     <>
                         <FormField
                             control={form.control}
-                            name="sober_watch"
+                            name="alcohol_agreement"
                             render={({ field: { value, ...rest } }) => (
                                 <FormItem className="flex items-center space-x-2">
                                     <FormControl>
@@ -211,7 +211,7 @@ const ReservationFormFields = ({
                                             checked={value}
                                             onCheckedChange={(e) =>
                                                 form.setValue(
-                                                    'sober_watch',
+                                                    'alcohol_agreement',
                                                     Boolean(e.valueOf()),
                                                     {
                                                         shouldDirty: true,
@@ -235,7 +235,7 @@ const ReservationFormFields = ({
                                 </FormItem>
                             )}
                         />
-                        {form.watch('sober_watch') && (
+                        {form.watch('alcohol_agreement') && (
                             <FormField
                                 control={form.control}
                                 name="sober_watch_id"

@@ -241,7 +241,9 @@ const ReservationFormFields = ({
                                 name="sober_watch_id"
                                 render={({ field }) => (
                                     <FormItem className="mb-4">
-                                        <FormLabel>Edruvakt sin id</FormLabel>
+                                        <FormLabel>
+                                            Edruvakt sitt navn
+                                        </FormLabel>
                                         <FormControl>
                                             <UserAutocomplete {...field} />
                                         </FormControl>

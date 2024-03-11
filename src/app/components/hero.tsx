@@ -1,11 +1,25 @@
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
+
+import { getItems } from '@/utils/apis/items';
 
 import styles from './welcometitle.module.css';
 import WelcomeTitle from '@/app/components/welcometitle';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-export default function Hero() {
+export default async function Hero() {
+    //TODO: burde kanskje håndtere fetch errors actionen istedet for hver enkelt call?
+    let items;
+    try {
+        items = await getItems();
+    } catch (e) {
+        console.error(e);
+    }
+
+    console.log(items);
+    console.log(items?.find((item) => item.name === 'Kontoret')?.id);
+
     return (
         <div className="h-[100vh] md:mt-[-5rem] w-full flex flex-col justify-center items-center relative overflow-x-hidden">
             <WelcomeTitle />
@@ -16,17 +30,32 @@ export default function Hero() {
                     om du er medlem i TIHLDE.
                 </p>
                 <div className="flex items-center flex-col md:flex-row w-2/3 md:w-fit mx-auto">
-                    <Button className="m-2 p-8 text-lg group w-full">
-                        <ArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform duration-150 min-w-8" />
-                        Reserver kontoret{' '}
-                    </Button>
-                    <Button
-                        className="m-2 p-8 text-lg group w-full"
-                        variant="outline"
+                    <Link
+                        className={cn(
+                            buttonVariants({ variant: 'default' }),
+                            'm-2 p-8 text-lg group w-full',
+                        )}
+                        href={`/${
+                            items?.find((item) => item.name === 'Kontoret')
+                                ?.id ?? 'booking'
+                        }`}
+                    >
+                        Reserver kontoret
+                        <ArrowRight className="mr-2 group-hover:-translate-x-1 transition-transform duration-150 min-w-8" />
+                    </Link>
+                    <Link
+                        className={cn(
+                            buttonVariants({ variant: 'outline' }),
+                            'm-2 p-8 text-lg group w-full',
+                        )}
+                        href={`/${
+                            items?.find((item) => item.name === 'Soundboks')
+                                ?.id ?? 'booking'
+                        }`}
                     >
                         Reserver soundbox
                         <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-150 min-w-8" />
-                    </Button>
+                    </Link>
                 </div>
             </div>
         </div>

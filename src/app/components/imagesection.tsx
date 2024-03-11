@@ -12,10 +12,10 @@ const ImageSection = async () => {
     }
 
     return (
-        <div className="">
+        <div className="flex flex-col gap-5">
             {items?.map((item, i) => (
                 <ImageTextCard
-                    key={item.id}
+                    key={i}
                     image={'/soundboks2.jpg'}
                     title={item.name}
                     description={item.description}
@@ -50,9 +50,9 @@ const ImageTextCard = ({
             )}
         >
             <div
-                className={`flex flex-col gap-3 ${align === 'right' ? 'order-1' : 'order-2'}`}
+                className={`flex flex-col gap-3 ${align === 'right' ? 'order-1' : 'md:order-2'}`}
             >
-                <h2 className="font-semibold text-3xl">{title}</h2>
+                <h2 className="font-semibold text-3xl text-center">{title}</h2>
                 <span className="text-foreground">{description}</span>
             </div>
             <Image
@@ -60,7 +60,7 @@ const ImageTextCard = ({
                 alt="Hero"
                 width="800"
                 height="800"
-                className={`border hover:shadow-2xl hover:scale-105 transition-all w-full duration-300 rounded-2xl shadow md:w-1/3 ${align === 'right' ? 'order-2' : 'order-1'}`}
+                className={`border hover:shadow-2xl hover:scale-105 transition-all w-full duration-300 rounded-2xl shadow md:w-1/3 ${align === 'right' ? 'md:order-2 order-1' : 'order-1'}`}
             />
         </div>
     );

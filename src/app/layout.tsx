@@ -1,4 +1,5 @@
 import BottomBar from '@/components/layout/bottom-bar/bottom-bar';
+import BottomBarWrapper from '@/components/layout/bottom-bar/bottom-bar-wrapper';
 import Header from '@/components/layout/header/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
@@ -15,7 +16,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { cookies } from 'next/headers';
+import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -44,7 +45,9 @@ export default async function RootLayout({
                         {children}
                     </div>
                     <div className="lg:hidden fixed bottom-5 w-full flex z-10">
-                        <BottomBar />
+                        <Suspense>
+                            <BottomBarWrapper />
+                        </Suspense>
                     </div>
                     {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
                 </ThemeProvider>

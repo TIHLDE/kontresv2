@@ -2,7 +2,12 @@
 
 import { ACCESS_TOKEN } from '../../../constants';
 import { IFetch } from './fetch';
-import { PermissionApp, User, UserPermissions } from './types';
+import {
+    PaginationResponse,
+    PermissionApp,
+    User,
+    UserPermissions,
+} from './types';
 import { cookies } from 'next/headers';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
@@ -74,4 +79,14 @@ export const checkUserPermissions = (apps: PermissionApp[]) => {
                 perms?.permissions?.[app].write_all,
         ),
     );
+};
+
+export const getUsers = (name: string, page = 1) => {
+    console.log(name);
+    return IFetch<PaginationResponse<User>>({
+        url: `${baseUrl}/users/?&search=${name}&page=${page}`,
+        config: {
+            method: 'GET',
+        },
+    });
 };

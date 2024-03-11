@@ -7,9 +7,14 @@ import {
     AlertDialogCancel,
     AutoAlertDialog,
 } from '@/components/ui/alert-dialog';
+import { Toaster } from '@/components/ui/toaster';
+import { useToast } from '@/components/ui/use-toast';
 
 import { ErrorType } from '@/utils/apis/fetch';
-import { createReservation, invalidateReservations } from '@/utils/apis/reservations';
+import {
+    createReservation,
+    invalidateReservations,
+} from '@/utils/apis/reservations';
 import { DetailedItem, Membership } from '@/utils/apis/types';
 
 import ApplicantCard from './ApplicantCard';
@@ -20,8 +25,6 @@ import {
 import { parse } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { Toaster } from '@/components/ui/toaster';
-import { useToast } from '@/components/ui/use-toast';
 
 type EventFormType = {
     items: DetailedItem[];
@@ -56,7 +59,6 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
         return new Date();
     };
 
-
     const searchParams = useSearchParams();
     const from = searchParams.get('from');
     const to = searchParams.get('to');
@@ -82,9 +84,9 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
 
     const showSuccess = () => {
         toast({
-            title: "Gratulerer!",
-            description: "Reservasjonen er blitt lagt inn 🥳",
-        })
+            title: 'Gratulerer!',
+            description: 'Reservasjonen er blitt lagt inn 🥳',
+        });
         invalidateReservations();
 
         redirect();
@@ -107,6 +109,8 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
             start_time: values?.from.toISOString() as string,
             end_time: values?.to.toISOString() as string,
             group: group as string,
+            alcohol_agreement: values?.alcohol_agreement,
+            sober_watch: values?.sober_watch_id,
         })
             .then((res) => {
                 showSuccess();
@@ -188,20 +192,19 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 groupChangeCallback={setSelectedGroup}
             />
 
-
             <ApplicantCard
                 image={
                     selectedGroup != '0'
                         ? groups.find(
-                            (group) => group.group.slug === selectedGroup,
-                        )?.group.image ?? ''
+                              (group) => group.group.slug === selectedGroup,
+                          )?.group.image ?? ''
                         : user.image
                 }
                 label={
                     selectedGroup != '0'
                         ? groups.find(
-                            (group) => group.group.slug === selectedGroup,
-                        )?.group.name ?? ''
+                              (group) => group.group.slug === selectedGroup,
+                          )?.group.name ?? ''
                         : user.first_name
                 }
             />

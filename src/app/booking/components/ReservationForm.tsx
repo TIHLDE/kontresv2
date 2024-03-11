@@ -11,7 +11,10 @@ import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 
 import { ErrorType } from '@/utils/apis/fetch';
-import { createReservation } from '@/utils/apis/reservations';
+import {
+    createReservation,
+    invalidateReservations,
+} from '@/utils/apis/reservations';
 import { DetailedItem, Membership } from '@/utils/apis/types';
 
 import ApplicantCard from './ApplicantCard';
@@ -84,6 +87,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
             title: 'Gratulerer!',
             description: 'Reservasjonen er blitt lagt inn 🥳',
         });
+        invalidateReservations();
 
         redirect();
     };

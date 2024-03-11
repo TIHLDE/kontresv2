@@ -1,15 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { setReservationState } from "@/utils/apis/reservations"
-import { useAtom, useSetAtom } from "jotai";
+import { invalidateReservations, setReservationState } from "@/utils/apis/reservations"
+import { useAtom } from "jotai";
 import { StateAtomType, stateAtom } from "./ReservationMeta";
 import { ReservationState } from "@/utils/apis/types";
 import { useRef, useState } from "react";
 import { LoadingSpinner } from "@/components/ui/loadingspinner";
 import { usePop } from "@/utils/animations/buttonPop";
 import { useToast } from "@/components/ui/use-toast";
-import { Toaster } from "@/components/ui/toaster";
 import { useShake } from "@/utils/animations/shake";
 
 interface AdminButtonsProps {
@@ -60,10 +59,12 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         setRejectLoading(true);
         setReservationState(reservationId, 'CANCELLED').then((data) => {
             setRejectLoading(false);
+            invalidateReservations();
             informSuccess();
             pop.run({ ref: rejectRef })
             setState(mapObject[data.state])
         }).catch(err => {
+            console.log(err)
             informFailure();
             setRejectLoading(false);
             shake.run({ ref: rejectRef })
@@ -75,6 +76,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         setAcceptLoading(true);
         setReservationState(reservationId, 'CONFIRMED').then((data) => {
             setAcceptLoading(false);
+            invalidateReservations();
             pop.run({ ref: acceptRef })
             informSuccess();
             setState(mapObject[data.state])

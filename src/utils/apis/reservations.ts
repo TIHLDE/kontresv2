@@ -1,9 +1,11 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
 import { IFetch } from './fetch';
-import { DetailedItem, DetailedReservation, PostReservation, ReservationState } from './types';
+import { DetailedItem, DetailedReservation, PostReservation, ReservationState, validationTags } from './types';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
+
 
 /**
  * Gets a specific reservation given a reservation UUID.
@@ -29,6 +31,9 @@ export const getReservations = () => {
         url: `${baseUrl}/kontres/reservations/`,
         config: {
             method: 'GET',
+            next: {
+                tags: [validationTags.reservations],
+            }
         },
     });
 };
@@ -81,4 +86,8 @@ export const setReservationState = (uuid: string, state: ReservationState) => {
             }),
         },
     });
+}
+
+export const invalidateReservations = () => {
+    revalidateTag(validationTags.reservations);
 }

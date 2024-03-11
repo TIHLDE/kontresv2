@@ -130,3 +130,10 @@ export interface PaginationResponse<T> {
     previous: number | null;
     results: Array<T>;
 }
+
+export const AdminPermissions = [PermissionApp.USER];
+
+export const validationTags = {
+    reservations: 'reservations',
+    bookableItems: 'bookableItems',
+};

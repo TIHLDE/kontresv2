@@ -97,7 +97,6 @@ export const checkUserAuth = async () => {
 };
 
 export const getUsers = (name: string, page = 1) => {
-    console.log(name);
     return IFetch<PaginationResponse<User>>({
         url: `${baseUrl}/users/?&search=${name}&page=${page}`,
         config: {

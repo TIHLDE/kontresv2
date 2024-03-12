@@ -19,8 +19,8 @@ import { DetailedItem, Membership } from '@/utils/apis/types';
 
 import ApplicantCard from './ApplicantCard';
 import {
-    EventFormFields,
-    EventFormValueTypes,
+    ReservationFormFields,
+    ReservationFormValueTypes
 } from '@/app/booking/components/ReservationFormFields';
 import { parse } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -41,9 +41,10 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const [errorAlertMessage, setErrorAlertMessage] = useState<string>();
     const [selectedGroup, setSelectedGroup] = useState('0');
 
+
     const { toast } = useToast();
 
-    const formValues = useRef<EventFormValueTypes>();
+    const formValues = useRef<ReservationFormValueTypes>();
 
     const router = useRouter();
 
@@ -71,10 +72,11 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
             ? itemUUID
             : items[0].id;
 
-    const onSubmit = async (values: EventFormValueTypes) => {
+    const onSubmit = async (values: ReservationFormValueTypes) => {
         formValues.current = values;
         setAlertOpen(true);
     };
+
 
     // Shows an error dialog if the form submit process went wrong
     const showError = (message: string) => {
@@ -180,7 +182,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 }
             />
 
-            <EventFormFields
+            <ReservationFormFields
                 initialData={{
                     item: defaultItem ?? '',
                     from: parseDate(from ?? ''),

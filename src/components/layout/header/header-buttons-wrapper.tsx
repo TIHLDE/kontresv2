@@ -34,7 +34,7 @@ const HeaderButtonsWrapper = async () => {
 
             {userData ? (
                 <UserArea
-                    username={userData?.user_id ?? ''}
+                    name={userData?.first_name ?? ''}
                     image={userData?.image ?? ''}
                     admin={admin}
                 />

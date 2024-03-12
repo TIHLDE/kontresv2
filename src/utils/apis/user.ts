@@ -21,6 +21,9 @@ export const getUser = (user_id: string, password: string) => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            next: {
+                tags: ['user']
+            }
         },
     });
 };
@@ -45,6 +48,7 @@ export const getUserData = (user_id: User['user_id']) => {
  */
 export const getCurrentUserData = async () => {
     const id = await cookies().get('user_id');
+
     return getUserData(id?.value ?? '');
 };
 
@@ -79,6 +83,21 @@ export const checkUserPermissions = (apps: PermissionApp[]) => {
                 perms?.permissions?.[app].write_all,
         ),
     );
+};
+
+export const checkUserAuth = async () => {
+    // Check if user is authenticated
+    const userId = cookies().get('user_id')?.value;
+    const token = cookies().get(ACCESS_TOKEN)?.value;
+    if (!userId || !token) return false;
+    let userData;
+    try {
+        userData = await getUserData(userId ?? '');
+    } catch (error) {
+        return false;
+    }
+
+    return Boolean(userData?.first_name);
 };
 
 export const getUsers = (name: string, page = 1) => {

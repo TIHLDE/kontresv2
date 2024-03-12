@@ -18,13 +18,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 interface UserAreaProps extends React.HTMLProps<HTMLDivElement> {
-    username: string;
+    name: string;
     image: string;
     admin?: boolean;
 }
 
 export const UserArea = ({
-    username,
+    name,
     image,
     admin,
     className,
@@ -62,7 +62,7 @@ export const UserArea = ({
                     </Avatar>
                 </PopoverTrigger>
                 <PopoverContent>
-                    <h2 className="text-lg">Hei, {username}!</h2>
+                    <h2 className="text-lg">Hei, {name}!</h2>
                     <div className="flex gap-3 mt-1">
                         <Button
                             variant={'destructive'}

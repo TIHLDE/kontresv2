@@ -31,6 +31,8 @@ export function LoginForm({ redirect }: { redirect: string }) {
                 type: "server",
                 message: "Feil brukernavn eller passord"
             })
+        }).then((data) => {
+            
         })
     }
 

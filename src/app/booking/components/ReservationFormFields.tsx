@@ -41,12 +41,12 @@ const formSchema = z.object({
     sober_watch_id: z.string().optional(),
 });
 
-export type EventFormValueTypes = z.infer<typeof formSchema>;
+export type ReservationFormValueTypes = z.infer<typeof formSchema>;
 
 type ReservationFormFieldsType = {
     items: DetailedItem[];
     initialData?: Partial<z.infer<typeof formSchema>>;
-    onSubmit: (values: EventFormValueTypes) => Promise<unknown>;
+    onSubmit: (values: ReservationFormValueTypes) => Promise<unknown>;
     groups?: SelectOptionType[] | SelectGroupType[];
     groupChangeCallback: Dispatch<SetStateAction<string>>;
 };
@@ -61,7 +61,7 @@ const ReservationFormFields = ({
     groupChangeCallback,
     onSubmit,
 }: ReservationFormFieldsType) => {
-    const form = useForm<EventFormValueTypes>({
+    const form = useForm<ReservationFormValueTypes>({
         resolver: zodResolver(formSchema),
         shouldUnregister: false,
         defaultValues: {
@@ -306,4 +306,4 @@ const ReservationFormFields = ({
     );
 };
 
-export { ReservationFormFields as EventFormFields };
+export { ReservationFormFields };

@@ -39,6 +39,7 @@ export type DetailedItem = {
     name: string;
     description: string;
     allows_alcohol: boolean;
+    image?: string;
 } & BaseModel;
 
 export type User = {

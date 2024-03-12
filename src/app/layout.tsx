@@ -1,17 +1,8 @@
-import BottomBar from '@/components/layout/bottom-bar/bottom-bar';
 import BottomBarWrapper from '@/components/layout/bottom-bar/bottom-bar-wrapper';
 import Header from '@/components/layout/header/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 
-import { getItems } from '@/utils/apis/items';
-import { PermissionApp } from '@/utils/apis/types';
-
-import {
-    checkUserAuth,
-    checkUserPermissions,
-    getUserData,
-} from '../utils/apis/user';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';

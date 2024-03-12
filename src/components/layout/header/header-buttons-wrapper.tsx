@@ -2,6 +2,8 @@ import { getItems } from '@/utils/apis/items';
 import { AdminPermissions, DetailedItem } from '@/utils/apis/types';
 import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
 
+
+
 import BookableItems from '../../ui/bookable-items';
 import HeaderLink from '../../ui/header-link';
 import Logo from '../../ui/logo';
@@ -10,13 +12,15 @@ import { UserArea } from '../user-area';
 const HeaderButtonsWrapper = async () => {
     let admin = false;
     let items: DetailedItem[] = [];
-    let userData = null;
+    let userData;
 
     try {
+        userData = await getCurrentUserData();
         admin = await checkUserPermissions(AdminPermissions);
         items = await getItems();
-        userData = await getCurrentUserData();
-    } catch (error) {}
+    } catch (error) {
+        console.error(error);
+    }
 
     return (
         <>

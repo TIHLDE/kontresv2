@@ -21,6 +21,9 @@ export const getUser = (user_id: string, password: string) => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            next: {
+                tags: ['user']
+            }
         },
     });
 };
@@ -45,6 +48,7 @@ export const getUserData = (user_id: User['user_id']) => {
  */
 export const getCurrentUserData = async () => {
     const id = await cookies().get('user_id');
+
     return getUserData(id?.value ?? '');
 };
 

@@ -26,8 +26,7 @@ export default async function Hero() {
 
             <div className={`flex flex-col gap-0 ${styles.action}`}>
                 <p className="text-lg md:text-xl md:mt-8 mt-3 md:mb-12 mb-6 text-center text-muted-foreground">
-                    Her kan du booke kontoret, soundbox og utstyr, <br />
-                    om du er medlem i TIHLDE.
+                    Her kan du som medlem i TIHLDE booke kontoret, <br></br> Soundboks eller annet utstyr.
                 </p>
                 <div className="flex items-center flex-col md:flex-row w-2/3 md:w-fit mx-auto">
                     <Link
@@ -53,7 +52,7 @@ export default async function Hero() {
                                 ?.id ?? 'booking'
                         }`}
                     >
-                        Reserver soundbox
+                        Reserver Soundboks
                         <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform duration-150 min-w-8" />
                     </Link>
                 </div>

@@ -2,29 +2,26 @@
 
 import { User } from '@/types/User';
 
-import {
-    AlertDialogAction,
-    AlertDialogCancel,
-    AutoAlertDialog,
-} from '@/components/ui/alert-dialog';
+
+
+import { AlertDialogAction, AlertDialogCancel, AutoAlertDialog } from '@/components/ui/alert-dialog';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 
+
+
 import { ErrorType } from '@/utils/apis/fetch';
-import {
-    createReservation,
-    invalidateReservations,
-} from '@/utils/apis/reservations';
+import { createReservation, invalidateReservations } from '@/utils/apis/reservations';
 import { DetailedItem, Membership } from '@/utils/apis/types';
 
+
+
 import ApplicantCard from './ApplicantCard';
-import {
-    ReservationFormFields,
-    ReservationFormValueTypes
-} from '@/app/booking/components/ReservationFormFields';
+import { ReservationFormFields, ReservationFormValueTypes } from '@/app/booking/components/ReservationFormFields';
 import { parse } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
+
 
 type EventFormType = {
     items: DetailedItem[];
@@ -111,7 +108,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
             start_time: values?.from.toISOString() as string,
             end_time: values?.to.toISOString() as string,
             group: group as string,
-            alcohol_agreement: values?.alcohol_agreement,
+            serves_alcohol: values?.serves_alcohol,
             sober_watch: values?.sober_watch_id,
         })
             .then((res) => {

@@ -7,7 +7,7 @@ export type DetailedReservation = {
     description: string;
     author_detail: User;
     group_detail: BaseGroup | undefined;
-    alcohol_agreement?: boolean;
+    serves_alcohol?: boolean;
     sober_watch?: string;
 } & BaseModel;
 

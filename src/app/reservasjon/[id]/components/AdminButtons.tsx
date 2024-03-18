@@ -45,13 +45,13 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         })
     }
 
-    const informFailure = () => {
+    const informFailure = (detailedErrorMessage: string | undefined = undefined) => {
         toast({
             title: "Noe gikk galt.",
-            description: "Kunne ikke lagre endringene.",
+            description: detailedErrorMessage || "En uventet feil oppstod.",
             variant: "destructive"
-        })
-    }
+        });
+    };
 
 
     const onReject = () => {
@@ -64,7 +64,6 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             pop.run({ ref: rejectRef })
             setState(mapObject[data.state])
         }).catch(err => {
-            console.log(err)
             informFailure();
             setRejectLoading(false);
             shake.run({ ref: rejectRef })
@@ -81,9 +80,16 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             informSuccess();
             setState(mapObject[data.state])
         }).catch(err => {
-            informFailure();
+            try {
+                const errorObj = JSON.parse(err.message);
+                const detailedErrorMessage = errorObj.response?.non_field_errors[0] || 'An unknown error occurred';
+                informFailure(detailedErrorMessage);
+            } catch (parseError) {
+                console.error("Error parsing the error message:", parseError);
+                informFailure();
+            }
             setAcceptLoading(false);
-            shake.run({ ref: acceptRef })
+            shake.run({ ref: acceptRef });
         });
     }
 

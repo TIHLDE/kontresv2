@@ -1,12 +1,12 @@
 import { Card } from '@/components/ui/card';
 
-import { getReservation } from '@/utils/apis/reservations';
-import { BaseGroup, PermissionApp } from '@/utils/apis/types';
+
+
+import { PermissionApp } from '@/utils/apis/types';
 import { checkUserPermissions } from '@/utils/apis/user';
 
 import AdminButtons from './components/AdminButtons';
 import DescriptionWrapper from './components/DescriptionWrapper';
-import ReservationMeta from './components/ReservationMeta';
 import ReservationMetaWrapper from './components/ReservationMetaWrapper';
 import TitleWrapper from './components/TitleWrapper';
 import Image from 'next/image';

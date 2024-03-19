@@ -1,38 +1,49 @@
 "use client";
 
-import { Card } from "@/components/ui/card"
-import { GroupProfilePill, UserProfilePill } from "@/components/ui/profilepill";
-import { User } from "@/types/User";
-import { BaseGroup, ReservationState } from "@/utils/apis/types";
-import { format } from "date-fns"
-import { nb } from "date-fns/locale/nb";
+import { User } from '@/types/User';
+
+import { Card } from '@/components/ui/card';
+import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
+
+import { BaseGroup, ReservationState } from '@/utils/apis/types';
+
+import { format } from 'date-fns';
+import { nb } from 'date-fns/locale/nb';
 import { atom, useAtom } from 'jotai';
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 interface ReservationMetaProps {
     from: string;
     to: string;
     user: User;
     group: BaseGroup;
+    soberWatch?: User;
     state: ReservationState;
 }
 
 export const stateMap: { [key in ReservationState]: StateAtomType } = {
-    CANCELLED: "Avslått",
-    CONFIRMED: "Bekreftet",
-    PENDING: "Avventer"
-}
+    CANCELLED: 'Avslått',
+    CONFIRMED: 'Bekreftet',
+    PENDING: 'Avventer',
+};
 
 export type StateAtomType = 'Bekreftet' | 'Avventer' | 'Avslått' | 'Laster';
 export const stateAtom = atom<StateAtomType>('Laster');
 
-const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps) => {
+const ReservationMeta = ({
+    from,
+    to,
+    user,
+    group,
+    state,
+    soberWatch,
+}: ReservationMetaProps) => {
+    console.log(soberWatch);
     const [stateText, setStateText] = useAtom(stateAtom);
 
     useEffect(() => {
-        setStateText(stateMap[state])
-    }, [state, setStateText])
-
+        setStateText(stateMap[state]);
+    }, [state, setStateText]);
 
     return (
         <Card>
@@ -55,34 +66,42 @@ const ReservationMeta = ({ from, to, user, group, state }: ReservationMetaProps)
                     </p>
                 </div>
                 <div>
-                    <h2 className="font-semibold text-xl">
-                        Skrevet av
-                    </h2>
+                    <h2 className="font-semibold text-xl">Skrevet av</h2>
                     <UserProfilePill user={user} />
-
                 </div>
-                {
-                    group &&
-                    (
-                        <div>
-                            <h2 className="font-semibold text-xl text-nowrap">
-                                På vegne av
-                            </h2>
-                            <GroupProfilePill className="w-full" group={group} />
-                        </div>
-                    )
-                }
+
+                {group && (
+                    <div>
+                        <h2 className="font-semibold text-xl text-nowrap">
+                            På vegne av
+                        </h2>
+                        <GroupProfilePill className="w-full" group={group} />
+                    </div>
+                )}
+
+                {soberWatch && (
+                    <div>
+                        <h2 className="font-semibold text-xl text-nowrap">
+                            Edruvakt
+                        </h2>
+                        <UserProfilePill className="w-full" user={soberWatch} />
+                    </div>
+                )}
                 <div>
                     <h2 className="font-semibold text-xl text-nowrap">
                         Status
                     </h2>
-                    <span className={`${stateText === "Avventer" && 'text-yellow-500'} 
-                                                ${stateText === "Bekreftet" && 'text-green-500'} 
-                                                ${stateText === "Avslått" && 'text-red-500'}`}>{stateText}</span>
+                    <span
+                        className={`${stateText === 'Avventer' && 'text-yellow-500'} 
+                                                ${stateText === 'Bekreftet' && 'text-green-500'} 
+                                                ${stateText === 'Avslått' && 'text-red-500'}`}
+                    >
+                        {stateText}
+                    </span>
                 </div>
             </div>
         </Card>
-    )
-}
+    );
+};
 
 export default ReservationMeta;

@@ -1,3 +1,5 @@
+import { User } from '@/types/User';
+
 import { getReservation } from '@/utils/apis/reservations';
 import { BaseGroup } from '@/utils/apis/types';
 
@@ -18,6 +20,7 @@ const ReservationMetaWrapper = async ({
             group={reservation.group_detail as BaseGroup}
             state={reservation.state}
             user={reservation.author_detail}
+            soberWatch={reservation.sober_watch}
         />
     );
 };

@@ -163,7 +163,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
                 </Button>
 
                 <DropdownMenu>
-                    <DropdownMenuTrigger>
+                    <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="px-2 md:w-fit w-full">
                             <MoreVertical className="h-4 w-4" />
                         </Button>

@@ -1,34 +1,27 @@
 'use client';
 
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/components/ui/use-toast';
+
+
 
 import { usePop } from '@/utils/animations/buttonPop';
 import { useShake } from '@/utils/animations/shake';
-import {
-    invalidateReservations,
-    setReservationState,
-} from '@/utils/apis/reservations';
+import { deleteReservation, invalidateReservations, setReservationState } from '@/utils/apis/reservations';
 import { ReservationState } from '@/utils/apis/types';
+
+
 
 import { StateAtomType, stateAtom } from './ReservationMeta';
 import { useAtom } from 'jotai';
 import { Delete, MoreVertical, Trash } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
+
 
 interface AdminButtonsProps {
     reservationId: string;
@@ -45,9 +38,13 @@ const mapObject: Flags<ReservationState> = {
 const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
     const [rejectLoading, setRejectLoading] = useState(false);
     const [acceptLoading, setAcceptLoading] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     const acceptRef = useRef<HTMLButtonElement | null>(null);
     const rejectRef = useRef<HTMLButtonElement | null>(null);
+
+    const router = useRouter();
 
     const pop = usePop();
     const shake = useShake();
@@ -56,6 +53,9 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
 
     const { toast } = useToast();
 
+    /**
+     * Function for informing the user about a success. Shows a toast with a message.
+     */
     const informSuccess = () => {
         toast({
             title: 'Vellykket!',
@@ -63,6 +63,9 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         });
     };
 
+    /**
+     * Function for informing the user about a failure. Shows a toast with a message.
+     */
     const informFailure = (
         detailedErrorMessage: string | undefined = undefined,
     ) => {
@@ -73,6 +76,9 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         });
     };
 
+    /**
+     * Function for rejecting a reservation
+     */
     const onReject = () => {
         // Reject the reservation
         setRejectLoading(true);
@@ -91,6 +97,9 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             });
     };
 
+    /**
+     * Function for accepting a reservation
+     */
     const onAccept = () => {
         // Accept the reservation
         setAcceptLoading(true);
@@ -121,6 +130,16 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             });
     };
 
+    /**
+     * Function for deleting a reservation
+     */
+    const onDeleteReservation = () => {
+        // Delete the reservation
+        return deleteReservation(reservationId).catch((err) => {
+            informFailure(err.message);
+        });
+    };
+
     return (
         <div className="w-full flex flex-col gap-3 p-5">
             <div className="w-full flex flex-col md:flex-row gap-3">
@@ -144,16 +163,52 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
 
                 <DropdownMenu>
                     <DropdownMenuTrigger>
-                        <Button variant="outline">
+                        <Button variant="ghost" className="px-2">
                             <MoreVertical className="h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                         <DropdownMenuLabel>Handlinger</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Slett</DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => setDeleteOpen(!deleteOpen)}
+                        >
+                            Slett
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <AlertDialog
+                    open={deleteOpen}
+                    onOpenChange={(open) => setDeleteOpen(open)}
+                >
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Denne handlingen kan ikke angres.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel className="">
+                                Avbryt
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                                className="bg-destructive text-background"
+                                onClick={() => {
+                                    setDeleteLoading(true);
+                                    onDeleteReservation().then(() => {
+                                        setDeleteLoading(false);
+                                        setDeleteOpen(false);
+                                        router.back();
+                                        invalidateReservations();
+                                    });
+                                }}
+                            >
+                                {deleteLoading ? <LoadingSpinner /> : 'Slett'}
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
         </div>
     );

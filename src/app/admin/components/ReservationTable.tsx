@@ -20,6 +20,7 @@ const ReservationTable = ({ data }: { data: DetailedReservation[] }) => {
             search={true}
             columns={reservationColumns}
             data={data}
+            filterProperty='author_detail'
             rowClickCallback={rowClickCallback}
         />
     );

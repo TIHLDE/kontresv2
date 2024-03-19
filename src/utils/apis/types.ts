@@ -16,6 +16,7 @@ export type ReservationState = 'CONFIRMED' | 'PENDING' | 'CANCELLED';
 export type PostReservation = {
     bookable_item: string;
     group: string;
+    sober_watch?: string;
 } & Omit<
     DetailedReservation,
     | 'state'
@@ -23,6 +24,7 @@ export type PostReservation = {
     | 'author_detail'
     | 'bookable_item_detail'
     | 'group_detail'
+    | 'sober_watch'
     | keyof BaseModel
 >;
 

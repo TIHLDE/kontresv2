@@ -2,15 +2,22 @@
 
 import { User } from '@/types/User';
 
+
+
 import { Card } from '@/components/ui/card';
 import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
 
+
+
 import { BaseGroup, ReservationState } from '@/utils/apis/types';
+
+
 
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
+
 
 interface ReservationMetaProps {
     from: string;
@@ -38,7 +45,6 @@ const ReservationMeta = ({
     state,
     soberWatch,
 }: ReservationMetaProps) => {
-    console.log(soberWatch);
     const [stateText, setStateText] = useAtom(stateAtom);
 
     useEffect(() => {

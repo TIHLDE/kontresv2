@@ -8,8 +8,12 @@ import BookableItems from '../../ui/bookable-items';
 import HeaderLink from '../../ui/header-link';
 import Logo from '../../ui/logo';
 import { UserArea } from '../user-area';
+import { cn } from '@/lib/utils';
 
-const HeaderButtonsWrapper = async () => {
+const HeaderButtonsWrapper = async ({
+    className,
+    ...props
+}: React.HTMLProps<HTMLDivElement>) => {
     let admin = false;
     let items: DetailedItem[] = [];
     let userData;
@@ -23,7 +27,13 @@ const HeaderButtonsWrapper = async () => {
     }
 
     return (
-        <>
+        <div
+            {...props}
+            className={cn(
+                'w-full h-full justify-start items-center flex',
+                className,
+            )}
+        >
             <nav className="flex gap-6 w-full items-center">
                 <HeaderLink href="/" className="mr-16">
                     <Logo />
@@ -39,7 +49,7 @@ const HeaderButtonsWrapper = async () => {
                     admin={admin}
                 />
             ) : undefined}
-        </>
+        </div>
     );
 };
 

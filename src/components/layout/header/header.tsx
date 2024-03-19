@@ -1,17 +1,16 @@
 import { User } from '@/types/User';
 
-import Logo from '@/components/ui/logo';
 
-import { AdminPermissions, DetailedItem } from '@/utils/apis/types';
-import { checkUserPermissions } from '@/utils/apis/user';
 
-import BookableItems from '../../ui/bookable-items';
-import HeaderLink from '../../ui/header-link';
-import { UserArea } from '../user-area';
+import { DetailedItem } from '@/utils/apis/types';
+
+
+
 import HeaderButtonsWrapper from './header-buttons-wrapper';
 import HeaderSkeleton from './header-skeleton';
 import HeaderWrapper from './header-wrapper';
 import { Suspense } from 'react';
+
 
 interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
     userData?: User;
@@ -20,10 +19,13 @@ interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
 
 export default async function Header({ className, ...props }: HeaderProps) {
     return (
-        <HeaderWrapper {...props} className="md:flex hidden">
+        <HeaderWrapper {...props}>
             <Suspense fallback={<HeaderSkeleton />}>
                 <HeaderButtonsWrapper />
             </Suspense>
+            <div className='md:hidden flex'>
+
+            </div>
         </HeaderWrapper>
     );
 }

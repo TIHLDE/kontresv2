@@ -137,6 +137,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
         // Delete the reservation
         return deleteReservation(reservationId).catch((err) => {
             informFailure(err.message);
+            throw new Error();
         });
     };
 
@@ -196,12 +197,15 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
                                 className="bg-destructive text-background"
                                 onClick={() => {
                                     setDeleteLoading(true);
-                                    onDeleteReservation().then(() => {
-                                        setDeleteLoading(false);
-                                        setDeleteOpen(false);
-                                        router.back();
-                                        invalidateReservations();
-                                    });
+                                    onDeleteReservation()
+                                        .then(() => {
+                                            setDeleteOpen(false);
+                                            router.back();
+                                            invalidateReservations();
+                                        })
+                                        .finally(() => {
+                                            setDeleteLoading(false);
+                                        });
                                 }}
                             >
                                 {deleteLoading ? <LoadingSpinner /> : 'Slett'}

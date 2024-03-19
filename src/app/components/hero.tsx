@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 export default async function Hero() {
     return (
-        <div className="h-[100vh] md:mt-[-5rem] w-full flex flex-col justify-center items-center relative overflow-x-hidden">
+        <div className="h-[100vh] md:mt-[-5rem] -mt-28 w-full flex flex-col justify-center items-center relative overflow-x-hidden">
             <WelcomeTitle />
 
             <div className={`flex flex-col gap-0 ${styles.action}`}>

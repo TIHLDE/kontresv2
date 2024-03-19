@@ -47,6 +47,8 @@ const ReservationMeta = ({
 }: ReservationMetaProps) => {
     const [stateText, setStateText] = useAtom(stateAtom);
 
+    console.log(soberWatch);
+
     useEffect(() => {
         setStateText(stateMap[state]);
     }, [state, setStateText]);

@@ -142,8 +142,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
     };
 
     return (
-        <div className="w-full flex flex-col gap-3 p-5">
-            <div className="w-full flex flex-col md:flex-row gap-3">
+            <div className="w-full flex flex-col md:flex-row gap-3 p-5">
                 <Button
                     ref={acceptRef}
                     className="w-full"
@@ -214,7 +213,6 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
                     </AlertDialogContent>
                 </AlertDialog>
             </div>
-        </div>
     );
 };
 

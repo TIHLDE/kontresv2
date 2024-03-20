@@ -47,7 +47,7 @@ type ReservationFormFieldsType = {
 };
 
 /**
- * Component that contains all of the fields that belong to the reservation form.
+ * Component that contains all the fields that belong to the reservation form.
  */
 const ReservationFormFields = ({
     initialData,
@@ -274,6 +274,7 @@ const ReservationFormFields = ({
                                 <Link
                                     href="https://tihlde.org/wiki/tihlde/lover-og-regler/"
                                     className="font-bold underline"
+                                    target="_blank"
                                 >
                                     vilkårene for bruk og utlån av TIHLDEs
                                     eiendeler

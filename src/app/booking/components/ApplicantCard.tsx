@@ -12,10 +12,10 @@ interface ApplicantCardProps {
  */
 const ApplicantCard = ({ label, image }: ApplicantCardProps) => {
     return (
-        <div className="mt-10">
+        <div className="mt-8">
             <p className="w-full text-center">Sender inn forespørsel som</p>
-            <Card className="p-2 w-fit mx-auto">
-                <div className="flex gap-5 items-center">
+            <Card className="p-2 w-fit my-2 mx-auto">
+                <div className="flex gap-2 items-center">
                     <Avatar className="rounded-lg">
                         <AvatarImage src={image} alt="Profililde" />
                         <AvatarFallback><UserRound className="text-foreground" /></AvatarFallback>

@@ -25,7 +25,7 @@ const formSchema = z.object({
     to: z.date(),
     item: z.string(),
     // Must be checked
-    accepted_rules: z.boolean().refine((val) => val, {
+    accepted_rules: z.boolean().refine((val) => val === true, {
         message: 'Du må godta vilkårene for å kunne reservere',
     }),
     application_on_behalf: z.string(),

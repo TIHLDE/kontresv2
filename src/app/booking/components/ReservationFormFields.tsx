@@ -1,22 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-} from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
-import AutoSelect, {
-    SelectGroupType,
-    SelectOptionType,
-} from '@/components/ui/select';
+import AutoSelect, { SelectGroupType, SelectOptionType } from '@/components/ui/select';
+
+
 
 import { DetailedItem } from '@/utils/apis/types';
+
+
 
 import UserAutocomplete from './UserAutocomplete';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,6 +18,7 @@ import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+
 
 const formSchema = z.object({
     from: z.date(),
@@ -37,7 +32,7 @@ const formSchema = z.object({
     description: z.string().min(10, {
         message: 'Beskrivelsen må være mer enn 10 tegn lang',
     }),
-    alcohol_agreement: z.boolean().optional(),
+    serves_alcohol: z.boolean().optional(),
     sober_watch_id: z.string().optional(),
 });
 
@@ -202,7 +197,7 @@ const ReservationFormFields = ({
                     <>
                         <FormField
                             control={form.control}
-                            name="alcohol_agreement"
+                            name="serves_alcohol"
                             render={({ field: { value, ...rest } }) => (
                                 <FormItem className="flex items-center space-x-2">
                                     <FormControl>
@@ -211,7 +206,7 @@ const ReservationFormFields = ({
                                             checked={value}
                                             onCheckedChange={(e) =>
                                                 form.setValue(
-                                                    'alcohol_agreement',
+                                                    'serves_alcohol',
                                                     Boolean(e.valueOf()),
                                                     {
                                                         shouldDirty: true,
@@ -235,7 +230,7 @@ const ReservationFormFields = ({
                                 </FormItem>
                             )}
                         />
-                        {form.watch('alcohol_agreement') && (
+                        {form.watch('serves_alcohol') && (
                             <FormField
                                 control={form.control}
                                 name="sober_watch_id"

@@ -31,7 +31,7 @@ export default async function RootLayout({
                     disableTransitionOnChange
                 >
                     <Header className="lg:flex hidden" />
-                    <div className="md:py-page pt-8 pb-32">
+                    <div className="py-page pb-32">
                         <Toaster />
                         {children}
                     </div>

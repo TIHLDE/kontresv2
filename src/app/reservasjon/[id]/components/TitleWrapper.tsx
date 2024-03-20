@@ -7,7 +7,7 @@ const TitleWrapper = async ({ params }: { params: { id: string } }) => {
         <h1 className="font-semibold my-3 text-3xl w-fit mx-auto mt-10 text-center">
             Reservasjon av{' '}
             <span className="lowercase">
-                {reservation.bookable_item_detail.name}
+                {reservation?.bookable_item_detail ? reservation?.bookable_item_detail?.name : 'ukjent gjenstand'}
             </span>
         </h1>
     );

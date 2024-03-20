@@ -16,7 +16,7 @@ export default function Page({
 
     return (
         /* This isn't a very elegant solution..? */
-        <div className="max-w-page mx-auto md:h-[calc(100vh_-_theme(padding.page)_*_2)] h-screen flex flex-col justify-center items-center">
+        <div className="max-w-page mx-auto h-screen -mt-24 flex flex-col justify-center items-center">
             <Card className="w-80">
                 <CardHeader>
                     <CardTitle className="text-center">Login</CardTitle>

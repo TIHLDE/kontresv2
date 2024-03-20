@@ -29,6 +29,10 @@ export const IFetch = <T extends unknown>({ url, config }: IFetchProps) => {
   })
     .then(async res => {
       if (!res.ok) {
+        if (res.status === 500) {
+          throw new Error('Internal server error');
+        }
+
         const message = await res.json();
         const errorObject: ErrorType = {
           status: res.status,

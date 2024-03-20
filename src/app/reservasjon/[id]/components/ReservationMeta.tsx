@@ -2,10 +2,16 @@
 
 import { User } from '@/types/User';
 
+
+
 import { Card } from '@/components/ui/card';
 import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
 
+
+
 import { BaseGroup, ReservationState } from '@/utils/apis/types';
+
+
 
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
@@ -76,10 +82,11 @@ const ReservationMeta = ({
                         <GroupProfilePill className="w-full" group={group} />
                     </div>
                 )}
+
                 {soberWatch && (
                     <div>
                         <h2 className="font-semibold text-xl text-nowrap">
-                            På vegne av
+                            Edruvakt
                         </h2>
                         <UserProfilePill className="w-full" user={soberWatch} />
                     </div>

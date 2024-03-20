@@ -1,3 +1,5 @@
+import { User } from '@/types/User';
+
 import { getReservation } from '@/utils/apis/reservations';
 import { BaseGroup } from '@/utils/apis/types';
 

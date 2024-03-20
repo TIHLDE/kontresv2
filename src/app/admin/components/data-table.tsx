@@ -111,6 +111,7 @@ export function DataTable<TData, TValue>({
                                     onClick={() => {
                                         rowClickCallback?.(row.original);
                                     }}
+                                    className={`${rowClickCallback ? 'cursor-pointer' : ''}`}
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>

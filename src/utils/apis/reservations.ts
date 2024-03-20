@@ -88,6 +88,15 @@ export const setReservationState = (uuid: string, state: ReservationState) => {
     });
 }
 
+export const deleteReservation = (uuid: string) => {
+    return IFetch({
+        url: `${baseUrl}/kontres/reservations/${uuid}/`,
+        config: {
+            method: 'DELETE',
+        },
+    });
+}
+
 export const invalidateReservations = () => {
     revalidateTag(validationTags.reservations);
 }

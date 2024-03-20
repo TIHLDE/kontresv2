@@ -274,6 +274,7 @@ const ReservationFormFields = ({
                                 <Link
                                     href="https://tihlde.org/wiki/tihlde/lover-og-regler/"
                                     className="font-bold underline"
+                                    target="_blank"
                                 >
                                     vilkårene for bruk og utlån av TIHLDEs
                                     eiendeler

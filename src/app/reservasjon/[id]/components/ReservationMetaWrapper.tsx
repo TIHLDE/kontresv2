@@ -18,6 +18,7 @@ const ReservationMetaWrapper = async ({
             group={reservation.group_detail as BaseGroup}
             state={reservation.state}
             user={reservation.author_detail}
+            soberWatch={reservation.sober_watch_detail}
         />
     );
 };

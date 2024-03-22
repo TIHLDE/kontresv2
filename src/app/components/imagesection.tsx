@@ -13,16 +13,18 @@ const ImageSection = async () => {
 
     return (
         <div className="flex flex-col gap-5">
-            {items?.map((item, i) => (
+            {items?.map((item, i) =>
                 /* When image support is eventually added, the image cards will automatically be displayed. */
-                item.image ? <ImageTextCard
-                    key={i}
-                    image={item.image}
-                    title={item.name}
-                    description={item.description}
-                    align={i % 2 === 0 ? 'right' : 'left'}
-                /> : undefined                
-            ))}
+                item.image ? (
+                    <ImageTextCard
+                        key={i}
+                        image={item.image}
+                        title={item.name}
+                        description={item.description}
+                        align={i % 2 === 0 ? 'right' : 'left'}
+                    />
+                ) : undefined,
+            )}
         </div>
     );
 };

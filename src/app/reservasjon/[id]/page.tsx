@@ -1,15 +1,17 @@
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-
-
 
 import { PermissionApp } from '@/utils/apis/types';
 import { checkUserPermissions } from '@/utils/apis/user';
 
 import AdminButtons from './components/AdminButtons';
 import DescriptionWrapper from './components/DescriptionWrapper';
+import ImageSection from './components/ImageSection';
 import ReservationMetaWrapper from './components/ReservationMetaWrapper';
 import TitleWrapper from './components/TitleWrapper';
+import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
+import { Router } from 'next/router';
 import { Suspense } from 'react';
 
 const Page = async ({ params }: { params: { id: string } }) => {
@@ -27,19 +29,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     return (
         <div className="max-w-page mx-auto min-h-screen md:w-2/5">
             <Card className="overflow-hidden">
-                <div>
-                    <div className="h-48 md:h-72 overflow-hidden flex items-center relative">
-                        <Image
-                            src={
-                                'https://www.southernliving.com/thmb/Rz-dYEhwq_82C5_Y9GLH2ZlEoYw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/gettyimages-837898820-1-4deae142d4d0403dbb6cb542bfc56934.jpg'
-                            }
-                            layout="fill"
-                            alt="Dog."
-                            className="w-full h-full relative object-cover"
-                        />
-                        <div className="w-full h-full absolute bottom-0 left-0 bg-gradient-to-t from-background to-transparent" />
-                    </div>
-                </div>
+                <ImageSection />
                 <Suspense fallback="Loading">
                     <TitleWrapper params={params} />
                 </Suspense>

@@ -18,6 +18,7 @@ const ImageSection = () => {
             <Button
                 className="absolute top-3 left-3 z-10 bg-white"
                 onClick={goBack}
+                aria-label="Gå tilbake til forrige side"
             >
                 <ArrowLeft className="text-black" />
             </Button>

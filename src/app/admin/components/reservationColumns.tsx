@@ -7,6 +7,8 @@ import { cn } from '@/utils/cn';
 
 import { stateMap } from '@/app/reservasjon/[id]/components/ReservationMeta';
 import { ColumnDef } from '@tanstack/react-table';
+import { format } from 'date-fns';
+import { nb } from 'date-fns/locale/nb';
 import { ArrowUpDown } from 'lucide-react';
 
 export const HeaderButton = ({ className, ...props }: ButtonProps) => {
@@ -62,6 +64,10 @@ export const reservationColumns: ColumnDef<DetailedReservation>[] = [
                 </HeaderButton>
             );
         },
+        accessorFn: (data) =>
+            format(data.start_time, 'd. LLLL HH:mm', {
+                locale: nb,
+            }),
     },
 
     {
@@ -79,6 +85,10 @@ export const reservationColumns: ColumnDef<DetailedReservation>[] = [
                 </HeaderButton>
             );
         },
+        accessorFn: (data) =>
+            format(data.end_time, 'd. LLLL HH:mm', {
+                locale: nb,
+            }),
     },
     {
         accessorKey: 'state',

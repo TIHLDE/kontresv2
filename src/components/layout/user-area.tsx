@@ -13,8 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ModeToggle } from '../ui/theme-mode-toggler';
 import { Settings, UserRound } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface UserAreaProps extends React.HTMLProps<HTMLDivElement> {
@@ -43,7 +43,7 @@ export const UserArea = ({
     const goToAdmin = () => {
         setOpen(false);
         router.push('/admin');
-    }
+    };
     return (
         <div
             {...props}
@@ -62,21 +62,32 @@ export const UserArea = ({
                     </Avatar>
                 </PopoverTrigger>
                 <PopoverContent>
-                    <h2 className="text-lg">Hei, {name}!</h2>
-                    <div className="flex gap-3 mt-1">
+                    <div className="w-full flex flex-col items-center content-center">
+                        <Avatar className="h-20 w-20">
+                            <AvatarImage src={image} alt={'profilbilde'} />
+                            <AvatarFallback>
+                                <UserRound className="text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <span className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                            Hei, {name}
+                        </span>
                         <Button
                             variant={'destructive'}
-                            className="w-full"
+                            className="mt-2 w-full"
                             onClick={signOut}
                         >
                             Logg ut
                         </Button>
-                        {
-                            admin ? <Button className="w-full" onClick={goToAdmin}>
+                        {admin ? (
+                            <Button
+                                variant={'outline'}
+                                className="w-full mt-1"
+                                onClick={goToAdmin}
+                            >
                                 Admin
-                            </Button> : undefined
-                        }
-
+                            </Button>
+                        ) : undefined}
                     </div>
                 </PopoverContent>
             </Popover>

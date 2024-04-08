@@ -1,7 +1,11 @@
 'use client';
 
 import { DetailedReservation } from '../../../utils/apis/types';
+import { format } from 'date-fns';
+import { nb } from 'date-fns/locale/nb';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
 function hexColorFromUUID(uuid: string) {
     let hash = 0;
@@ -30,10 +34,64 @@ export default function ReservationShard({
     setRelativeMousePosition: (e: any) => void;
 }) {
     const router = useRouter();
+    const innerInfoRef = React.useRef<HTMLDivElement>(null);
+    const wrapperRef = React.useRef<HTMLDivElement>(null);
+
+    function Info() {
+        return (
+            <motion.div
+                ref={innerInfoRef}
+                className="text-xs text-neutral-900 p-2 relative overflow-hidden"
+            >
+                {/* Temporary calendar details */}
+                <h2>@{reservation?.author_detail.user_id}</h2>
+                {reservation?.group_detail && (
+                    <h2>
+                        På vegne av{' '}
+                        <span className="underline">
+                            {reservation?.group_detail?.name}
+                        </span>
+                    </h2>
+                )}
+                <p className="mt-2">
+                    {format(reservation?.start_time, 'PPP, HH:MM', {
+                        locale: nb,
+                    })}
+                </p>
+                <p className="mt-1">
+                    {' '}
+                    {format(reservation?.end_time, 'PPP, HH:MM', {
+                        locale: nb,
+                    })}
+                </p>
+            </motion.div>
+        );
+    }
 
     return (
-        <div
-            onMouseEnter={(e) => e.stopPropagation()}
+        <motion.div
+            ref={wrapperRef}
+            whileHover={{
+                height:
+                    innerInfoRef.current?.offsetHeight! >=
+                    wrapperRef.current?.offsetHeight!
+                        ? 'auto'
+                        : height,
+            }}
+            transition={{
+                duration: 0, //jævlig vanskelig å animate den her, 10 index poeng til den som klarer det (du kan kreve poengene hos mads)
+
+            }}
+            initial={{
+                top: top,
+                left: left,
+                width: width,
+                height: height,
+                backgroundColor: hexColorFromUUID(reservation.id),
+            }}
+            onMouseEnter={(e) => {
+                e.stopPropagation();
+            }}
             onMouseOver={(e) => e.stopPropagation()}
             onMouseLeave={(e) => {
                 e.stopPropagation();
@@ -51,29 +109,9 @@ export default function ReservationShard({
                 router.push(`/reservasjon/${reservation.id}`);
                 e.stopPropagation();
             }}
-            className="absolute rounded-md shadow-lg border z-10"
-            style={{
-                top: top,
-                left: left,
-                width: width,
-                height: height,
-                backgroundColor: hexColorFromUUID(reservation.id),
-            }}
+            className="absolute overflow-hidden rounded-md shadow-lg border z-10 cursor-pointer transition-all duration-300 ease-in-out"
         >
-            <div className="text-xs text-white p-2">
-                {/* Temporary calendar details */}
-                <h2>@{reservation?.author_detail.user_id}</h2>
-                {reservation?.group_detail && (
-                    <h2>
-                        På vegne av{' '}
-                        <span className="underline">
-                            {reservation?.group_detail?.name}
-                        </span>
-                    </h2>
-                )}
-                <p className="mt-2">{reservation?.start_time}</p>
-                <p className="mt-1">{reservation?.end_time}</p>
-            </div>
-        </div>
+            <Info />
+        </motion.div>
     );
 }

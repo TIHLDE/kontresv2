@@ -72,11 +72,19 @@ export const UserArea = ({
                         <span className="scroll-m-20 text-2xl font-semibold tracking-tight">
                             Hei, {name}
                         </span>
-                        <Button variant={'destructive'} className="mt-2 w-full">
+                        <Button
+                            variant={'destructive'}
+                            className="mt-2 w-full"
+                            onClick={signOut}
+                        >
                             Logg ut
                         </Button>
                         {admin ? (
-                            <Button variant={'outline'} className="w-full mt-1">
+                            <Button
+                                variant={'outline'}
+                                className="w-full mt-1"
+                                onClick={goToAdmin}
+                            >
                                 Admin
                             </Button>
                         ) : undefined}

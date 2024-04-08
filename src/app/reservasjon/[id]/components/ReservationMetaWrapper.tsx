@@ -13,6 +13,7 @@ const ReservationMetaWrapper = async ({
     const reservation = await getReservation(params.id);
     const from = new Date(reservation.start_time);
     const to = new Date(reservation.end_time);
+    console.log(reservation);
     return (
         <ReservationMeta
             from={from.toISOString()}
@@ -21,6 +22,7 @@ const ReservationMetaWrapper = async ({
             state={reservation.state}
             user={reservation.author_detail}
             soberWatch={reservation.sober_watch}
+            acceptedBy={reservation.approved_by}
         />
     );
 };

@@ -9,6 +9,7 @@ export type DetailedReservation = {
     group_detail: BaseGroup | undefined;
     serves_alcohol?: boolean;
     sober_watch?: User;
+    approved_by?: User;
 } & BaseModel;
 
 export type ReservationState = 'CONFIRMED' | 'PENDING' | 'CANCELLED';

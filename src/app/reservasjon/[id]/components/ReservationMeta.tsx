@@ -1,23 +1,16 @@
-"use client";
+'use client';
 
 import { User } from '@/types/User';
-
-
 
 import { Card } from '@/components/ui/card';
 import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
 
-
-
 import { BaseGroup, ReservationState } from '@/utils/apis/types';
-
-
 
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
-
 
 interface ReservationMetaProps {
     from: string;
@@ -25,6 +18,7 @@ interface ReservationMetaProps {
     user: User;
     group: BaseGroup;
     soberWatch?: User;
+    acceptedBy?: User;
     state: ReservationState;
 }
 
@@ -44,6 +38,7 @@ const ReservationMeta = ({
     group,
     state,
     soberWatch,
+    acceptedBy,
 }: ReservationMetaProps) => {
     const [stateText, setStateText] = useAtom(stateAtom);
 
@@ -91,6 +86,14 @@ const ReservationMeta = ({
                             Edruvakt
                         </h2>
                         <UserProfilePill className="w-full" user={soberWatch} />
+                    </div>
+                )}
+                {acceptedBy && (
+                    <div>
+                        <h2 className="font-semibold text-xl text-nowrap">
+                            Godkjent av
+                        </h2>
+                        <UserProfilePill className="w-full" user={acceptedBy} />
                     </div>
                 )}
                 <div>

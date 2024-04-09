@@ -16,7 +16,7 @@ export default async function BookableItems({
     return (
         <nav className={className} {...props}>
             {bookableItems?.map((item, index) => (
-                <HeaderLink key={index} href={'/' + item.id}>
+                <HeaderLink key={index} href={'/calendar/' + item.id}>
                     {item.name}
                 </HeaderLink>
             ))}

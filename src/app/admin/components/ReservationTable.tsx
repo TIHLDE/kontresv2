@@ -27,9 +27,9 @@ const ReservationTable = ({ data }: { data: DetailedReservation[] }) => {
     return (
         <div className="flex flex-col gap-5">
             <div className="mt-10">
-                <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                <h3 className="text-2xl font-semibold leading-none tracking-tight">
                     Godkjente og pågående søknader
-                </h2>
+                </h3>
                 <DataTable
                     searchPlaceholder={'Søk etter brukere...'}
                     search={true}
@@ -41,9 +41,9 @@ const ReservationTable = ({ data }: { data: DetailedReservation[] }) => {
             </div>
 
             <div>
-                <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+                <h3 className="text-2xl font-semibold leading-none tracking-tight">
                     Avslåtte søknader
-                </h2>
+                </h3>
                 <DataTable
                     searchPlaceholder={'Søk etter brukere...'}
                     search={true}

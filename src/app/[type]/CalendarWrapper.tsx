@@ -19,7 +19,9 @@ const CalendarWrapper = async ({ type }: CalendarWrapperProps) => {
 
     reservationRequest =
         reservationRequest?.filter(
-            (booking) => type === booking?.bookable_item_detail?.id,
+            (booking) =>
+                type === booking?.bookable_item_detail?.id &&
+                booking?.state === 'CONFIRMED',
         ) ?? [];
     return (
         <Calendar

@@ -65,11 +65,6 @@ export function DataTable<TData, TValue>({
             <div className="flex items-center py-4">
                 <Input
                     placeholder={searchPlaceholder ?? 'Søk...'}
-                    value={
-                        (table
-                            .getColumn(filterProperty as string)
-                            ?.getFilterValue() as string) ?? ''
-                    }
                     onChange={(event) =>
                         table
                             .getColumn(filterProperty as string)

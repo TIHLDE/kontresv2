@@ -25,7 +25,6 @@ const Page = async () => {
                         fullName={user.first_name + ' ' + user.last_name}
                     />
                     <ReservationTable data={reservations} />
-                    {user.first_name + ' ' + user.last_name}
                 </CardContent>
             </Card>
         </div>

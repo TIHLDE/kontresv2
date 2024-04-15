@@ -22,6 +22,7 @@ export default function ReservationShard({
     width,
     height,
     color,
+    view,
     reservation,
     setRelativeMousePosition,
 }: {
@@ -30,12 +31,14 @@ export default function ReservationShard({
     width: number | string;
     height: number | string;
     color: string;
+    view: 'week' | 'day';
     reservation: DetailedReservation;
     setRelativeMousePosition: (e: any) => void;
 }) {
     const router = useRouter();
     const innerInfoRef = React.useRef<HTMLDivElement>(null);
     const wrapperRef = React.useRef<HTMLDivElement>(null);
+    console.log(view, view == 'week' ? width : '100%');
 
     function Info() {
         return (
@@ -80,14 +83,15 @@ export default function ReservationShard({
             }}
             transition={{
                 duration: 0, //jævlig vanskelig å animate den her, 10 index poeng til den som klarer det (du kan kreve poengene hos mads)
-
             }}
             initial={{
                 top: top,
-                left: left,
-                width: width,
+                left: view == 'week' ? left : '0',
                 height: height,
                 backgroundColor: hexColorFromUUID(reservation.id),
+            }}
+            style={{
+                width: view == 'week' ? width : '100%',
             }}
             onMouseEnter={(e) => {
                 e.stopPropagation();

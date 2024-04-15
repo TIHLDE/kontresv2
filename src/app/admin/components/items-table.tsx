@@ -16,7 +16,7 @@ import { DetailedItem } from '@/utils/apis/types';
 
 import CreateItemForm, { ItemFormValueTypes } from './create-item-form';
 import { DataTable } from './data-table';
-import { itemColumns } from './itemColumns';
+import { itemColumns } from './item-columns';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 

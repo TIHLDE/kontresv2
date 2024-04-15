@@ -3,8 +3,8 @@
 import { getReservations } from '@/utils/apis/reservations';
 import { DetailedReservation } from '@/utils/apis/types';
 
-import { DataTable } from './data-table';
-import { reservationColumns } from './reservationColumns';
+import { DataTable } from '../../app/admin/components/data-table';
+import { reservationColumns } from '../../app/admin/components/reservation-columns';
 import { useRouter } from 'next/navigation';
 
 const ReservationTable = ({ data }: { data: DetailedReservation[] }) => {

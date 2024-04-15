@@ -2,7 +2,9 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import ItemsList from './components/ItemsList';
-import ReservationsList from './components/ReservationsList';
+import ItemsListSkeleton from './components/items-list-skeleton';
+import ReservationTableSkeleton from './components/reservation-table-skeleton';
+import ReservationsList from './components/reservations-list';
 import { Suspense } from 'react';
 
 const Admin = async () => {
@@ -19,12 +21,16 @@ const Admin = async () => {
                             <TabsTrigger value="items">Gjenstander</TabsTrigger>
                         </TabsList>
                         <TabsContent value="reservations">
-                            <Suspense fallback={<h1>Laster</h1>}>
+                            <Suspense
+                                fallback={
+                                    <ReservationTableSkeleton className="mt-10" />
+                                }
+                            >
                                 <ReservationsList />
                             </Suspense>
                         </TabsContent>
                         <TabsContent value="items">
-                            <Suspense fallback={<h1>Laster</h1>}>
+                            <Suspense fallback={<ItemsListSkeleton />}>
                                 <ItemsList />
                             </Suspense>
                         </TabsContent>

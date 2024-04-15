@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import ItemsList from './components/ItemsList';
+import ItemsList from './components/items-list';
 import ItemsListSkeleton from './components/items-list-skeleton';
 import ReservationTableSkeleton from './components/reservation-table-skeleton';
 import ReservationsList from './components/reservations-list';

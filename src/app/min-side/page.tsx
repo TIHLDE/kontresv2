@@ -2,7 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { UserDetail } from '@/components/ui/user-detail';
 
-import { getReservations } from '@/utils/apis/reservations';
+import {
+    getReservations,
+    getUserReservations,
+} from '@/utils/apis/reservations';
 import { getCurrentUserData } from '@/utils/apis/user';
 
 import ReservationTable from '@/app/admin/components/ReservationTable';
@@ -12,7 +15,7 @@ const Page = async () => {
     const user = await getCurrentUserData();
 
     // Fetch the user's reservations
-    const reservations = await getReservations();
+    const reservations = await getUserReservations();
     return (
         <div className="max-w-page mx-auto flex flex-col place-content-center">
             <Card className="w-full">

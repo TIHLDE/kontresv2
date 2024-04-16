@@ -2,26 +2,29 @@
 
 import { User } from '@/types/User';
 
-
-
-import { AlertDialogAction, AlertDialogCancel, AutoAlertDialog } from '@/components/ui/alert-dialog';
+import {
+    AlertDialogAction,
+    AlertDialogCancel,
+    AutoAlertDialog,
+} from '@/components/ui/alert-dialog';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 
-
-
 import { ErrorType } from '@/utils/apis/fetch';
-import { createReservation, invalidateReservations } from '@/utils/apis/reservations';
+import {
+    createReservation,
+    invalidateReservations,
+} from '@/utils/apis/reservations';
 import { DetailedItem, Membership } from '@/utils/apis/types';
 
-
-
 import ApplicantCard from './ApplicantCard';
-import { ReservationFormFields, ReservationFormValueTypes } from '@/app/booking/components/ReservationFormFields';
+import {
+    ReservationFormFields,
+    ReservationFormValueTypes,
+} from '@/app/booking/components/ReservationFormFields';
 import { parse } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
-
 
 type EventFormType = {
     items: DetailedItem[];
@@ -37,7 +40,6 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     const [errorAlertOpen, setErrorAlertOpen] = useState(false);
     const [errorAlertMessage, setErrorAlertMessage] = useState<string>();
     const [selectedGroup, setSelectedGroup] = useState('0');
-
 
     const { toast } = useToast();
 
@@ -73,7 +75,6 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
         formValues.current = values;
         setAlertOpen(true);
     };
-
 
     // Shows an error dialog if the form submit process went wrong
     const showError = (message: string) => {
@@ -184,6 +185,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                     item: defaultItem ?? '',
                     from: parseDate(from ?? ''),
                     to: parseDate(to ?? ''),
+                    sober_watch_id: user.user_id,
                 }}
                 items={items}
                 groups={formGroups}

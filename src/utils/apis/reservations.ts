@@ -1,11 +1,16 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
 import { IFetch } from './fetch';
-import { DetailedItem, DetailedReservation, PostReservation, ReservationState, validationTags } from './types';
+import {
+    DetailedItem,
+    DetailedReservation,
+    PostReservation,
+    ReservationState,
+    validationTags,
+} from './types';
+import { revalidateTag } from 'next/cache';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
-
 
 /**
  * Gets a specific reservation given a reservation UUID.
@@ -33,7 +38,7 @@ export const getReservations = () => {
             method: 'GET',
             next: {
                 tags: [validationTags.reservations],
-            }
+            },
         },
     });
 };
@@ -52,11 +57,9 @@ export const getBookableItem = (id: string) => {
  *
  * @returns Reservation details
  */
-export const createReservation = ({
-    ...rest
-}: PostReservation) => {
+export const createReservation = ({ ...rest }: PostReservation) => {
     const body = {
-        ...rest
+        ...rest,
     };
     return IFetch<DetailedReservation>({
         url: `${baseUrl}/kontres/reservations/`,
@@ -86,7 +89,7 @@ export const setReservationState = (uuid: string, state: ReservationState) => {
             }),
         },
     });
-}
+};
 
 export const deleteReservation = (uuid: string) => {
     return IFetch({
@@ -95,8 +98,17 @@ export const deleteReservation = (uuid: string) => {
             method: 'DELETE',
         },
     });
-}
+};
 
 export const invalidateReservations = () => {
     revalidateTag(validationTags.reservations);
-}
+};
+
+export const getUserReservations = () => {
+    return IFetch<DetailedReservation[]>({
+        url: `${baseUrl}/users/me/reservations`,
+        config: {
+            method: 'GET',
+        },
+    });
+};

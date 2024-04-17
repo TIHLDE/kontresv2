@@ -11,6 +11,9 @@ import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { ArrowUpDown } from 'lucide-react';
 
+const dateSortingFn = (a: DetailedReservation, b: DetailedReservation) =>
+    new Date(a.start_time) > new Date(b.start_time) ? 1 : -1;
+
 export const HeaderButton = ({ className, ...props }: ButtonProps) => {
     return (
         <Button
@@ -68,6 +71,7 @@ export const reservationColumns: ColumnDef<DetailedReservation>[] = [
             format(data.start_time, 'd. LLLL HH:mm', {
                 locale: nb,
             }),
+        sortingFn: (a, b) => dateSortingFn(a.original, b.original),
     },
 
     {
@@ -89,6 +93,7 @@ export const reservationColumns: ColumnDef<DetailedReservation>[] = [
             format(data.end_time, 'd. LLLL HH:mm', {
                 locale: nb,
             }),
+        sortingFn: (a, b) => dateSortingFn(a.original, b.original),
     },
     {
         accessorKey: 'state',

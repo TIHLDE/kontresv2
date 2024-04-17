@@ -37,6 +37,11 @@ const Profile = ({ user, admin, open, setOpen }: ProfileProps) => {
         router.push('/admin');
     };
 
+    const goToMyPage = () => {
+        setOpen(false);
+        router.push('/min-side');
+    };
+
     return (
         <Drawer open={open} onOpenChange={(open) => setOpen(open)}>
             <DrawerContent>
@@ -50,6 +55,9 @@ const Profile = ({ user, admin, open, setOpen }: ProfileProps) => {
                             Admin
                         </Button>
                     ) : undefined}
+                    <Button variant="outline" onClick={goToMyPage}>
+                        Min side
+                    </Button>
                     <Button variant={'destructive'} onClick={signOut}>
                         Logg ut
                     </Button>

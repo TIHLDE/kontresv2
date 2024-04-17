@@ -2,6 +2,8 @@
 
 import { User } from '@/types/User';
 
+
+
 import { DetailedItem } from '@/utils/apis/types';
 
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
@@ -32,7 +34,7 @@ interface BottomBarProps extends HTMLMotionProps<'div'> {
  * This bottom bar is designated for mobile views. It is intended as a dynamic, and eye-catching
  * way to navigate the app.
  *
- * Terminology: \
+ * Terminology:
  * **Narrow mode** => The bottom bar is in a narrow state, meaning it is small and compact. It will only display a
  * back button.
  *
@@ -60,8 +62,9 @@ const BottomBar = ({
     useEffect(() => {
         // Conditionally animate the bottom bar based on the path
         let narrow = false;
-        let calendarPath =
-            /^\/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/i;
+        let calendarPath = new RegExp(
+            '^/calendar/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$',
+        );
         narrow = narrow || calendarPath.test(path);
 
         // let someOtherPath = /\/some-other-path/; // Example of another path

@@ -93,7 +93,7 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
     };
 
     const redirect = () => {
-        router.push('/');
+        router.push('/min-side');
     };
 
     const submitReservation = () => {

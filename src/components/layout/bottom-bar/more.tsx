@@ -1,19 +1,17 @@
 import { Button } from '@/components/ui/button';
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-} from '@/components/ui/drawer';
+import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 
-import { DetailedItem } from '@/utils/apis/types';
-import { Code } from 'lucide-react';
 
+
+import { DetailedItem } from '@/utils/apis/types';
+
+
+
+import { Code } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
+
 
 interface MoreProps {
     items?: DetailedItem[];
@@ -26,19 +24,22 @@ const More = ({ items, open, setOpen }: MoreProps) => {
 
     const goToCalendar = (uuid?: string) => {
         setOpen(false);
-        router.push(`/${uuid}`);
+        router.push(`/calendar/${uuid}`);
     };
 
     const generateMailTo = () => {
         const emailTo = 'index@tihlde.org';
-        const subject = '[Tema angående kontres eller andre indexrelaterte ting]';
+        const subject =
+            '[Tema angående kontres eller andre indexrelaterte ting]';
         const emailBody =
             'Hei, ærede Indexere! %0d%0a' +
             'Jeg har vært på kontres, og... (Skriv det du vil her) %0d%0a %0d%0a' +
             'Med vennlig hilsen %0d%0a' +
             '*Fyll inn navnet ditt her*';
-        router.push('mailto:' + emailTo + '?subject=' + subject + '&body=' + emailBody);
-    }
+        router.push(
+            'mailto:' + emailTo + '?subject=' + subject + '&body=' + emailBody,
+        );
+    };
 
 
     return (

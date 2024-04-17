@@ -1,17 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+
+
+import { checkUserAuth } from '@/utils/apis/user';
+
 import { ACCESS_TOKEN } from '../../../constants';
 import { LoginForm } from './components/LoginForm';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export default function Page({
+export default async function Page({
     searchParams,
 }: {
     searchParams?: { redirect?: string };
 }) {
     const redirect_url = searchParams?.redirect ?? '/';
-    const isLoggedin = Boolean(cookies().get(ACCESS_TOKEN)?.value);
+
+    const isLoggedin = await checkUserAuth();
     if (isLoggedin) redirect(redirect_url);
 
     return (

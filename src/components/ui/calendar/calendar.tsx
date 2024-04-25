@@ -1,9 +1,13 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
 import { leftPad } from '../../../lib/utils';
 import { DetailedReservation } from '../../../utils/apis/types';
@@ -14,14 +18,18 @@ import CalendarTimePopover from './calendar-time-popover';
 import CalendarWeekView from './calendar-week-view';
 import ExistingReservations from './existing-reservations';
 import PossiblePlaceholder from './placeholder';
-import { RelativeMousePositionProps, compareMousePositions, getDateAtMousePosition, weekDays } from '@/lib/utils';
+import {
+    RelativeMousePositionProps,
+    compareMousePositions,
+    getDateAtMousePosition,
+    weekDays,
+} from '@/lib/utils';
 import { add, format, setHours, setMinutes, startOfWeek } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { motion } from 'framer-motion';
 import { PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
 
 interface CalendarProps {
     typeUUID: string;
@@ -147,7 +155,7 @@ export default function Calendar({
                         value={view}
                         onValueChange={(val: 'day' | 'week') => setView(val)}
                     >
-                        <SelectTrigger className="w-[180px]">
+                        <SelectTrigger className="w-[180px] hidden md:flex ">
                             <SelectValue placeholder="Visningsmodus" />
                         </SelectTrigger>
                         <SelectContent>

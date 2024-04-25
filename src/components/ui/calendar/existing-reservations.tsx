@@ -65,6 +65,7 @@ export default function ExistingReservations({
         let { start, end, reservation } = res;
         return (
             <ReservationShard
+                view={view}
                 setRelativeMousePosition={setRelativeMousePosition}
                 top={(getHours(start) * 100) / 23 + '%'}
                 left={

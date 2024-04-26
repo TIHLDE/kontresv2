@@ -38,7 +38,6 @@ export default function ReservationShard({
     const router = useRouter();
     const innerInfoRef = React.useRef<HTMLDivElement>(null);
     const wrapperRef = React.useRef<HTMLDivElement>(null);
-    console.log(view, view == 'week' ? width : '100%');
 
     function Info() {
         return (
@@ -86,12 +85,12 @@ export default function ReservationShard({
             }}
             initial={{
                 top: top,
-                left: view == 'week' ? left : '0',
                 height: height,
                 backgroundColor: hexColorFromUUID(reservation.id),
             }}
             style={{
                 width: view == 'week' ? width : '100%',
+                left: view == 'week' ? left : '0',
             }}
             onMouseEnter={(e) => {
                 e.stopPropagation();

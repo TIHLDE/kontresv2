@@ -34,14 +34,18 @@ export function getDateAtMousePosition<RelativeMousePositionProps>(
     const xPos = e.nativeEvent.clientX;
     const height = e.currentTarget.clientHeight;
     const width = e.currentTarget.clientWidth;
-    const day = Math.floor((xPos / width) * 7);
-    const time = Math.floor((yPos / height) * 288);
+    const day = Math.floor(
+        ((xPos - e.currentTarget.getBoundingClientRect().left) / width) * 7,
+    );
+    console.log(e.nativeEvent.offsetY);
     return {
         x: xPos,
         y: yPos,
         day,
-        hours: Math.floor(time / 12),
-        minutes: (time % 12) * 5,
+        hours: Math.floor(
+            ((e.nativeEvent.target as HTMLDivElement).offsetTop / height) * 24,
+        ),
+        minutes: Math.floor( e.nativeEvent.offsetY/48*60),
     };
 }
 

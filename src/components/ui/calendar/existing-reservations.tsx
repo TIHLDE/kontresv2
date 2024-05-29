@@ -69,8 +69,11 @@ export default function ExistingReservations({
                 setRelativeMousePosition={setRelativeMousePosition}
                 top={(getHours(start) * 100) / 23 + '%'}
                 left={
-                    (100 / 7) * (getDay(start) == 0 ? 6 : getDay(start) - 1) +
-                    '%'
+                    view == 'week'
+                        ? (100 / 7) *
+                              (getDay(start) == 0 ? 6 : getDay(start) - 1) +
+                          '%'
+                        : '0'
                 }
                 color="red"
                 key={index}

@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -10,9 +9,6 @@ import DescriptionWrapper from './components/DescriptionWrapper';
 import ImageSection from './components/ImageSection';
 import ReservationMetaWrapper from './components/ReservationMetaWrapper';
 import TitleWrapper from './components/TitleWrapper';
-import { ArrowLeft } from 'lucide-react';
-import Image from 'next/image';
-import { Router } from 'next/router';
 import { Suspense } from 'react';
 
 const Page = async ({ params }: { params: { id: string } }) => {

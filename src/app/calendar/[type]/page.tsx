@@ -10,7 +10,7 @@ interface PageProps {
 }
 export default async function Page({ params: { type } }: PageProps) {
     return (
-        <div className="md:pt-20">
+        <div className="">
             <Suspense fallback={<LoadingSpinner className="mx-auto" />}>
                 <CalendarWrapper type={type} />
             </Suspense>

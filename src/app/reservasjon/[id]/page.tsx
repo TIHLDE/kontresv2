@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import { PermissionApp } from '@/utils/apis/types';
 import { checkUserPermissions } from '@/utils/apis/user';
@@ -30,14 +31,16 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <div className="max-w-page mx-auto min-h-screen md:w-2/5">
             <Card className="overflow-hidden">
                 <ImageSection />
-                <Suspense fallback="Loading">
+                <Suspense
+                    fallback={<Skeleton className="w-1/2 h-7 mx-auto mt-10" />}
+                >
                     <TitleWrapper params={params} />
                 </Suspense>
                 <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
-                    <Suspense fallback="Loading">
+                    <Suspense fallback={<Skeleton className="w-40 h-52" />}>
                         <ReservationMetaWrapper params={params} />
                     </Suspense>
-                    <Suspense fallback="Loading">
+                    <Suspense fallback={<Skeleton className="w-full h-52" />}>
                         <DescriptionWrapper params={params} />
                     </Suspense>
                 </div>

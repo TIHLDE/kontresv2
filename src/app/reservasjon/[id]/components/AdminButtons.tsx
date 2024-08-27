@@ -1,27 +1,41 @@
 'use client';
 
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useToast } from '@/components/ui/use-toast';
-
-
 
 import { usePop } from '@/utils/animations/buttonPop';
 import { useShake } from '@/utils/animations/shake';
-import { deleteReservation, invalidateReservations, setReservationState } from '@/utils/apis/reservations';
+import {
+    deleteReservation,
+    invalidateReservations,
+    setReservationState,
+} from '@/utils/apis/reservations';
 import { ReservationState } from '@/utils/apis/types';
-
-
 
 import { StateAtomType, stateAtom } from './ReservationMeta';
 import { useAtom } from 'jotai';
-import { Delete, MoreVertical, Trash } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-
 
 interface AdminButtonsProps {
     reservationId: string;
@@ -142,77 +156,77 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
     };
 
     return (
-            <div className="w-full flex flex-col md:flex-row gap-3 p-5">
-                <Button
-                    ref={acceptRef}
-                    className="w-full"
-                    onClick={onAccept}
-                    disabled={acceptLoading || rejectLoading}
-                >
-                    {acceptLoading ? <LoadingSpinner /> : 'Godkjenn'}
-                </Button>
-                <Button
-                    ref={rejectRef}
-                    className="w-full"
-                    onClick={onReject}
-                    variant={'destructive'}
-                    disabled={acceptLoading || rejectLoading}
-                >
-                    {rejectLoading ? <LoadingSpinner /> : 'Avslå'}
-                </Button>
+        <div className="w-full flex flex-col md:flex-row gap-3 p-5">
+            <Button
+                ref={acceptRef}
+                className="w-full"
+                onClick={onAccept}
+                disabled={acceptLoading || rejectLoading}
+            >
+                {acceptLoading ? <LoadingSpinner /> : 'Godkjenn'}
+            </Button>
+            <Button
+                ref={rejectRef}
+                className="w-full"
+                onClick={onReject}
+                variant={'destructive'}
+                disabled={acceptLoading || rejectLoading}
+            >
+                {rejectLoading ? <LoadingSpinner /> : 'Avslå'}
+            </Button>
 
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="px-2 md:w-fit w-full">
-                            <MoreVertical className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>Handlinger</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                            onClick={() => setDeleteOpen(!deleteOpen)}
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="px-2 md:w-fit w-full">
+                        <MoreVertical className="h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuLabel>Handlinger</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                        onClick={() => setDeleteOpen(!deleteOpen)}
+                    >
+                        Slett
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            <AlertDialog
+                open={deleteOpen}
+                onOpenChange={(open) => setDeleteOpen(open)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Denne handlingen kan ikke angres.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel className="">
+                            Avbryt
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-destructive text-background"
+                            onClick={() => {
+                                setDeleteLoading(true);
+                                onDeleteReservation()
+                                    .then(() => {
+                                        setDeleteOpen(false);
+                                        router.back();
+                                        invalidateReservations();
+                                    })
+                                    .finally(() => {
+                                        setDeleteLoading(false);
+                                    });
+                            }}
                         >
-                            Slett
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-                <AlertDialog
-                    open={deleteOpen}
-                    onOpenChange={(open) => setDeleteOpen(open)}
-                >
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                Denne handlingen kan ikke angres.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel className="">
-                                Avbryt
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                                className="bg-destructive text-background"
-                                onClick={() => {
-                                    setDeleteLoading(true);
-                                    onDeleteReservation()
-                                        .then(() => {
-                                            setDeleteOpen(false);
-                                            router.back();
-                                            invalidateReservations();
-                                        })
-                                        .finally(() => {
-                                            setDeleteLoading(false);
-                                        });
-                                }}
-                            >
-                                {deleteLoading ? <LoadingSpinner /> : 'Slett'}
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
-            </div>
+                            {deleteLoading ? <LoadingSpinner /> : 'Slett'}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </div>
     );
 };
 

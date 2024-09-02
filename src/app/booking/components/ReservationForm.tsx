@@ -16,7 +16,6 @@ import {
 } from '@/utils/apis/reservations';
 import { DetailedItem, Membership } from '@/utils/apis/types';
 
-import ApplicantCard from './ApplicantCard';
 import {
     ReservationFormFields,
     ReservationFormValueTypes,

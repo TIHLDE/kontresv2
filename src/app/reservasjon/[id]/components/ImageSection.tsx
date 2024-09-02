@@ -2,11 +2,14 @@
 
 import { Button } from '@/components/ui/button';
 
+import { cn } from '@/lib/utils';
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import React from 'react';
 
-const ImageSection = () => {
+interface ImageSectionProps extends React.HTMLProps<HTMLDivElement> {}
+const ImageSection = ({ className, ...props }: ImageSectionProps) => {
     const router = useRouter();
 
     const goBack = () => {
@@ -14,7 +17,13 @@ const ImageSection = () => {
     };
 
     return (
-        <div className="h-48 md:h-72 overflow-hidden flex items-center relative">
+        <div
+            className={cn(
+                'h-48 md:h-72 overflow-hidden flex items-center relative',
+                className,
+            )}
+            {...props}
+        >
             <Button
                 className="absolute top-3 left-3 z-10 bg-white"
                 onClick={goBack}

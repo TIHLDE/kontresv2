@@ -47,6 +47,9 @@ export default function UserAutocomplete({ onChange, value, ...rest }: any) {
                             )}
                         </Combobox.Option>
                     ))}
+                    {users.length === 0 && (
+                        <li className="p-2">Ingen resultater</li>
+                    )}
                 </Combobox.Options>
             </div>
         </Combobox>

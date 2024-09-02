@@ -28,14 +28,14 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <BlurBackground>
             <div className="md:max-w-2xl max-w-page mx-auto min-h-screen w-full">
                 <Card className="overflow-hidden">
-                    <ImageSection />
-                    <div className="relative -mt-40 z-10">
+                    <ImageSection className="z-0" />
+                    <div className="relative -mt-40">
                         <Suspense
                             fallback={
                                 <Skeleton className="w-1/2 h-7 mx-auto mt-10" />
                             }
                         >
-                            <TitleWrapper params={params} className="-mt-40" />
+                            <TitleWrapper params={params} />
                         </Suspense>
                         <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
                             <Suspense

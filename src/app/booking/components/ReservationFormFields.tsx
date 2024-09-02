@@ -21,6 +21,7 @@ import { DetailedItem } from '@/utils/apis/types';
 import ApplicantCard from './ApplicantCard';
 import UserAutocomplete from './UserAutocomplete';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
@@ -239,20 +240,35 @@ const ReservationFormFields = ({
                             )}
                         />
                         {form.watch('serves_alcohol') && (
-                            <FormField
-                                control={form.control}
-                                name="sober_watch_id"
-                                render={({ field }) => (
-                                    <FormItem className="mb-4">
-                                        <FormLabel>
-                                            Edruvakt sitt navn
-                                        </FormLabel>
-                                        <FormControl>
-                                            <UserAutocomplete {...field} />
-                                        </FormControl>
-                                    </FormItem>
-                                )}
-                            />
+                            <motion.div
+                                initial={{
+                                    height: 0,
+                                    overflow: 'hidden',
+                                }}
+                                animate={{
+                                    height: 'fit-content',
+                                }}
+                                transition={{
+                                    duration: 0.5,
+                                    type: 'spring',
+                                    bounce: 0.25,
+                                }}
+                            >
+                                <FormField
+                                    control={form.control}
+                                    name="sober_watch_id"
+                                    render={({ field }) => (
+                                        <FormItem className="mb-4">
+                                            <FormLabel>
+                                                Edruvakt sitt navn
+                                            </FormLabel>
+                                            <FormControl>
+                                                <UserAutocomplete {...field} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </motion.div>
                         )}
                     </>
                 )}

@@ -26,7 +26,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
     return (
         <BlurBackground>
-            <div className="max-w-2xl mx-auto min-h-screen w-full">
+            <div className="md:max-w-2xl max-w-page mx-auto min-h-screen w-full">
                 <Card className="overflow-hidden">
                     <ImageSection />
                     <Suspense

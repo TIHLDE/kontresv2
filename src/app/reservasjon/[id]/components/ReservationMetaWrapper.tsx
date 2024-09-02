@@ -1,5 +1,3 @@
-import { User } from '@/types/User';
-
 import { getReservation } from '@/utils/apis/reservations';
 import { BaseGroup } from '@/utils/apis/types';
 
@@ -11,6 +9,7 @@ const ReservationMetaWrapper = async ({
     params: { id: string };
 }) => {
     const reservation = await getReservation(params.id);
+    console.log(reservation);
     const from = new Date(reservation.start_time);
     const to = new Date(reservation.end_time);
     return (
@@ -21,6 +20,7 @@ const ReservationMetaWrapper = async ({
             state={reservation.state}
             user={reservation.author_detail}
             soberWatch={reservation.sober_watch}
+            approvedBy={reservation.approved_by}
         />
     );
 };

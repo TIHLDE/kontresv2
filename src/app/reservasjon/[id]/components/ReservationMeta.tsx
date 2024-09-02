@@ -1,23 +1,16 @@
-"use client";
+'use client';
 
 import { User } from '@/types/User';
-
-
 
 import { Card } from '@/components/ui/card';
 import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
 
-
-
-import { BaseGroup, ReservationState } from '@/utils/apis/types';
-
-
+import { BaseGroup, GroupType, ReservationState } from '@/utils/apis/types';
 
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
-
 
 interface ReservationMetaProps {
     from: string;
@@ -26,6 +19,7 @@ interface ReservationMetaProps {
     group: BaseGroup;
     soberWatch?: User;
     state: ReservationState;
+    approvedBy?: string;
 }
 
 export const stateMap: { [key in ReservationState]: StateAtomType } = {
@@ -44,6 +38,7 @@ const ReservationMeta = ({
     group,
     state,
     soberWatch,
+    approvedBy,
 }: ReservationMetaProps) => {
     const [stateText, setStateText] = useAtom(stateAtom);
 
@@ -73,7 +68,15 @@ const ReservationMeta = ({
                 </div>
                 <div>
                     <h2 className="font-semibold text-xl">Skrevet av</h2>
-                    <UserProfilePill user={user} />
+                    <UserProfilePill
+                        email={user.email}
+                        firstName={user.first_name}
+                        gender={user.gender}
+                        image={user.image}
+                        lastName={user.last_name}
+                        tool={user.tool}
+                        userId={user.user_id}
+                    />
                 </div>
 
                 {group && (
@@ -85,12 +88,39 @@ const ReservationMeta = ({
                     </div>
                 )}
 
+                {approvedBy && (
+                    <div>
+                        <h2 className="font-semibold text-xl text-nowrap">
+                            {state === 'CONFIRMED' ? 'Godkjent' : 'Avslått'} av
+                        </h2>
+                        <UserProfilePill
+                            className="w-full"
+                            firstName={approvedBy}
+                            lastName=""
+                            image=""
+                            gender={0}
+                            email="test@gmail.com"
+                            userId={'0'}
+                            tool={'Maskingevær'}
+                        />
+                    </div>
+                )}
+
                 {soberWatch && (
                     <div>
                         <h2 className="font-semibold text-xl text-nowrap">
                             Edruvakt
                         </h2>
-                        <UserProfilePill className="w-full" user={soberWatch} />
+                        <UserProfilePill
+                            className="w-full"
+                            firstName={soberWatch.first_name}
+                            lastName={soberWatch.last_name}
+                            image={soberWatch.image}
+                            gender={soberWatch.gender}
+                            email={soberWatch.email}
+                            userId={soberWatch.user_id}
+                            tool={soberWatch.tool}
+                        />
                     </div>
                 )}
                 <div>

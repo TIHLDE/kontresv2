@@ -30,7 +30,7 @@ const ImageSection = () => {
                 alt="Dog."
                 className="w-full h-full relative object-cover"
             />
-            <div className="w-full h-full absolute bottom-0 left-0 bg-gradient-to-t from-background to-transparent" />
+            <div className="w-full h-full absolute bottom-0 left-0 bg-gradient-to-t from-card from-20% to-transparent" />
         </div>
     );
 };

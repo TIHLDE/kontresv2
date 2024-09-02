@@ -29,24 +29,30 @@ const Page = async ({ params }: { params: { id: string } }) => {
             <div className="md:max-w-2xl max-w-page mx-auto min-h-screen w-full">
                 <Card className="overflow-hidden">
                     <ImageSection />
-                    <Suspense
-                        fallback={
-                            <Skeleton className="w-1/2 h-7 mx-auto mt-10" />
-                        }
-                    >
-                        <TitleWrapper params={params} />
-                    </Suspense>
-                    <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
-                        <Suspense fallback={<Skeleton className="w-52 h-80" />}>
-                            <ReservationMetaWrapper params={params} />
-                        </Suspense>
+                    <div className="relative -mt-40 z-10">
                         <Suspense
-                            fallback={<Skeleton className="w-full h-80" />}
+                            fallback={
+                                <Skeleton className="w-1/2 h-7 mx-auto mt-10" />
+                            }
                         >
-                            <DescriptionWrapper params={params} />
+                            <TitleWrapper params={params} className="-mt-40" />
                         </Suspense>
+                        <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
+                            <Suspense
+                                fallback={<Skeleton className="w-52 h-80" />}
+                            >
+                                <ReservationMetaWrapper params={params} />
+                            </Suspense>
+                            <Suspense
+                                fallback={<Skeleton className="w-full h-80" />}
+                            >
+                                <DescriptionWrapper params={params} />
+                            </Suspense>
+                        </div>
+                        {admin ? (
+                            <AdminButtons reservationId={id} />
+                        ) : undefined}
                     </div>
-                    {admin ? <AdminButtons reservationId={id} /> : undefined}
                 </Card>
             </div>
         </BlurBackground>

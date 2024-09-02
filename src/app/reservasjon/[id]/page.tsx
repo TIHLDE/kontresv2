@@ -1,3 +1,4 @@
+import BlurBackground from '@/components/layout/blur-background';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -24,25 +25,31 @@ const Page = async ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <div className="max-w-page mx-auto min-h-screen md:w-full">
-            <Card className="overflow-hidden">
-                <ImageSection />
-                <Suspense
-                    fallback={<Skeleton className="w-1/2 h-7 mx-auto mt-10" />}
-                >
-                    <TitleWrapper params={params} />
-                </Suspense>
-                <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
-                    <Suspense fallback={<Skeleton className="w-52 h-80" />}>
-                        <ReservationMetaWrapper params={params} />
+        <BlurBackground>
+            <div className="max-w-2xl mx-auto min-h-screen w-full">
+                <Card className="overflow-hidden">
+                    <ImageSection />
+                    <Suspense
+                        fallback={
+                            <Skeleton className="w-1/2 h-7 mx-auto mt-10" />
+                        }
+                    >
+                        <TitleWrapper params={params} />
                     </Suspense>
-                    <Suspense fallback={<Skeleton className="w-full h-80" />}>
-                        <DescriptionWrapper params={params} />
-                    </Suspense>
-                </div>
-                {admin ? <AdminButtons reservationId={id} /> : undefined}
-            </Card>
-        </div>
+                    <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
+                        <Suspense fallback={<Skeleton className="w-52 h-80" />}>
+                            <ReservationMetaWrapper params={params} />
+                        </Suspense>
+                        <Suspense
+                            fallback={<Skeleton className="w-full h-80" />}
+                        >
+                            <DescriptionWrapper params={params} />
+                        </Suspense>
+                    </div>
+                    {admin ? <AdminButtons reservationId={id} /> : undefined}
+                </Card>
+            </div>
+        </BlurBackground>
     );
 };
 

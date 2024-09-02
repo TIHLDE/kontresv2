@@ -24,7 +24,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     }
 
     return (
-        <div className="max-w-page mx-auto min-h-screen md:w-2/5">
+        <div className="max-w-page mx-auto min-h-screen md:w-full">
             <Card className="overflow-hidden">
                 <ImageSection />
                 <Suspense
@@ -33,10 +33,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
                     <TitleWrapper params={params} />
                 </Suspense>
                 <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
-                    <Suspense fallback={<Skeleton className="w-40 h-52" />}>
+                    <Suspense fallback={<Skeleton className="w-52 h-80" />}>
                         <ReservationMetaWrapper params={params} />
                     </Suspense>
-                    <Suspense fallback={<Skeleton className="w-full h-52" />}>
+                    <Suspense fallback={<Skeleton className="w-full h-80" />}>
                         <DescriptionWrapper params={params} />
                     </Suspense>
                 </div>

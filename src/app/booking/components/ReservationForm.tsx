@@ -7,7 +7,6 @@ import {
     AlertDialogCancel,
     AutoAlertDialog,
 } from '@/components/ui/alert-dialog';
-import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/components/ui/use-toast';
 
 import { ErrorType } from '@/utils/apis/fetch';
@@ -191,23 +190,20 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 groups={formGroups}
                 onSubmit={onSubmit}
                 groupChangeCallback={setSelectedGroup}
-            />
-
-            <ApplicantCard
-                image={
-                    selectedGroup != '0'
-                        ? groups.find(
-                              (group) => group.group.slug === selectedGroup,
-                          )?.group.image ?? ''
-                        : user.image
-                }
-                label={
-                    selectedGroup != '0'
-                        ? groups.find(
-                              (group) => group.group.slug === selectedGroup,
-                          )?.group.name ?? ''
-                        : user.first_name
-                }
+                applicant={{
+                    image:
+                        selectedGroup != '0'
+                            ? groups.find(
+                                  (group) => group.group.slug === selectedGroup,
+                              )?.group.image ?? ''
+                            : user.image,
+                    label:
+                        selectedGroup != '0'
+                            ? groups.find(
+                                  (group) => group.group.slug === selectedGroup,
+                              )?.group.name ?? ''
+                            : user.first_name,
+                }}
             />
         </>
     );

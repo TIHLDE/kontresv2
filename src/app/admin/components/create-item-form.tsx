@@ -70,11 +70,16 @@ export const CreateItemForm = ({
                 <FormField
                     control={form.control}
                     name="image"
-                    render={({ field }) => (
+                    render={({ field: { value, ...rest } }) => (
                         <FormItem>
                             <FormLabel>Bilde (ikke støttet enda)</FormLabel>
                             <FormControl>
-                                <Input type="file" disabled {...field} />
+                                <Input
+                                    type="file"
+                                    disabled
+                                    value={value ?? ''}
+                                    {...rest}
+                                />
                             </FormControl>
                         </FormItem>
                     )}

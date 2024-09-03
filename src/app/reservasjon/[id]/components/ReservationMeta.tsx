@@ -20,7 +20,7 @@ interface ReservationMetaProps extends React.ComponentProps<typeof Card> {
     group: BaseGroup;
     soberWatch?: User;
     state: ReservationState;
-    approvedBy?: string;
+    approvedBy?: User;
 }
 
 export const stateMap: { [key in ReservationState]: StateAtomType } = {
@@ -97,15 +97,14 @@ const ReservationMeta = ({
                             {state === 'CONFIRMED' ? 'Godkjent' : 'Avslått'} av
                         </h2>
                         <UserProfilePill
-                            showHoverCard={false}
                             className="w-full"
-                            firstName={approvedBy}
-                            lastName=""
-                            image=""
-                            gender={0}
-                            email="test@gmail.com"
-                            userId={'0'}
-                            tool={'Maskingevær'}
+                            firstName={approvedBy.first_name}
+                            lastName={approvedBy.last_name}
+                            image={approvedBy.image}
+                            gender={approvedBy.gender}
+                            email={approvedBy.email}
+                            userId={approvedBy.email}
+                            tool={approvedBy.tool}
                         />
                     </div>
                 )}

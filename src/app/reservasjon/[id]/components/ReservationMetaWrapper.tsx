@@ -25,7 +25,7 @@ const ReservationMetaWrapper = async ({
             state={reservation.state}
             user={reservation.author_detail}
             soberWatch={reservation.sober_watch}
-            approvedBy={reservation.approved_by}
+            approvedBy={reservation.approved_by_detail}
             {...props}
         />
     );

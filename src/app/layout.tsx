@@ -1,3 +1,4 @@
+import BlurBackground from '@/components/layout/blur-background';
 import BottomBarWrapper from '@/components/layout/bottom-bar/bottom-bar-wrapper';
 import Header from '@/components/layout/header/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
@@ -33,7 +34,7 @@ export default async function RootLayout({
                     <Header className="lg:flex hidden" />
                     <div className="py-page pb-32">
                         <Toaster />
-                        {children}
+                        <BlurBackground>{children}</BlurBackground>
                     </div>
                     <div className="lg:hidden fixed bottom-5 w-full flex z-10">
                         <Suspense>

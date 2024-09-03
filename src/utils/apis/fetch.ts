@@ -44,6 +44,7 @@ export const IFetch = <T extends unknown>({ url, config }: IFetchProps) => {
             return res.json();
         })
         .catch((err) => {
+            console.error(err);
             throw new Error(err);
         }) as Promise<T>;
 };

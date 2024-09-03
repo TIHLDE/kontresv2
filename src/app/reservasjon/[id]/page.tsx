@@ -27,7 +27,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
     return (
         <BlurBackground>
             <div className="md:max-w-2xl max-w-page mx-auto min-h-screen w-full">
-                <Card className="overflow-hidden">
+                <Card className="">
                     <ImageSection className="z-0" />
                     <div className="relative -mt-40">
                         <Suspense
@@ -41,12 +41,18 @@ const Page = async ({ params }: { params: { id: string } }) => {
                             <Suspense
                                 fallback={<Skeleton className="w-52 h-80" />}
                             >
-                                <ReservationMetaWrapper params={params} />
+                                <ReservationMetaWrapper
+                                    params={params}
+                                    className="relative z-10"
+                                />
                             </Suspense>
                             <Suspense
                                 fallback={<Skeleton className="w-full h-80" />}
                             >
-                                <DescriptionWrapper params={params} />
+                                <DescriptionWrapper
+                                    params={params}
+                                    className="relative z-0"
+                                />
                             </Suspense>
                         </div>
                         {admin ? (

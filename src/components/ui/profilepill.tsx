@@ -29,6 +29,7 @@ interface UserProfilePillProps extends React.HTMLProps<HTMLDivElement> {
     userId: string;
     tool: string;
     email: string;
+    showHoverCard?: boolean;
 }
 
 const genderMap: { [key: number]: string } = {
@@ -55,6 +56,7 @@ export const UserProfilePill = ({
     lastName,
     userId,
     email,
+    showHoverCard = true,
     tool,
     ...props
 }: UserProfilePillProps) => {
@@ -63,59 +65,61 @@ export const UserProfilePill = ({
             <HoverCardTrigger>
                 <ProfileButton {...props} label={firstName} image={image} />
             </HoverCardTrigger>
-            <HoverCardContent className="w-80">
-                <div className="flex justify-between space-x-4">
-                    <Avatar>
-                        <AvatarImage
-                            src={image}
-                            alt={'Profilbilde'}
-                            className="rounded-lg"
-                        />
-                        <AvatarFallback>
-                            <UserRound className="text-foreground" />
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className="space-y-1 w-full [&_svg]:mr-2 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:opacity-70">
-                        <h4 className="text-sm font-semibold">
-                            {firstName + ' ' + lastName}
-                        </h4>
-                        <Link
-                            className="hover:underline text-muted-foreground"
-                            href={`https://tihlde.org/profil/${userId}/`}
-                        >
-                            @{userId}
-                        </Link>
-                        <BioSection
-                            className="pt-2"
-                            items={[
-                                {
-                                    icon: <MailIcon />,
-                                    label: (
-                                        <Link
-                                            className="hover:underline"
-                                            href={`mailto:${email}`}
-                                        >
-                                            {email}
-                                        </Link>
-                                    ),
-                                },
-                                {
-                                    icon: <ArrowUpLeftFromCircle />,
-                                    label: genderMap[gender ?? 2],
-                                },
-                                ...(tool
-                                    ? [
-                                          {
-                                              icon: <Wrench />,
-                                              label: tool ?? 'Ikke oppgitt',
-                                          },
-                                      ]
-                                    : []),
-                            ]}
-                        />
+            {showHoverCard && (
+                <HoverCardContent className="w-80">
+                    <div className="flex justify-between space-x-4">
+                        <Avatar>
+                            <AvatarImage
+                                src={image}
+                                alt={'Profilbilde'}
+                                className="rounded-lg"
+                            />
+                            <AvatarFallback>
+                                <UserRound className="text-foreground" />
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="space-y-1 w-full [&_svg]:mr-2 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:opacity-70">
+                            <h4 className="text-sm font-semibold">
+                                {firstName + ' ' + lastName}
+                            </h4>
+                            <Link
+                                className="hover:underline text-muted-foreground"
+                                href={`https://tihlde.org/profil/${userId}/`}
+                            >
+                                @{userId}
+                            </Link>
+                            <BioSection
+                                className="pt-2"
+                                items={[
+                                    {
+                                        icon: <MailIcon />,
+                                        label: (
+                                            <Link
+                                                className="hover:underline"
+                                                href={`mailto:${email}`}
+                                            >
+                                                {email}
+                                            </Link>
+                                        ),
+                                    },
+                                    {
+                                        icon: <ArrowUpLeftFromCircle />,
+                                        label: genderMap[gender ?? 2],
+                                    },
+                                    ...(tool
+                                        ? [
+                                              {
+                                                  icon: <Wrench />,
+                                                  label: tool ?? 'Ikke oppgitt',
+                                              },
+                                          ]
+                                        : []),
+                                ]}
+                            />
+                        </div>
                     </div>
-                </div>
-            </HoverCardContent>
+                </HoverCardContent>
+            )}
         </HoverCard>
     );
 };

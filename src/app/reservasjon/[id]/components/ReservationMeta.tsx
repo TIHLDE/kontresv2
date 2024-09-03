@@ -7,12 +7,13 @@ import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
 
 import { BaseGroup, GroupType, ReservationState } from '@/utils/apis/types';
 
+import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 
-interface ReservationMetaProps {
+interface ReservationMetaProps extends React.ComponentProps<typeof Card> {
     from: string;
     to: string;
     user: User;
@@ -39,6 +40,8 @@ const ReservationMeta = ({
     state,
     soberWatch,
     approvedBy,
+    className,
+    ...props
 }: ReservationMetaProps) => {
     const [stateText, setStateText] = useAtom(stateAtom);
 
@@ -47,7 +50,7 @@ const ReservationMeta = ({
     }, [state, setStateText]);
 
     return (
-        <Card className="bg-card/30 backdrop-blur-sm">
+        <Card className={cn('bg-card/30 backdrop-blur-sm', className)}>
             <div className="flex flex-col gap-3 p-3">
                 <div>
                     <h2 className="font-semibold text-xl">Fra</h2>
@@ -94,6 +97,7 @@ const ReservationMeta = ({
                             {state === 'CONFIRMED' ? 'Godkjent' : 'Avslått'} av
                         </h2>
                         <UserProfilePill
+                            showHoverCard={false}
                             className="w-full"
                             firstName={approvedBy}
                             lastName=""

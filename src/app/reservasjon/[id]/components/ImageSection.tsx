@@ -19,7 +19,7 @@ const ImageSection = ({ className, ...props }: ImageSectionProps) => {
     return (
         <div
             className={cn(
-                'h-48 md:h-72 overflow-hidden flex items-center relative',
+                'h-48 md:h-72 overflow-hidden flex items-center relative rounded-t-md',
                 className,
             )}
             {...props}

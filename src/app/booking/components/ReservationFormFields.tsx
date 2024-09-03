@@ -1,24 +1,31 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DateTimePicker } from '@/components/ui/date-time-picker';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
-import AutoSelect, { SelectGroupType, SelectOptionType } from '@/components/ui/select';
-
-
+import AutoSelect, {
+    SelectGroupType,
+    SelectOptionType,
+} from '@/components/ui/select';
 
 import { DetailedItem } from '@/utils/apis/types';
 
-
-
+import ApplicantCard from './ApplicantCard';
 import UserAutocomplete from './UserAutocomplete';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 
 const formSchema = z.object({
     from: z.date(),
@@ -44,6 +51,7 @@ type ReservationFormFieldsType = {
     onSubmit: (values: ReservationFormValueTypes) => Promise<unknown>;
     groups?: SelectOptionType[] | SelectGroupType[];
     groupChangeCallback: Dispatch<SetStateAction<string>>;
+    applicant?: { image: string; label: string };
 };
 
 /**
@@ -55,6 +63,7 @@ const ReservationFormFields = ({
     groups,
     groupChangeCallback,
     onSubmit,
+    applicant,
 }: ReservationFormFieldsType) => {
     const form = useForm<ReservationFormValueTypes>({
         resolver: zodResolver(formSchema),
@@ -231,20 +240,35 @@ const ReservationFormFields = ({
                             )}
                         />
                         {form.watch('serves_alcohol') && (
-                            <FormField
-                                control={form.control}
-                                name="sober_watch_id"
-                                render={({ field }) => (
-                                    <FormItem className="mb-4">
-                                        <FormLabel>
-                                            Edruvakt sitt navn
-                                        </FormLabel>
-                                        <FormControl>
-                                            <UserAutocomplete {...field} />
-                                        </FormControl>
-                                    </FormItem>
-                                )}
-                            />
+                            <motion.div
+                                initial={{
+                                    height: 0,
+                                    overflow: 'hidden',
+                                }}
+                                animate={{
+                                    height: 'fit-content',
+                                }}
+                                transition={{
+                                    duration: 0.5,
+                                    type: 'spring',
+                                    bounce: 0.25,
+                                }}
+                            >
+                                <FormField
+                                    control={form.control}
+                                    name="sober_watch_id"
+                                    render={({ field }) => (
+                                        <FormItem className="mb-4">
+                                            <FormLabel>
+                                                Edruvakt sitt navn
+                                            </FormLabel>
+                                            <FormControl>
+                                                <UserAutocomplete {...field} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </motion.div>
                         )}
                     </>
                 )}
@@ -282,6 +306,12 @@ const ReservationFormFields = ({
                             </FormLabel>
                         </FormItem>
                     )}
+                />
+
+                <ApplicantCard
+                    image={applicant?.image}
+                    label={applicant?.label}
+                    className="w-full"
                 />
 
                 <div className="mt-5">

@@ -6,6 +6,7 @@ import {
     FormField,
     FormItem,
     FormLabel,
+    FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
@@ -16,7 +17,7 @@ import * as z from 'zod';
 const formSchema = z.object({
     name: z.string().min(1),
     description: z.string().min(1),
-    image: z.string().url().optional(),
+    image: z.string().url().optional().nullable(),
     allows_alcohol: z.boolean().optional(),
 });
 
@@ -69,11 +70,16 @@ export const CreateItemForm = ({
                 <FormField
                     control={form.control}
                     name="image"
-                    render={({ field }) => (
+                    render={({ field: { value, ...rest } }) => (
                         <FormItem>
                             <FormLabel>Bilde (ikke støttet enda)</FormLabel>
                             <FormControl>
-                                <Input type="file" disabled {...field} />
+                                <Input
+                                    type="file"
+                                    disabled
+                                    value={value ?? ''}
+                                    {...rest}
+                                />
                             </FormControl>
                         </FormItem>
                     )}

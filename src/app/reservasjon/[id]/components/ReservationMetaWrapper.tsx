@@ -14,7 +14,6 @@ const ReservationMetaWrapper = async ({
     ...props
 }: ReservationMetaWrapperProps) => {
     const reservation = await getReservation(params.id);
-    console.log(reservation);
     const from = new Date(reservation.start_time);
     const to = new Date(reservation.end_time);
     return (

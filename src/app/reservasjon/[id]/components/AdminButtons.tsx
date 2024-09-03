@@ -215,6 +215,11 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
                                         setDeleteOpen(false);
                                         router.back();
                                         invalidateReservations();
+                                        toast({
+                                            title: 'Reservasjonen er slettet.',
+                                            description:
+                                                'Reservasjonen er nå slettet.',
+                                        });
                                     })
                                     .finally(() => {
                                         setDeleteLoading(false);

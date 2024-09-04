@@ -32,6 +32,7 @@ import {
 import { ReservationState } from '@/utils/apis/types';
 
 import { StateAtomType, stateAtom } from './ReservationMeta';
+import RejectDialog from './reject-dialog';
 import { useAtom } from 'jotai';
 import { MoreVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -165,15 +166,16 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
             >
                 {acceptLoading ? <LoadingSpinner /> : 'Godkjenn'}
             </Button>
-            <Button
-                ref={rejectRef}
-                className="w-full"
-                onClick={onReject}
-                variant={'destructive'}
-                disabled={acceptLoading || rejectLoading}
-            >
-                {rejectLoading ? <LoadingSpinner /> : 'Avslå'}
-            </Button>
+            <RejectDialog onReject={onReject}>
+                <Button
+                    ref={rejectRef}
+                    className="w-full"
+                    variant={'destructive'}
+                    disabled={acceptLoading || rejectLoading}
+                >
+                    {rejectLoading ? <LoadingSpinner /> : 'Avslå'}
+                </Button>
+            </RejectDialog>
 
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>

@@ -1,10 +1,10 @@
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import ItemsList from './components/items-list';
-import ItemsListSkeleton from './components/items-list-skeleton';
+import FilteredTable from './components/FilteredTable/filtered-table';
+import ItemsListSkeleton from './components/ItemsList/components/items-list-skeleton';
+import ItemsList from './components/ItemsList/items-list';
 import ReservationTableSkeleton from './components/reservation-table-skeleton';
-import ReservationsList from './components/reservations-list';
 import { Suspense } from 'react';
 
 const Admin = async () => {
@@ -26,7 +26,7 @@ const Admin = async () => {
                                     <ReservationTableSkeleton className="mt-10" />
                                 }
                             >
-                                <ReservationsList />
+                                <FilteredTable className="mt-5" />
                             </Suspense>
                         </TabsContent>
                         <TabsContent value="items">

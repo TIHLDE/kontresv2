@@ -1,6 +1,6 @@
 import { getItems } from '@/utils/apis/items';
 
-import ItemsTable from './items-table';
+import ItemsTable from './components/items-table';
 
 const ItemsList = async () => {
     let items;

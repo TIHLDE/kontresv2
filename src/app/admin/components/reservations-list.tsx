@@ -1,7 +1,6 @@
 import { getReservations } from '@/utils/apis/reservations';
 
 import ReservationTable from '../../../components/ui/reservation-table';
-import { Suspense } from 'react';
 
 const ReservationsList = async () => {
     let reservations;

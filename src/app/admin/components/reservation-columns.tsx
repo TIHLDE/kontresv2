@@ -2,7 +2,7 @@
 
 import { Button, ButtonProps } from '@/components/ui/button';
 
-import { DetailedReservation } from '@/utils/apis/types';
+import { DetailedReservation, ReservationState } from '@/utils/apis/types';
 import { cn } from '@/utils/cn';
 
 import { stateMap } from '@/app/reservasjon/[id]/components/ReservationMeta';
@@ -97,7 +97,9 @@ export const reservationColumns: ColumnDef<DetailedReservation>[] = [
     },
     {
         accessorKey: 'state',
-        accessorFn: (data) => stateMap[data.state],
+        cell: (data) => (
+            <StatusLabel status={data.cell.getValue() as ReservationState} />
+        ),
         header: ({ column }) => {
             return (
                 <HeaderButton
@@ -113,3 +115,14 @@ export const reservationColumns: ColumnDef<DetailedReservation>[] = [
         },
     },
 ];
+
+const StatusLabel = ({ status }: { status: ReservationState }) => {
+    const colors: { [STATE in ReservationState]: string } = {
+        CANCELLED: 'text-red-500',
+        PENDING: 'text-yellow-500',
+        CONFIRMED: 'text-green-500',
+    };
+    return (
+        <p className={cn(colors[status], 'font-medium')}>{stateMap[status]}</p>
+    );
+};

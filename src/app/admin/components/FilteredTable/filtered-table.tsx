@@ -9,9 +9,12 @@ import React from 'react';
 interface FilteredTableProps extends React.HTMLProps<HTMLDivElement> {}
 const FilteredTable = async ({ className, ...props }: FilteredTableProps) => {
     let reservations;
+    let items;
     try {
         reservations = await getReservations();
+        items = await getItems();
     } catch (e) {}
+
     return (
         <div
             className={cn(
@@ -21,7 +24,7 @@ const FilteredTable = async ({ className, ...props }: FilteredTableProps) => {
             {...props}
         >
             <ReservationsTable reservations={reservations ?? []} />
-            <Filters />
+            <Filters items={items ?? []} />
         </div>
     );
 };

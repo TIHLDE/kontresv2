@@ -69,11 +69,7 @@ export const UserProfilePill = ({
                 <HoverCardContent className="w-80">
                     <div className="flex justify-between space-x-4">
                         <Avatar>
-                            <AvatarImage
-                                src={image}
-                                alt={'Profilbilde'}
-                                className="rounded-lg"
-                            />
+                            <AvatarImage src={image} alt={'Profilbilde'} />
                             <AvatarFallback>
                                 <UserRound className="text-foreground" />
                             </AvatarFallback>

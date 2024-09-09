@@ -11,6 +11,7 @@ export type DetailedReservation = {
     sober_watch?: User;
     approved_by?: string;
     approved_by_detail?: User;
+    reason?: string;
 } & BaseModel;
 
 export type ReservationState = 'CONFIRMED' | 'PENDING' | 'CANCELLED';

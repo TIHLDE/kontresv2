@@ -50,7 +50,7 @@ const ReservationMeta = ({
     }, [state, setStateText]);
 
     return (
-        <Card className={cn('bg-card/30 backdrop-blur-sm', className)}>
+        <Card className={cn('bg-card/30 backdrop-blur-sm w-full', className)}>
             <div className="flex flex-col gap-3 p-3">
                 <div>
                     <h2 className="font-semibold text-xl">Fra</h2>

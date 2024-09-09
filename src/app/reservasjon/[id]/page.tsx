@@ -9,6 +9,7 @@ import DescriptionWrapper from './components/DescriptionWrapper';
 import ImageSection from './components/ImageSection';
 import ReservationMetaWrapper from './components/ReservationMetaWrapper';
 import TitleWrapper from './components/TitleWrapper';
+import AdminInfo from './components/admin-info';
 import { Suspense } from 'react';
 
 const Page = async ({ params }: { params: { id: string } }) => {
@@ -35,8 +36,10 @@ const Page = async ({ params }: { params: { id: string } }) => {
                     >
                         <TitleWrapper params={params} />
                     </Suspense>
-                    <div className="flex gap-3 w-full p-5 flex-col md:flex-row">
-                        <Suspense fallback={<Skeleton className="w-52 h-80" />}>
+                    <div className="grid gap-3 w-full md:grid-cols-[1fr_2fr] p-5 grid-cols-1">
+                        <Suspense
+                            fallback={<Skeleton className="w-full h-80" />}
+                        >
                             <ReservationMetaWrapper
                                 params={params}
                                 className="relative z-10"
@@ -49,6 +52,9 @@ const Page = async ({ params }: { params: { id: string } }) => {
                                 params={params}
                                 className="relative z-0"
                             />
+                        </Suspense>
+                        <Suspense>
+                            <AdminInfo params={params} />
                         </Suspense>
                     </div>
                     {admin ? <AdminButtons reservationId={id} /> : undefined}

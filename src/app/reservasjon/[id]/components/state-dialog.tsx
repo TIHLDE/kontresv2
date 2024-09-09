@@ -23,28 +23,60 @@ import { Input } from '@/components/ui/input';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogProps } from '@radix-ui/react-alert-dialog';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-interface RejectDialogProps extends DialogProps {
-    onReject: () => void;
+interface StateDialogProps extends DialogProps {
+    onStateChange: (reason: string) => void;
+    title: string;
+    reasonRequired?: boolean;
+    fieldLabel: string;
 }
-const RejectDialog = ({ onReject, children, ...props }: RejectDialogProps) => {
+const StateDialog = ({
+    onStateChange,
+    reasonRequired = true,
+    title,
+    fieldLabel,
+    children,
+    open,
+    onOpenChange,
+    ...props
+}: StateDialogProps) => {
+    const [dialogOpen, setDialogOpen] = useState(open);
+
     const formSchema = z.object({
-        reason: z.string().min(1),
+        reason: reasonRequired ? z.string().min(1) : z.string(),
     });
     const form = useForm<{ reason: string }>({
         resolver: zodResolver(formSchema),
     });
-    const onSubmit = (values: z.infer<typeof formSchema>) => {};
+    const onSubmit = (values: z.infer<typeof formSchema>) => {
+        setDialogOpen(false);
+        onStateChange(values.reason);
+    };
+
+    useEffect(() => {
+        setDialogOpen(open);
+    }, [open]);
+
     return (
-        <Dialog {...props}>
+        <Dialog
+            open={dialogOpen}
+            onOpenChange={(state) => {
+                setDialogOpen(state);
+                onOpenChange?.(state);
+            }}
+            {...props}
+        >
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Avvise forespørsel</DialogTitle>
+                    <DialogTitle>{title}</DialogTitle>
                     <DialogDescription>
-                        For å avvise forespørselen må du oppgi en begrunnelse.
+                        {reasonRequired
+                            ? 'For å gjennomføre denne handlingen må du oppgi en begrunnelse.'
+                            : 'Dersom det trengs kan du oppgi tillegsinformasjon for brukeren.'}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -55,10 +87,10 @@ const RejectDialog = ({ onReject, children, ...props }: RejectDialogProps) => {
                             name="reason"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Begrunnelse</FormLabel>
+                                    <FormLabel>{fieldLabel}</FormLabel>
                                     <FormControl>
                                         <Input
-                                            placeholder="Søknaden ble ikke godkjent fordi..."
+                                            placeholder="Lorem ipsum..."
                                             {...field}
                                         />
                                     </FormControl>
@@ -69,15 +101,7 @@ const RejectDialog = ({ onReject, children, ...props }: RejectDialogProps) => {
                             <DialogClose asChild>
                                 <Button variant="secondary">Avbryt</Button>
                             </DialogClose>
-                            <DialogClose asChild>
-                                <Button
-                                    type="submit"
-                                    variant={'destructive'}
-                                    onClick={onReject}
-                                >
-                                    Avvis
-                                </Button>
-                            </DialogClose>
+                            <Button type="submit">Bekreft</Button>
                         </DialogFooter>
                     </form>
                 </Form>
@@ -86,4 +110,4 @@ const RejectDialog = ({ onReject, children, ...props }: RejectDialogProps) => {
     );
 };
 
-export default RejectDialog;
+export default StateDialog;

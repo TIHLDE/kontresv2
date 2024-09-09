@@ -32,7 +32,7 @@ import {
 import { ReservationState } from '@/utils/apis/types';
 
 import { StateAtomType, stateAtom } from './ReservationMeta';
-import RejectDialog from './reject-dialog';
+import StateDialog from './state-dialog';
 import { useAtom } from 'jotai';
 import { MoreVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -94,7 +94,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
     /**
      * Function for rejecting a reservation
      */
-    const onReject = () => {
+    const onReject = (reason: string) => {
         // Reject the reservation
         setRejectLoading(true);
         setReservationState(reservationId, 'CANCELLED')
@@ -115,7 +115,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
     /**
      * Function for accepting a reservation
      */
-    const onAccept = () => {
+    const onAccept = (reason?: string) => {
         // Accept the reservation
         setAcceptLoading(true);
         setReservationState(reservationId, 'CONFIRMED')
@@ -158,15 +158,26 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
 
     return (
         <div className="w-full flex flex-col md:flex-row gap-3 p-5">
-            <Button
-                ref={acceptRef}
-                className="w-full"
-                onClick={onAccept}
-                disabled={acceptLoading || rejectLoading}
+            <StateDialog
+                title={'Godkjenne forespørsel'}
+                fieldLabel="Tillegsinformasjon"
+                reasonRequired={false}
+                onStateChange={(reason) => onAccept(reason)}
             >
-                {acceptLoading ? <LoadingSpinner /> : 'Godkjenn'}
-            </Button>
-            <RejectDialog onReject={onReject}>
+                <Button
+                    ref={acceptRef}
+                    className="w-full"
+                    disabled={acceptLoading || rejectLoading}
+                >
+                    {acceptLoading ? <LoadingSpinner /> : 'Godkjenn'}
+                </Button>
+            </StateDialog>
+
+            <StateDialog
+                fieldLabel="Begrunnelse"
+                title={'Avvise forespørsel'}
+                onStateChange={(reason) => onReject(reason)}
+            >
                 <Button
                     ref={rejectRef}
                     className="w-full"
@@ -175,7 +186,7 @@ const AdminButtons = ({ reservationId }: AdminButtonsProps) => {
                 >
                     {rejectLoading ? <LoadingSpinner /> : 'Avslå'}
                 </Button>
-            </RejectDialog>
+            </StateDialog>
 
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>

@@ -1,39 +1,10 @@
-/* const nextConfig = {
-    images: {
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: '**'
-            }
-        ]
-    },
-    compress: false,
-} */
+/**
+ * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
+ * for Docker builds.
+ */
+await import('./src/env.js');
 
-const nextConfig = async (phase, { defaultConfig }) => {
+/** @type {import("next").NextConfig} */
+const config = {};
 
-    /** @type {import('next').NextConfig} */
-    const nextConfig = {
-        ...defaultConfig,
-        images: {
-            remotePatterns: [
-                {
-                    protocol: 'https',
-                    hostname: '**',
-                }
-            ]
-        },
-        webpack(webpackConfig) {
-            return {
-                ...webpackConfig,
-                optimization: {
-                    minimize: false
-                }
-            }
-        }
-    }
-
-    return nextConfig;
-}
-
-module.exports = nextConfig;
+export default config;

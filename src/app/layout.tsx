@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { TRPCReactProvider } from '@/trpc/react';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Suspense } from 'react';
@@ -25,24 +26,26 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={cn(inter.className, 'overflow-x-hidden')}>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    <Header className="lg:flex hidden" />
-                    <div className="py-page pb-32">
-                        <Toaster />
-                        <BlurBackground>{children}</BlurBackground>
-                    </div>
-                    <div className="lg:hidden fixed bottom-5 w-full flex z-10">
-                        <Suspense>
-                            <BottomBarWrapper />
-                        </Suspense>
-                    </div>
-                    {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
-                </ThemeProvider>
+                <TRPCReactProvider>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        <Header className="lg:flex hidden" />
+                        <div className="py-page pb-32">
+                            <Toaster />
+                            <BlurBackground>{children}</BlurBackground>
+                        </div>
+                        <div className="lg:hidden fixed bottom-5 w-full flex z-10">
+                            <Suspense>
+                                <BottomBarWrapper />
+                            </Suspense>
+                        </div>
+                        {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
+                    </ThemeProvider>
+                </TRPCReactProvider>
             </body>
         </html>
     );

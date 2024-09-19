@@ -1,0 +1,9 @@
+services:
+  postgres:
+    env_file:
+      - database.env
+    image: postgres:16.4
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker-volumes/postgres:/var/lib/postgresql/data

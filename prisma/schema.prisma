@@ -10,6 +10,13 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+//Har ikke funnet en måte prisma kan importere fra types.ts, må manuellt passe på at disse stemmer overens
+enum ReservationState {
+    PENDING
+    CONFIRMED 
+    CANCELLED 
+}
+
 model Post {
     id        Int      @id @default(autoincrement())
     name      String
@@ -17,4 +24,31 @@ model Post {
     updatedAt DateTime @updatedAt
 
     @@index([name])
+}
+
+model BookableItem {
+    item_id         Int       @id @default(autoincrement())
+    name            String
+    description     String
+    allows_alcohol  Boolean
+    group_id        String
+    reservation     Reservation[]
+
+    @@index([name])
+}
+
+model Reservation {
+    resservation_id              Int @id @default(autoincrement())
+    author          String
+    bookable_item   BookableItem @relation(fields: [bookable_item_id], references: [item_id])
+    bookable_item_id Int
+    start_time      DateTime
+    end_time        DateTime
+    state           ReservationState @default(PENDING)
+    description     String
+    accepted_rules  Boolean
+    group           String
+    serves_alcohol  Boolean
+    sober_watch     String
+    approved_by     String
 }

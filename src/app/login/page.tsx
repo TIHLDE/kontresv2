@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { checkUserAuth } from '@/utils/apis/user';
 
 import { LoginForm } from './components/LoginForm';
-import { api } from '@/trpc/server';
 import { redirect } from 'next/navigation';
 
 export default async function Page({
@@ -13,7 +12,6 @@ export default async function Page({
 }) {
     const redirect_url = searchParams?.redirect ?? '/';
 
-    const hello = await api.post.hello({ text: 'Frikk Ormestad Larsen' });
     const isLoggedin = await checkUserAuth();
     if (isLoggedin) redirect(redirect_url);
 
@@ -23,7 +21,6 @@ export default async function Page({
             <Card className="w-80">
                 <CardHeader>
                     <CardTitle className="text-center">Login</CardTitle>
-                    Hei, {hello.greeting}!
                 </CardHeader>
                 <CardContent>
                     <LoginForm redirect={redirect_url} />

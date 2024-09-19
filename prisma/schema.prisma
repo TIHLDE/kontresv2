@@ -17,38 +17,29 @@ enum ReservationState {
     CANCELLED 
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([name])
-}
-
 model BookableItem {
-    item_id         Int       @id @default(autoincrement())
+    itemId         Int       @id @default(autoincrement())
     name            String
     description     String
-    allows_alcohol  Boolean
-    group_id        String
+    allowsAlcohol  Boolean
+    groupId        String
     reservation     Reservation[]
 
     @@index([name])
 }
 
 model Reservation {
-    resservation_id              Int @id @default(autoincrement())
+    reservationId              Int @id @default(autoincrement())
     author          String
-    bookable_item   BookableItem @relation(fields: [bookable_item_id], references: [item_id])
-    bookable_item_id Int
-    start_time      DateTime
-    end_time        DateTime
+    bookableItem   BookableItem @relation(fields: [bookableItemId], references: [itemId])
+    bookableItemId Int
+    startTime      DateTime
+    endTime        DateTime
     state           ReservationState @default(PENDING)
     description     String
-    accepted_rules  Boolean
+    acceptedRules  Boolean
     group           String
-    serves_alcohol  Boolean
-    sober_watch     String
-    approved_by     String
+    servesAlcohol  Boolean
+    soberWatch     String
+    approvedBy     String
 }

@@ -22,7 +22,7 @@ export const IFetch = <T extends unknown>({ url, config }: IFetchProps) => {
         ...config?.headers,
     };
 
-    return fetch(url, {
+    return fetch("https://api-dev.tihlde.org"+url, {
         ...config,
         headers,
     })

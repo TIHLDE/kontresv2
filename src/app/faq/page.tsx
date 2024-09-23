@@ -1,29 +1,8 @@
 import FaqCard from './components/faq-card';
+import { api } from '@/trpc/server';
 
 export default async function page() {
-    const data = [
-        {
-            description: 'Test',
-            title: 'Test',
-            user: {
-                image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/264px-Huskiesatrest.jpg',
-            },
-        },
-        {
-            description: 'AHdajsdahdajdada',
-            title: 'Test',
-            user: {
-                image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/264px-Huskiesatrest.jpg',
-            },
-        },
-        {
-            description: 'Test2',
-            title: 'Test2',
-            user: {
-                image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/264px-Huskiesatrest.jpg',
-            },
-        },
-    ];
+    const data = await api.faq.getAll();
 
     return (
         <div className="max-w-page mx-auto min-h-screen flex flex-col gap-5 w-fit">

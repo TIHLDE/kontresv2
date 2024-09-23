@@ -11,6 +11,7 @@ export const faqRouter = createTRPCRouter({
     //get all FAQs
     getAll: publicProcedure.query(async () => {
         const faqs = await prisma.fAQ.findMany();
+        return faqs
     }),
 
     //get FAQ by id

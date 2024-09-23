@@ -1,62 +1,23 @@
-import { db } from '@/server/db';
-
 import {
     type MembershipResponse,
     getTIHLDEMemberships,
 } from './services/lepton/get-memberships';
 import { getTIHLDEUser } from './services/lepton/get-user';
 import { loginToTIHLDE } from './services/lepton/login';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { type DefaultUser, type NextAuthOptions, getServerSession } from 'next-auth';
-import { type Adapter } from 'next-auth/adapters';
-import type { DefaultJWT } from 'next-auth/jwt';
+import { type NextAuthOptions, getServerSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-
-
-import type {} from "next-auth/adapters"
-
-type UserData = {
-    id: string;
-    role: UserRole;
-    leaderOf: string[];
-    firstName: string;
-    lastName: string;
-    TIHLDE_Token: string;
-}
-type UserDataNoToken = Omit<UserData, 'TIHLDE_Token'>;
-
-// Session type declaration (what the backend can access on the user object)
-declare module 'next-auth' {
-    interface User {
-        lol: string
-    }
-    interface Session {
-        user: UserDataNoToken;
-    }
-}
-
-declare module 'next-auth/adapters' {
-    interface AdapterUser {}
-}
-
-declare module 'next-auth/jwt' {
-    interface JWT {
-        user: UserData,
-    }
-}
 
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: 'jwt',
     },
     providers: [
-        // Login with TIHLDE username and password
         Credentials({
             id: 'tihlde',
             name: 'TIHLDE',
             credentials: {
-                username: { label: 'Brukernavn', type: 'text' },
-                password: { label: 'Passord', type: 'password' },
+                username: { label: 'username', type: 'text' },
+                password: { label: 'password', type: 'password' },
             },
             async authorize(credentials, _req) {
                 if (!credentials) {
@@ -65,10 +26,10 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 const token = await loginToTIHLDE(
-                    credentials?.username,
-                    credentials?.password,
+                    credentials.username,
+                    credentials.password,
                 );
-                
+
                 if (!token) {
                     console.error('No token from TIHLDE auth response!');
                     return null;
@@ -81,65 +42,69 @@ export const authOptions: NextAuthOptions = {
 
                 const userId = user.user_id;
                 const role = getUserRole(memberships);
-                
-                // TODO: test if this works
+
                 if (!role) {
-                    console.error("User is not a TIHLDE member");
+                    console.error('User is not a TIHLDE member');
                     return null;
                 }
+
                 const leaderOf = getUserLeaderGroups(memberships);
 
-                const jwtData = {
+                const userData = {
                     id: userId,
                     firstName: user.first_name,
                     lastName: user.last_name,
                     role,
                     leaderOf,
                     TIHLDE_Token: token,
-                }
+                };
 
-                console.log("[AUTH] User object", jwtData);
-
-                return { lol: "hello "};
+                return userData;
             },
         }),
-        // Users can log in anonymously, using only a nickname,
-        // we create a random user id (instead of tihlde username),
-        // to make a database record for them (for joining teams etc ...)
     ],
     callbacks: {
-        jwt: async ({ user }) => {
-            
-            return { user };
+        jwt: async ({ token, user }) => {
+            if (user) {
+                token.id = user.id;
+                token.firstName = user.firstName;
+                token.lastName = user.lastName;
+                token.role = user.role;
+                token.leaderOf = user.leaderOf;
+                token.TIHLDE_Token = user.TIHLDE_Token;
+            }
+
+            return token;
         },
-        session: ({ session, token }) => {
-            return {
-                ...session,
-                user: {
-                    id: token.user.id,
-                    role: token.user.role,
-                },
+        session: async ({ session, token }) => {
+            session.user = {
+                id: token.id,
+                firstName: token.firstName,
+                lastName: token.lastName,
+                role: token.role,
+                leaderOf: token.leaderOf,
             };
+            return session;
         },
     },
 };
 
-/**
- * The role of a Blitzed user
- *
- * - ADMIN: Can create and edit games, and have admin control
- * - USER: Regular user logged in with TIHLDE
- * - ANONYMOUS: Anonymous user who has not logged in with TIHLDE, and uses a custom name
- *
- *  Anonymous users have more limited access
- */
+export const getServerAuthSession = () => getServerSession(authOptions);
+
+export const getUserLeaderGroups = (
+    memberships: MembershipResponse | null,
+): string[] => {
+    if (!memberships) {
+        return [];
+    }
+
+    return memberships.results
+        .filter((m) => m.membership_type === 'LEADER')
+        .map((m) => m.group.slug);
+};
+
 export type UserRole = 'MEMBER' | 'ADMIN';
 
-/**
- * Get the role of a user, given their memberships (or lack thereof)
- * @param memberships Memberships, if any (null if anonymous user)
- * @returns The role that the user has in Blitzed, aka. what they can access
- */
 function getUserRole(memberships: MembershipResponse | null): UserRole | null {
     if (!memberships) return null;
 
@@ -150,25 +115,3 @@ function getUserRole(memberships: MembershipResponse | null): UserRole | null {
 
     return 'MEMBER';
 }
-
-/**
- * Returns whether the user has a role of TIHLDE or higher
- *
- * Is used for validation
- */
-export const isUserRoleTihldeOrHigher = (role: UserRole): boolean => {
-    console.log("[TODO] Implement role restrictions for non-offical THILDE members", role);
-    return role === "ADMIN" || role === "USER";
-};
-
-
-export const getUserLeaderGroups = (memberships: MembershipResponse | null): string[] => {
-    if (!memberships) {
-        return [];
-    }
-
-    return memberships.results.filter((m) => m.membership_type === 'LEADER').map((m) => m.group.slug);
-
-}
-
-export const getServerAuthSession = () => getServerSession(authOptions);

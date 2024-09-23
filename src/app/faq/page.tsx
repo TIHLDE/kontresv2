@@ -1,27 +1,9 @@
+import { api } from "@/trpc/server";
 import FaqCard from "./components/faq-card";
 
 export default async function page() {
-    const data = [
-        {
-            description: "Test",
-            title: "Test",
-            user: {
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/264px-Huskiesatrest.jpg"
-            }
-        },{
-            description: "AHdajsdahdajdada",
-            title: "Test",
-            user: {
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/264px-Huskiesatrest.jpg"
-            }
-        },{
-            description: "Test2",
-            title: "Test2",
-            user: {
-                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Huskiesatrest.jpg/264px-Huskiesatrest.jpg"
-            }
-        }
-    ]
+    const data = await api.faq.getAll();
+    
 
     return(
         <div className="max-w-page mx-auto min-h-screen flex flex-col gap-5 w-fit">
@@ -29,7 +11,7 @@ export default async function page() {
             <div className="grid grid-cols-3 gap-5">
                 {
                     data.map((object, index) => ( 
-                        <FaqCard description={object.description} title={object.title} userImage={object.user.image} key={index} />
+                        <FaqCard description={object.answer} title={object.question} userImage={"https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_square.jpg"} key={index} />
                      ))
                 }
             </div>

@@ -1,11 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type UserRole } from '@/server/auth';
+
 import NextAuth from 'next-auth';
 
 interface UserData {
     id: string;
     firstName: string;
     lastName: string;
-    role: string;
+    role: UserRole;
     leaderOf: string[];
     TIHLDE_Token: string;
 }
@@ -13,14 +15,8 @@ interface UserData {
 type UserDataNoToken = Omit<UserData, 'TIHLDE_Token'>;
 
 declare module 'next-auth' {
-    interface User {
-        id: string;
-        firstName: string;
-        lastName: string;
-        role: string;
-        leaderOf: string[];
-        TIHLDE_Token: string;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    interface User extends UserData {}
 
     interface Session {
         user: UserDataNoToken;
@@ -28,12 +24,6 @@ declare module 'next-auth' {
 }
 
 declare module 'next-auth/jwt' {
-    interface JWT {
-        id: string;
-        firstName: string;
-        lastName: string;
-        role: string;
-        leaderOf: string[];
-        TIHLDE_Token: string;
-    }
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    interface JWT extends UserData {}
 }

@@ -1,32 +1,33 @@
-import { getItems } from '@/utils/apis/items';
+// import { getItems } from '@/utils/apis/items';
 import { cn } from '@/utils/cn';
 
 import Image from 'next/image';
 
 const ImageSection = async () => {
-    let items;
-    try {
-        items = await getItems();
-    } catch (e) {
-        console.error(e);
-    }
+    return <></>
+    // let items;
+    // try {
+    //     items = await getItems();
+    // } catch (e) {
+    //     console.error(e);
+    // }
 
-    return (
-        <div className="flex flex-col gap-5">
-            {items?.map((item, i) =>
-                /* When image support is eventually added, the image cards will automatically be displayed. */
-                item.image ? (
-                    <ImageTextCard
-                        key={i}
-                        image={item.image}
-                        title={item.name}
-                        description={item.description}
-                        align={i % 2 === 0 ? 'right' : 'left'}
-                    />
-                ) : undefined,
-            )}
-        </div>
-    );
+    // return (
+    //     <div className="flex flex-col gap-5">
+    //         {items?.map((item, i) =>
+    //             /* When image support is eventually added, the image cards will automatically be displayed. */
+    //             item.image ? (
+    //                 <ImageTextCard
+    //                     key={i}
+    //                     image={item.image}
+    //                     title={item.name}
+    //                     description={item.description}
+    //                     align={i % 2 === 0 ? 'right' : 'left'}
+    //                 />
+    //             ) : undefined,
+    //         )}
+    //     </div>
+    // );
 };
 
 interface ImageTextCardProps extends React.HTMLProps<HTMLDivElement> {

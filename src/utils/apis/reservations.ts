@@ -1,6 +1,6 @@
 'use server';
 
-import { IFetch } from './fetch';
+// import { IFetch } from './fetch';
 import {
     DetailedItem,
     DetailedReservation,
@@ -21,35 +21,35 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
  * @returns Reservation details
  */
 export const getReservation = (uuid: string) => {
-    return IFetch<DetailedReservation>({
-        url: `${baseUrl}/kontres/reservations/${uuid}/`,
-        config: {
-            method: 'GET',
-        },
-    });
+    // return IFetch<DetailedReservation>({
+    //     url: `${baseUrl}/kontres/reservations/${uuid}/`,
+    //     config: {
+    //         method: 'GET',
+    //     },
+    // });
 };
 
 //gets all reservations
 //in progress
 export const getReservations = () => {
-    return IFetch<DetailedReservation[]>({
-        url: `${baseUrl}/kontres/reservations/`,
-        config: {
-            method: 'GET',
-            next: {
-                tags: [validationTags.reservations],
-            },
-        },
-    });
+    // return IFetch<DetailedReservation[]>({
+    //     url: `${baseUrl}/kontres/reservations/`,
+    //     config: {
+    //         method: 'GET',
+    //         next: {
+    //             tags: [validationTags.reservations],
+    //         },
+    //     },
+    // });
 };
 
 export const getBookableItem = (id: string) => {
-    return IFetch<DetailedItem>({
-        url: `${baseUrl}/kontres/bookable_items/` + id,
-        config: {
-            method: 'GET',
-        },
-    });
+    // return IFetch<DetailedItem>({
+    //     url: `${baseUrl}/kontres/bookable_items/` + id,
+    //     config: {
+    //         method: 'GET',
+    //     },
+    // });
 };
 
 /**
@@ -61,43 +61,43 @@ export const createReservation = ({ ...rest }: PostReservation) => {
     const body = {
         ...rest,
     };
-    return IFetch<DetailedReservation>({
-        url: `${baseUrl}/kontres/reservations/`,
-        config: {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        },
-    });
+    // return IFetch<DetailedReservation>({
+    //     url: `${baseUrl}/kontres/reservations/`,
+    //     config: {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(body),
+    //     },
+    // });
 };
 
 /**
  * Updates the state of a reservation to the given state.
  */
 export const setReservationState = (uuid: string, state: ReservationState) => {
-    return IFetch<DetailedReservation>({
-        url: `${baseUrl}/kontres/reservations/${uuid}/`,
-        config: {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                state,
-            }),
-        },
-    });
+    // return IFetch<DetailedReservation>({
+    //     url: `${baseUrl}/kontres/reservations/${uuid}/`,
+    //     config: {
+    //         method: 'PUT',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             state,
+    //         }),
+    //     },
+    // });
 };
 
 export const deleteReservation = (uuid: string) => {
-    return IFetch({
-        url: `${baseUrl}/kontres/reservations/${uuid}/`,
-        config: {
-            method: 'DELETE',
-        },
-    });
+    // return IFetch({
+    //     url: `${baseUrl}/kontres/reservations/${uuid}/`,
+    //     config: {
+    //         method: 'DELETE',
+    //     },
+    // });
 };
 
 export const invalidateReservations = () => {
@@ -105,10 +105,10 @@ export const invalidateReservations = () => {
 };
 
 export const getUserReservations = () => {
-    return IFetch<DetailedReservation[]>({
-        url: `${baseUrl}/users/me/reservations`,
-        config: {
-            method: 'GET',
-        },
-    });
+    // return IFetch<DetailedReservation[]>({
+    //     url: `${baseUrl}/users/me/reservations`,
+    //     config: {
+    //         method: 'GET',
+    //     },
+    // });
 };

@@ -14,37 +14,37 @@ export interface ErrorType {
     response?: Record<string, unknown>;
 }
 
-export const IFetch = <T extends unknown>({ url, config }: IFetchProps) => {
-    let headers: HeadersInit = {};
-    headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string;
-    headers = {
-        ...headers,
-        ...config?.headers,
-    };
+// export const IFetch = <T extends unknown>({ url, config }: IFetchProps) => {
+//     let headers: HeadersInit = {};
+//     headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string;
+//     headers = {
+//         ...headers,
+//         ...config?.headers,
+//     };
 
-    return fetch(url, {
-        ...config,
-        headers,
-    })
-        .then(async (res) => {
-            if (!res.ok) {
-                if (res.status === 500) {
-                    throw new Error('Internal server error');
-                }
+//     return fetch(url, {
+//         ...config,
+//         headers,
+//     })
+//         .then(async (res) => {
+//             if (!res.ok) {
+//                 if (res.status === 500) {
+//                     throw new Error('Internal server error');
+//                 }
 
-                const message = await res.json();
-                const errorObject: ErrorType = {
-                    status: res.status,
-                    statusText: res.statusText,
-                    response: message,
-                };
-                throw new Error(JSON.stringify(errorObject));
-            }
+//                 const message = await res.json();
+//                 const errorObject: ErrorType = {
+//                     status: res.status,
+//                     statusText: res.statusText,
+//                     response: message,
+//                 };
+//                 throw new Error(JSON.stringify(errorObject));
+//             }
 
-            return res.json();
-        })
-        .catch((err) => {
-            console.error(err);
-            throw new Error(err);
-        }) as Promise<T>;
-};
+//             return res.json();
+//         })
+//         .catch((err) => {
+//             console.error(err);
+//             throw new Error(err);
+//         }) as Promise<T>;
+// };

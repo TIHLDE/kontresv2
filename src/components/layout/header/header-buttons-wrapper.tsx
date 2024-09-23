@@ -29,6 +29,7 @@ const HeaderButtonsWrapper = async ({
                 </HeaderLink>
                 {/* <BookableItems className="flex gap-6" items={items} /> */}
                 <HeaderLink href="/booking">Booking</HeaderLink>
+                <HeaderLink href="/faq">FAQ</HeaderLink>
             </nav>
 
             {session?.user ? (

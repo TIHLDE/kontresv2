@@ -43,3 +43,11 @@ model Reservation {
     soberWatch     String
     approvedBy     String
 }
+
+model FAQ {
+    questionId      Int @id @default(autoincrement())
+    question        String
+    answer          String
+    group           String
+    author          String
+}

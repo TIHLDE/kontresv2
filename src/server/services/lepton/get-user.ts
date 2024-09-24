@@ -35,4 +35,7 @@ export interface TIHLDEUser {
     last_name: string;
     email: string;
     gender: number;
+    study: {
+        membership_type: string;
+    }
 }

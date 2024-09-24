@@ -2,9 +2,9 @@ import {
     type MembershipResponse,
     getTIHLDEMemberships,
 } from './services/lepton/get-memberships';
-import { getTIHLDEUser } from './services/lepton/get-user';
+import { getTIHLDEUser, type TIHLDEUser } from './services/lepton/get-user';
 import { loginToTIHLDE } from './services/lepton/login';
-import { type NextAuthOptions, getServerSession } from 'next-auth';
+import { type NextAuthOptions, type User, getServerSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthOptions = {
@@ -40,26 +40,25 @@ export const authOptions: NextAuthOptions = {
                     getTIHLDEUser(token, credentials.username),
                 ]);
 
-                const userId = user.user_id;
-                const role = getUserRole(memberships);
+                const TIHLDEInfo = getTIHLDEUserInfo(user, memberships);
 
-                if (!role) {
-                    console.error('User is not a TIHLDE member');
+                if (!TIHLDEInfo.isMember) {
+                    console.error("Not a member of TIHLDE");
                     return null;
                 }
 
-                const leaderOf = getUserLeaderGroups(memberships);
+                const userId = user.user_id;
 
                 const userData = {
                     id: userId,
                     firstName: user.first_name,
                     lastName: user.last_name,
-                    role,
-                    leaderOf,
+                    role: TIHLDEInfo.isAdmin ? 'ADMIN' : 'MEMBER',
+                    leaderOf: TIHLDEInfo.leaderOf,
                     TIHLDE_Token: token,
                 };
 
-                return userData;
+                return userData as User;
             },
         }),
     ],
@@ -105,13 +104,20 @@ export const getUserLeaderGroups = (
 
 export type UserRole = 'MEMBER' | 'ADMIN';
 
-function getUserRole(memberships: MembershipResponse | null): UserRole | null {
-    if (!memberships) return null;
+export function getTIHLDEUserInfo(user: TIHLDEUser | null, memberships: MembershipResponse | null): { isMember: false } | { isMember: true, leaderOf: string[], isAdmin: boolean } {
+    if (!user) return { isMember: false };
+    if (!memberships) return { isMember: false };
+    if (user.study.membership_type != "MEMBER") return { isMember: false };
 
-    const adminGroups = ['index', 'hs'];
-    if (memberships?.results.some((r) => adminGroups.includes(r.group.slug))) {
-        return 'ADMIN';
+    const leaderOf = memberships.results
+        .filter((m) => m.membership_type === 'LEADER')
+        .map((m) => m.group.slug);
+    
+        const adminGroups = ['index', 'hs'];
+
+    return {
+        isMember: true,
+        leaderOf,
+        isAdmin: memberships?.results.some((r) => adminGroups.includes(r.group.slug))
     }
-
-    return 'MEMBER';
 }

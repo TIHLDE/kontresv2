@@ -1,9 +1,9 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
+import { createTRPCRouter, memberProcedure } from '@/server/api/trpc';
 
 import { z } from 'zod';
 
 export const postRouter = createTRPCRouter({
-    hello: publicProcedure
+    hello: memberProcedure
         .input(z.object({ text: z.string() }))
         .query(({ input }) => {
             return {
@@ -11,7 +11,7 @@ export const postRouter = createTRPCRouter({
             };
         }),
 
-    create: publicProcedure
+    create: memberProcedure
         .input(z.object({ name: z.string().min(1) }))
         .mutation(async ({ input }) => {
             return `Hello there, ${input.name}`;

@@ -1,7 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type UserRole } from '@/server/auth';
 
-import NextAuth from 'next-auth';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// import NextAuth from 'next-auth';
 
 interface UserData {
     id: string;

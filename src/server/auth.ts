@@ -2,9 +2,10 @@ import {
     type MembershipResponse,
     getTIHLDEMemberships,
 } from './services/lepton/get-memberships';
-import { getTIHLDEUser, type TIHLDEUser } from './services/lepton/get-user';
+import { type TIHLDEUser, getTIHLDEUser } from './services/lepton/get-user';
 import { loginToTIHLDE } from './services/lepton/login';
 import { type NextAuthOptions, type User, getServerSession } from 'next-auth';
+import { type JWT } from 'next-auth/jwt';
 import Credentials from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthOptions = {
@@ -43,7 +44,7 @@ export const authOptions: NextAuthOptions = {
                 const TIHLDEInfo = getTIHLDEUserInfo(user, memberships);
 
                 if (!TIHLDEInfo.isMember) {
-                    console.error("Not a member of TIHLDE");
+                    console.error('Not a member of TIHLDE');
                     return null;
                 }
 
@@ -63,7 +64,7 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        jwt: async ({ token, user }) => {
+        jwt: async ({ token, user }: { token: JWT; user: User }) => {
             if (user) {
                 token.id = user.id;
                 token.firstName = user.firstName;
@@ -104,20 +105,27 @@ export const getUserLeaderGroups = (
 
 export type UserRole = 'MEMBER' | 'ADMIN';
 
-export function getTIHLDEUserInfo(user: TIHLDEUser | null, memberships: MembershipResponse | null): { isMember: false } | { isMember: true, leaderOf: string[], isAdmin: boolean } {
+export function getTIHLDEUserInfo(
+    user: TIHLDEUser | null,
+    memberships: MembershipResponse | null,
+):
+    | { isMember: false }
+    | { isMember: true; leaderOf: string[]; isAdmin: boolean } {
     if (!user) return { isMember: false };
     if (!memberships) return { isMember: false };
-    if (user.study.membership_type != "MEMBER") return { isMember: false };
+    if (user.study.membership_type !== 'MEMBER') return { isMember: false };
 
     const leaderOf = memberships.results
         .filter((m) => m.membership_type === 'LEADER')
         .map((m) => m.group.slug);
-    
-        const adminGroups = ['index', 'hs'];
+
+    const adminGroups = ['index', 'hs'];
 
     return {
         isMember: true,
         leaderOf,
-        isAdmin: memberships?.results.some((r) => adminGroups.includes(r.group.slug))
-    }
+        isAdmin: memberships?.results.some((r) =>
+            adminGroups.includes(r.group.slug),
+        ),
+    };
 }

@@ -1,8 +1,8 @@
-import { SessionProvider } from 'next-auth/react';
 import AuthTester from './components/authTester';
 import Hero from './components/hero';
 import ImageSection from './components/imagesection';
 import { api } from '@/trpc/server';
+import { SessionProvider } from 'next-auth/react';
 import { Suspense } from 'react';
 
 export default async function Home() {

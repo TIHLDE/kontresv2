@@ -1,16 +1,43 @@
-import {
-    type MembershipResponse,
-    getTIHLDEMemberships,
-} from './services/lepton/get-memberships';
-import { type TIHLDEUser, getTIHLDEUser } from './services/lepton/get-user';
-import { loginToTIHLDE } from './services/lepton/login';
-import { type NextAuthOptions, type User, getServerSession } from 'next-auth';
-import { type JWT } from 'next-auth/jwt';
-import Credentials from 'next-auth/providers/credentials';
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { loginToTIHLDE } from "./server/services/lepton/login";
+import { getTIHLDEMemberships, type MembershipResponse } from "./server/services/lepton/get-memberships";
+import { getTIHLDEUser, type TIHLDEUser } from "./server/services/lepton/get-user";
 
-export const authOptions: NextAuthOptions = {
+type UserRole = 'ADMIN' | 'MEMBER';
+type UserData = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    role: UserRole;
+    leaderOf: string[];
+    TIHLDE_Token: string;
+}
+
+type UserDataNoToken = Omit<UserData, 'TIHLDE_Token'>;
+
+declare module 'next-auth' {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    interface User extends UserData {}
+    type AdapterUser = object
+
+    interface Session {
+        user: UserDataNoToken;
+    }
+}
+
+// @ts-expect-error JWT module is not defined in next-auth for some reason
+declare module 'next-auth/jwt' {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    interface JWT extends UserData {}
+}
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
     session: {
-        strategy: 'jwt',
+        strategy: "jwt",
+    },
+    pages: {
+        signIn: '/login',
     },
     providers: [
         Credentials({
@@ -22,7 +49,11 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials, _req) {
                 if (!credentials) {
-                    console.error('No credentials sent in login request!');
+                    console.error("No credentials sent in login request!");
+                    return null;
+                }
+                if (typeof credentials.username != "string" || typeof credentials.password != "string") {
+                    console.error("Missing username or password in login request!");
                     return null;
                 }
 
@@ -32,7 +63,7 @@ export const authOptions: NextAuthOptions = {
                 );
 
                 if (!token) {
-                    console.error('No token from TIHLDE auth response!');
+                    console.error("No token from TIHLDE auth response!");
                     return null;
                 }
 
@@ -42,68 +73,45 @@ export const authOptions: NextAuthOptions = {
                 ]);
 
                 const TIHLDEInfo = getTIHLDEUserInfo(user, memberships);
-
                 if (!TIHLDEInfo.isMember) {
                     console.error('Not a member of TIHLDE');
                     return null;
                 }
 
-                const userId = user.user_id;
-
                 const userData = {
-                    id: userId,
+                    id: user.user_id,
                     firstName: user.first_name,
                     lastName: user.last_name,
                     role: TIHLDEInfo.isAdmin ? 'ADMIN' : 'MEMBER',
                     leaderOf: TIHLDEInfo.leaderOf,
                     TIHLDE_Token: token,
-                };
+                }
 
-                return userData as User;
+                return userData as UserData;
             },
-        }),
+        })
     ],
     callbacks: {
-        jwt: async ({ token, user }: { token: JWT; user: User }) => {
+        jwt({ user, token }) {
             if (user) {
-                token.id = user.id;
-                token.firstName = user.firstName;
-                token.lastName = user.lastName;
-                token.role = user.role;
-                token.leaderOf = user.leaderOf;
-                token.TIHLDE_Token = user.TIHLDE_Token;
+                token.user = user;
             }
-
             return token;
         },
-        session: async ({ session, token }) => {
-            session.user = {
-                id: token.id,
-                firstName: token.firstName,
-                lastName: token.lastName,
-                role: token.role,
-                leaderOf: token.leaderOf,
-            };
-            return session;
-        },
-    },
-};
+        
+        // @ts-expect-error Session is not in the correct format
+        session({ session, token }) {
+            const sessionData: {
+                user: UserDataNoToken;
+            } = session as never;
+            sessionData.user = token.user as UserDataNoToken;
+            // @ts-expect-error TIHLDE_Token is not in UserDataNoToken
+            delete sessionData.user.TIHLDE_Token
 
-export const getServerAuthSession = () => getServerSession(authOptions);
-
-export const getUserLeaderGroups = (
-    memberships: MembershipResponse | null,
-): string[] => {
-    if (!memberships) {
-        return [];
-    }
-
-    return memberships.results
-        .filter((m) => m.membership_type === 'LEADER')
-        .map((m) => m.group.slug);
-};
-
-export type UserRole = 'MEMBER' | 'ADMIN';
+            return sessionData;
+        }
+    } 
+})
 
 export function getTIHLDEUserInfo(
     user: TIHLDEUser | null,

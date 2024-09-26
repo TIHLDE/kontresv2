@@ -1,12 +1,12 @@
 import { db } from '@/server/db';
 
-import { getServerAuthSession } from '../auth';
+import { auth } from '@/auth';
 import { TRPCError, initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError, z } from 'zod';
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-    const session = await getServerAuthSession();
+    const session = await auth();
 
     return {
         session,
@@ -76,7 +76,7 @@ export const groupLeaderProcedure = t.procedure
 
         return next({
             ctx: {
-                session: { ...ctx.session, user: { ...ctx.session.user } },
+                session: ctx.session,
             },
         });
     });
@@ -90,7 +90,7 @@ export const adminProcedure = t.procedure
 
         return next({
             ctx: {
-                session: { ...ctx.session, user: { ...ctx.session.user } },
+                session: ctx.session
             },
         });
     });

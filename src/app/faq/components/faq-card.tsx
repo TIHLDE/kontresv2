@@ -1,19 +1,16 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 
 type FaqCardProps = {
     title: string;
     description: string;
     userImage: string;
-    questionId: number;
 }
 
-export default function FaqCard({ description, title, userImage, questionId}: FaqCardProps) {
+export default function FaqCard({ description, title, userImage}: FaqCardProps) {
 
     return (
-        <Card> 
-            <Link href={`faq/${questionId}`}>
+        <Card className="h-full"> 
             <CardHeader>
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{ description }</CardDescription>
@@ -23,7 +20,6 @@ export default function FaqCard({ description, title, userImage, questionId}: Fa
                     <AvatarImage src={userImage} />
                 </Avatar>
             </CardContent>
-            </Link>
         </Card>   
         )
 }

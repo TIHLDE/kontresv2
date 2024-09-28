@@ -1,8 +1,6 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserProfilePill } from "@/components/ui/profilepill";
-import { User } from "@/types/User";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 type FaqCardProps = {
     title: string;
@@ -12,15 +10,12 @@ type FaqCardProps = {
 }
 
 export default function FaqCard({ description, title, userImage, questionId}: FaqCardProps) {
-    const router = useRouter();
-    function handleClick(){
-        router.push(`/faq/${questionId}`);
-    }
 
     return (
-        <Card onClick={handleClick}>
+        <Card> 
+            <Link href={`faq/${questionId}`}>
             <CardHeader>
-                <CardTitle>{ title }</CardTitle>
+                <CardTitle>{title}</CardTitle>
                 <CardDescription>{ description }</CardDescription>
             </CardHeader>
             <CardContent>
@@ -28,7 +23,7 @@ export default function FaqCard({ description, title, userImage, questionId}: Fa
                     <AvatarImage src={userImage} />
                 </Avatar>
             </CardContent>
-
-        </Card>    
+            </Link>
+        </Card>   
         )
 }

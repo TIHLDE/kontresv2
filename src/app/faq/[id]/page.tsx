@@ -1,11 +1,13 @@
 import { CardHeader, Card, CardContent, CardTitle } from "@/components/ui/card";
 import { api } from "@/trpc/server";
 
+type QuestionPageParams = {
+    params: {id: string}
+}
 
-export default async function Page(params: { id: number }) {
+export default async function Page({params: { id }}: QuestionPageParams) {
 
-    const data = await api.faq.getById({questionId: params.id});
-
+    const data = await api.faq.getById({questionId: parseInt(id)});
     return (
         <div className="max-w-page mx-auto h-screen -mt-24 flex flex-col justify-center items-center">
             <Card className="w-80">
@@ -13,7 +15,7 @@ export default async function Page(params: { id: number }) {
                     <CardTitle className="text-center">{data.question}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <h1>Test for å se om det ser fint ut</h1>
+                    {data.answer}
                 </CardContent>
             </Card>
         </div>

@@ -1,4 +1,4 @@
-import { getItems } from '@/utils/apis/items';
+// import { getItems } from '@/utils/apis/items';
 import { PermissionApp } from '@/utils/apis/types';
 import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
 
@@ -9,12 +9,13 @@ const BottomBarWrapper = async () => {
     let admin;
     let items;
     try {
-        user = await getCurrentUserData();
-        admin = await checkUserPermissions([PermissionApp.USER]);
-        items = await getItems();
+        // user = await getCurrentUserData();
+        // admin = await checkUserPermissions([PermissionApp.USER]);
+        // items = await getItems();
     } catch (e) {}
 
-    return <BottomBar user={user} admin={admin} items={items} />;
+    return <></>;
+    // return <BottomBar user={user} admin={admin} items={items} />;
 };
 
 export default BottomBarWrapper;

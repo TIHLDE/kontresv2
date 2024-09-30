@@ -2,14 +2,20 @@
 
 import { signIn } from '@/auth';
 
+
 export async function loginUser(
     username: string,
     password: string,
     redirectUrl = '/',
 ) {
-    await signIn('tihlde', {
-        redirectTo: redirectUrl,
-        username,
-        password,
-    });
+    try {
+        await signIn('tihlde', {
+            redirectTo: redirectUrl,
+            username,
+            password,
+        });
+    } catch (error) {
+        // TODO: Show error to user
+        console.error(error);
+    }
 }

@@ -56,7 +56,17 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * If a user doesnt have a membership, authorize will fail.
  * @see auth.ts
  */
-export const memberProcedure = t.procedure.use(timingMiddleware);
+export const memberProcedure = t.procedure
+    .use(timingMiddleware)
+    .use(({ ctx, next }) => {
+        if (!ctx.session) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+        return next({
+            ctx: {
+                session: ctx.session,
+            },
+        });
+    });
 
 const groupLeaderInputSchema = z.object({
     groupId: z.string(),

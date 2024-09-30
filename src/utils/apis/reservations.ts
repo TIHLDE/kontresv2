@@ -1,77 +1,6 @@
 'use server';
 
-// import { IFetch } from './fetch';
-import {
-    DetailedItem,
-    DetailedReservation,
-    type PostReservation,
-    type ReservationState,
-    validationTags,
-} from './types';
-import { revalidateTag } from 'next/cache';
-
-const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
-
-/**
- * Gets a specific reservation given a reservation UUID.
- *
- * TODO - Perform proper sanitization for the uuid when it
- * is placed in the query url.
- * @param uuid The UUID
- * @returns Reservation details
- */
-export const getReservation = (uuid: string) => {
-    // return IFetch<DetailedReservation>({
-    //     url: `${baseUrl}/kontres/reservations/${uuid}/`,
-    //     config: {
-    //         method: 'GET',
-    //     },
-    // });
-};
-
-//gets all reservations
-//in progress
-export const getReservations = () => {
-    // return IFetch<DetailedReservation[]>({
-    //     url: `${baseUrl}/kontres/reservations/`,
-    //     config: {
-    //         method: 'GET',
-    //         next: {
-    //             tags: [validationTags.reservations],
-    //         },
-    //     },
-    // });
-};
-
-export const getBookableItem = (id: string) => {
-    // return IFetch<DetailedItem>({
-    //     url: `${baseUrl}/kontres/bookable_items/` + id,
-    //     config: {
-    //         method: 'GET',
-    //     },
-    // });
-};
-
-/**
- * Registers a reservation with the backend.
- *
- * @returns Reservation details
- */
-export const createReservation = ({ ...rest }: PostReservation) => {
-    const body = {
-        ...rest,
-    };
-    // return IFetch<DetailedReservation>({
-    //     url: `${baseUrl}/kontres/reservations/`,
-    //     config: {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(body),
-    //     },
-    // });
-};
+import { type ReservationState } from './types';
 
 /**
  * Updates the state of a reservation to the given state.
@@ -87,28 +16,6 @@ export const setReservationState = (uuid: string, state: ReservationState) => {
     //         body: JSON.stringify({
     //             state,
     //         }),
-    //     },
-    // });
-};
-
-export const deleteReservation = (uuid: string) => {
-    // return IFetch({
-    //     url: `${baseUrl}/kontres/reservations/${uuid}/`,
-    //     config: {
-    //         method: 'DELETE',
-    //     },
-    // });
-};
-
-export const invalidateReservations = () => {
-    revalidateTag(validationTags.reservations);
-};
-
-export const getUserReservations = () => {
-    // return IFetch<DetailedReservation[]>({
-    //     url: `${baseUrl}/users/me/reservations`,
-    //     config: {
-    //         method: 'GET',
     //     },
     // });
 };

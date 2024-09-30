@@ -24,7 +24,7 @@ model BookableItem {
     allowsAlcohol  Boolean
     groupId        String
     reservation     Reservation[]
-
+    FAQ             FAQ[]
     @@index([name])
 }
 
@@ -50,4 +50,6 @@ model FAQ {
     answer          String
     group           String
     author          String
+    bookableItem   BookableItem @relation(fields: [bookableItemId], references: [itemId])
+    bookableItemId Int
 }

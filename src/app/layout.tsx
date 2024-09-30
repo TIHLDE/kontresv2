@@ -33,7 +33,7 @@ export default async function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        {/* <Header className="lg:flex hidden" /> */}
+                        <Header className="lg:flex hidden" />
                         <div className="py-page pb-32">
                             <Toaster />
                             <BlurBackground>{children}</BlurBackground>

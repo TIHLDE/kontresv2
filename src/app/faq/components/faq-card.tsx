@@ -1,7 +1,5 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserProfilePill } from "@/components/ui/profilepill";
-import { User } from "@/types/User";
 
 type FaqCardProps = {
     title: string;
@@ -10,10 +8,11 @@ type FaqCardProps = {
 }
 
 export default function FaqCard({ description, title, userImage}: FaqCardProps) {
+
     return (
-        <Card>
+        <Card className="h-full"> 
             <CardHeader>
-                <CardTitle>{ title }</CardTitle>
+                <CardTitle>{title}</CardTitle>
                 <CardDescription>{ description }</CardDescription>
             </CardHeader>
             <CardContent>
@@ -21,7 +20,6 @@ export default function FaqCard({ description, title, userImage}: FaqCardProps) 
                     <AvatarImage src={userImage} />
                 </Avatar>
             </CardContent>
-
-        </Card>    
+        </Card>   
         )
 }

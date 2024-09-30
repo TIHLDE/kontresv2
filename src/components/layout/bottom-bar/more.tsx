@@ -1,17 +1,19 @@
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerClose, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+} from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 
-
-
-import { DetailedItem } from '@/utils/apis/types';
-
-
+import { type DetailedItem } from '@/utils/apis/types';
 
 import { Code } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction } from 'react';
-
+import { type Dispatch, type SetStateAction } from 'react';
 
 interface MoreProps {
     items?: DetailedItem[];
@@ -41,7 +43,6 @@ const More = ({ items, open, setOpen }: MoreProps) => {
         );
     };
 
-
     return (
         <Drawer open={open} onOpenChange={(open) => setOpen(open)}>
             <DrawerContent>
@@ -65,7 +66,13 @@ const More = ({ items, open, setOpen }: MoreProps) => {
                         </Button>
                     ))}
                     <Separator />
-                    <Button variant={'outline'} className='flex gap-2 items-center' onClick={generateMailTo}><span>Kontakt index</span> <Code className='w-4 h-4' /></Button>
+                    <Button
+                        variant={'outline'}
+                        className="flex gap-2 items-center"
+                        onClick={generateMailTo}
+                    >
+                        <span>Kontakt index</span> <Code className="w-4 h-4" />
+                    </Button>
                 </div>
                 <DrawerFooter>
                     <DrawerClose asChild>

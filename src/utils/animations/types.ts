@@ -5,6 +5,6 @@ export interface RunProps {
 
 type AnimationHookReturnType = {
     run: RunType;
-}
+};
 
 export type AnimationHookType = () => AnimationHookReturnType;

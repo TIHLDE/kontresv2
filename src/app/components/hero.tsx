@@ -1,7 +1,5 @@
 import { buttonVariants } from '@/components/ui/button';
 
-
-
 import { getItems } from '@/utils/apis/items';
 
 import styles from './welcometitle.module.css';

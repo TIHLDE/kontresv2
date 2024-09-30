@@ -1,11 +1,11 @@
-import { AnimationHookType, RunType } from "./types"
-import styles from './animations.module.css'
+import styles from './animations.module.css';
+import { type AnimationHookType, type RunType } from './types';
 
 export const useShake: AnimationHookType = () => {
     return {
-        run
-    }
-}
+        run,
+    };
+};
 
 const run: RunType = ({ ref }) => {
     const element = ref.current;
@@ -15,4 +15,4 @@ const run: RunType = ({ ref }) => {
     element.addEventListener('animationend', () => {
         element.classList.remove(styles.shake);
     });
-}
+};

@@ -1,11 +1,15 @@
-"use client"
+'use client';
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion';
 
 type ErrorPropType = {
-    error: Error & { digest?: string }
-}
+    error: Error & { digest?: string };
+};
 
 export default function Error({ error }: ErrorPropType) {
     return (
@@ -21,7 +25,6 @@ export default function Error({ error }: ErrorPropType) {
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
-
         </div>
-    )
+    );
 }

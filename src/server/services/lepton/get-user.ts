@@ -37,5 +37,5 @@ export interface TIHLDEUser {
     gender: number;
     study: {
         membership_type: string;
-    }
+    };
 }

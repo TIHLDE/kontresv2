@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { InputProps } from '@/components/ui/input';
+import { type InputProps } from '@/components/ui/input';
 import {
     Popover,
     PopoverContent,
@@ -24,7 +24,7 @@ export function DateTimePicker({
 }: InputProps) {
     const [date, setDate] = React.useState<Date | null>(
         initialDate ||
-        (typeof value !== 'undefined' ? new Date(value as string) : null),
+            (typeof value !== 'undefined' ? new Date(value as string) : null),
     );
     const handleDateChange = (newDate?: Date) => {
         if (!newDate) return;

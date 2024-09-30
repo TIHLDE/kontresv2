@@ -90,7 +90,7 @@ export const adminProcedure = t.procedure
 
         return next({
             ctx: {
-                session: ctx.session
+                session: ctx.session,
             },
         });
     });

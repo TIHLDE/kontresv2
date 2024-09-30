@@ -4,8 +4,8 @@
 import {
     DetailedItem,
     DetailedReservation,
-    PostReservation,
-    ReservationState,
+    type PostReservation,
+    type ReservationState,
     validationTags,
 } from './types';
 import { revalidateTag } from 'next/cache';

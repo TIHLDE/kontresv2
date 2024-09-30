@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, ButtonProps } from './button';
+import { Button, type ButtonProps } from './button';
 import { MoonIcon, SunIcon } from 'lucide-react';
 import React from 'react';
 

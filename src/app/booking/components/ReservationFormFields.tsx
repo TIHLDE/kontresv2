@@ -12,18 +12,18 @@ import {
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 import AutoSelect, {
-    SelectGroupType,
-    SelectOptionType,
+    type SelectGroupType,
+    type SelectOptionType,
 } from '@/components/ui/select';
 
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 
 import ApplicantCard from './ApplicantCard';
 import UserAutocomplete from './UserAutocomplete';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Dispatch, SetStateAction } from 'react';
+import { type Dispatch, type SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -181,7 +181,7 @@ const ReservationFormFields = ({
                                         value: item.id,
                                     }))}
                                     placeholder={'Velg en gjenstand'}
-                                    defaultValue={initialData?.item as string}
+                                    defaultValue={initialData?.item}
                                     onValueChange={field.onChange}
                                     {...field}
                                     className="w-full"

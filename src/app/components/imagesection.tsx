@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 import Image from 'next/image';
 
 const ImageSection = async () => {
-    return <></>
+    return <></>;
     // let items;
     // try {
     //     items = await getItems();

@@ -4,8 +4,8 @@ import { ACCESS_TOKEN } from '../../../constants';
 // import { IFetch } from './fetch';
 import {
     PaginationResponse,
-    PermissionApp,
-    User,
+    type PermissionApp,
+    type User,
     UserPermissions,
 } from './types';
 import { cookies } from 'next/headers';
@@ -48,7 +48,6 @@ export const getUserData = (user_id: User['user_id']) => {
  */
 export const getCurrentUserData = async () => {
     // const id = await cookies().get('user_id');
-
     // return getUserData(id?.value ?? '');
 };
 
@@ -96,7 +95,6 @@ export const checkUserAuth = async () => {
     // } catch (error) {
     //     return false;
     // }
-
     // return Boolean(userData?.first_name);
 };
 

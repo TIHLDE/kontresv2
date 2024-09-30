@@ -1,8 +1,8 @@
-"use server"
+'use server';
 
-import { revalidateTag } from "next/cache";
 // import { IFetch } from "./fetch";
-import { DetailedItem, validationTags } from "./types";
+import { type DetailedItem, validationTags } from './types';
+import { revalidateTag } from 'next/cache';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 
@@ -11,7 +11,6 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
     Therefore, both functions do the same as of now.
 */
 
-
 /**
  * Gets a specific item given an item UUID.
  *
@@ -19,12 +18,12 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
  * @returns Item details
  */
 export const getItem = (uuid: string) => {
-//   return IFetch<DetailedItem[]>({
-//     url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
-//     config: {
-//       method: "GET"
-//     }
-//   });
+    //   return IFetch<DetailedItem[]>({
+    //     url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
+    //     config: {
+    //       method: "GET"
+    //     }
+    //   });
 };
 
 /**
@@ -33,58 +32,60 @@ export const getItem = (uuid: string) => {
  * @returns A list of all reservalble items
  */
 export const getItems = () => {
-//   return IFetch<DetailedItem[]>({
-//     url: `${baseUrl}/kontres/bookable_items/`,
-//     config: {
-//       method: "GET",
-//       next: {
-//         tags: [validationTags.bookableItems]
-//       }
-//     }
-//   });
+    //   return IFetch<DetailedItem[]>({
+    //     url: `${baseUrl}/kontres/bookable_items/`,
+    //     config: {
+    //       method: "GET",
+    //       next: {
+    //         tags: [validationTags.bookableItems]
+    //       }
+    //     }
+    //   });
 };
-
-
 
 /**
  * Registers a new bookable item in backend
  */
-export const createItem = (data: Omit<DetailedItem, 'id' | 'updated_at' | 'created_at'>) => {
-//   return IFetch<DetailedItem>({
-//     url: `${baseUrl}/kontres/bookable_items/`,
-//     config: {
-//       body: JSON.stringify(data),
-//       method: "POST",
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     }
-//   });
-}
+export const createItem = (
+    data: Omit<DetailedItem, 'id' | 'updated_at' | 'created_at'>,
+) => {
+    //   return IFetch<DetailedItem>({
+    //     url: `${baseUrl}/kontres/bookable_items/`,
+    //     config: {
+    //       body: JSON.stringify(data),
+    //       method: "POST",
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     }
+    //   });
+};
 
-export const updateItem = (uuid: string, data: Omit<DetailedItem, 'id' | 'updated_at' | 'created_at'>) => {
-//   return IFetch<DetailedItem>({
-//     url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
-//     config: {
-//       body: JSON.stringify(data),
-//       method: "PATCH",
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     }
-//   });
-}
-
+export const updateItem = (
+    uuid: string,
+    data: Omit<DetailedItem, 'id' | 'updated_at' | 'created_at'>,
+) => {
+    //   return IFetch<DetailedItem>({
+    //     url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
+    //     config: {
+    //       body: JSON.stringify(data),
+    //       method: "PATCH",
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     }
+    //   });
+};
 
 export const deleteItem = (uuid: string) => {
-//   return IFetch({
-//     url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
-//     config: {
-//       method: "DELETE"
-//     }
-//   });
-}
+    //   return IFetch({
+    //     url: `${baseUrl}/kontres/bookable_items/${uuid}/`,
+    //     config: {
+    //       method: "DELETE"
+    //     }
+    //   });
+};
 
 export const invalidateItems = () => {
-  revalidateTag(validationTags.bookableItems);
-}
+    revalidateTag(validationTags.bookableItems);
+};

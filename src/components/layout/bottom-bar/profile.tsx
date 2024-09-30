@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@/types/User';
+import { type User } from '@/types/User';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +15,7 @@ import {
 import { signOutUser } from '@/utils/apis/user';
 
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction } from 'react';
+import { type Dispatch, type SetStateAction } from 'react';
 
 interface ProfileProps {
     user?: User;

@@ -1,7 +1,7 @@
-import { Card } from '@/components/ui/card';
+import { type Card } from '@/components/ui/card';
 
 import { getReservation } from '@/utils/apis/reservations';
-import { BaseGroup } from '@/utils/apis/types';
+import { type BaseGroup } from '@/utils/apis/types';
 
 import ReservationMeta from './ReservationMeta';
 

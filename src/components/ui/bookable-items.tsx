@@ -1,4 +1,5 @@
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
+
 import { getItems } from '../../utils/apis/items';
 import HeaderLink from './header-link';
 
@@ -11,7 +12,6 @@ export default async function BookableItems({
     items,
     ...props
 }: BookableItemsProps) {
-
     const bookableItems = items?.sort((a, b) => a.name.localeCompare(b.name));
     return (
         <nav className={className} {...props}>

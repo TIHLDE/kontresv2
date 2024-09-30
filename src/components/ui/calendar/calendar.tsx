@@ -9,7 +9,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-import { DetailedReservation } from '../../../utils/apis/types';
+import { type DetailedReservation } from '../../../utils/apis/types';
 import PossibleBooking from './booking-prompt';
 import CalendarDay from './calendar-day';
 import CalendarDayView from './calendar-day-view';
@@ -26,7 +26,7 @@ import { useEffect, useRef, useState } from 'react';
 
 interface CalendarProps {
     typeUUID: string;
-    name: String;
+    name: string;
     reservations: DetailedReservation[];
 }
 
@@ -194,8 +194,8 @@ export default function Calendar({
                         />
                     )}
                     <PossiblePlaceholder
-                        dragStart={dragStart!}
-                        dragEnd={dragEnd!}
+                        dragStart={dragStart}
+                        dragEnd={dragEnd}
                         view={view}
                         mousePosition={mousePosition}
                         containerRef={containerRef}
@@ -210,8 +210,8 @@ export default function Calendar({
                         containerRef={containerRef}
                         startDate={startDate}
                         endDate={endDate}
-                        dragStart={dragStart!}
-                        dragEnd={dragEnd!}
+                        dragStart={dragStart}
+                        dragEnd={dragEnd}
                         setRelativeMousePosition={setMousePosition}
                         setEndDate={setEndDate}
                         setStartDate={setStartDate}

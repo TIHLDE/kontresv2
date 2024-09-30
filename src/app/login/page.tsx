@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { LoginForm } from './components/LoginForm';
-import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 
 export default async function Page({
     searchParams,

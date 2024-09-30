@@ -48,7 +48,7 @@ export const UserArea = ({
     const goToMyPage = () => {
         setOpen(false);
         router.push('/min-side');
-    }
+    };
 
     return (
         <div
@@ -85,7 +85,13 @@ export const UserArea = ({
                         >
                             Logg ut
                         </Button>
-                        <Button variant={"outline"} className="w-full mt-1" onClick={goToMyPage}>Min side</Button>
+                        <Button
+                            variant={'outline'}
+                            className="w-full mt-1"
+                            onClick={goToMyPage}
+                        >
+                            Min side
+                        </Button>
                         {admin ? (
                             <Button
                                 variant={'outline'}

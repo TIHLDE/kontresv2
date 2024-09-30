@@ -1,4 +1,4 @@
-"use server"
+'use server';
 
 // import { IFetch } from "./fetch"
 // import { Membership, PaginationResponse } from "./types"

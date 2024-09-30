@@ -1,7 +1,7 @@
 import Calendar from '@/components/ui/calendar/calendar';
 
 import { getBookableItem, getReservations } from '@/utils/apis/reservations';
-import { DetailedItem, DetailedReservation } from '@/utils/apis/types';
+import { type DetailedItem, type DetailedReservation } from '@/utils/apis/types';
 
 interface CalendarWrapperProps {
     type: string;
@@ -26,7 +26,7 @@ const CalendarWrapper = async ({ type }: CalendarWrapperProps) => {
     return (
         <Calendar
             typeUUID={type}
-            name={item.name as string}
+            name={item.name!}
             reservations={reservationRequest}
         />
     );

@@ -1,6 +1,6 @@
 import { User } from '@/types/User';
 
-import { BaseGroup, GroupType } from '@/utils/apis/types';
+import { type BaseGroup, GroupType } from '@/utils/apis/types';
 import { cn } from '@/utils/cn';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
@@ -32,7 +32,7 @@ interface UserProfilePillProps extends React.HTMLProps<HTMLDivElement> {
     showHoverCard?: boolean;
 }
 
-const genderMap: { [key: number]: string } = {
+const genderMap: Record<number, string> = {
     1: 'Mann',
     2: 'Kvinne',
     3: 'Annet',

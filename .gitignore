@@ -45,6 +45,7 @@ database.env
 
 # idea files
 .idea
+.vscode/settings.json
 
 # docker
 docker-volumes/

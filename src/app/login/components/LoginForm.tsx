@@ -1,45 +1,41 @@
-"use client"
+"use client";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { loginUser } from "../actions"
 import { Button } from "@/components/ui/button"
 import { LoadingSpinner } from "@/components/ui/loadingspinner"
+import { loginUser } from "../actions";
 
 type LoginFormSubmitEventType = z.infer<typeof formSchema>
 
 const formSchema = z.object({
-    user_id: z.string(),
+    username: z.string(),
     password: z.string(),
 })
 
-export function LoginForm({ redirect }: { redirect: string }) {
+type LoginFormProps = {
+    redirectUrl: string
+}
+
+export function LoginForm({ redirectUrl }: LoginFormProps) {
     const form = useForm<LoginFormSubmitEventType>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            user_id: "",
+            username: "",
             password: "",
         }
     })
 
     const handleSubmit = async (data: LoginFormSubmitEventType) => {
-        await loginUser(data.user_id, data.password, redirect).catch((err) => {
-            console.error(err)
-            form.setError("root", {
-                type: "server",
-                message: "Feil brukernavn eller passord"
-            })
-        }).then((data) => {
-            
-        })
+        await loginUser(data.username, data.password, redirectUrl);
     }
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}>
-                <FormField control={form.control} name="user_id" render={({ field }) => (
+                <FormField control={form.control} name="username" render={({ field }) => (
                     <FormItem>
                         <FormLabel>Brukernavn</FormLabel>
                         <FormControl>

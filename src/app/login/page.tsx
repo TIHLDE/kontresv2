@@ -1,19 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
-import { checkUserAuth } from '@/utils/apis/user';
-
 import { LoginForm } from './components/LoginForm';
 import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
 
 export default async function Page({
     searchParams,
 }: {
     searchParams?: { redirect?: string };
 }) {
-    const redirect_url = searchParams?.redirect ?? '/';
+    const redirectUrl = searchParams?.redirect ?? '/';
 
-    const isLoggedin = await checkUserAuth();
-    if (isLoggedin) redirect(redirect_url);
+    const session = await auth();
+
+    if (session?.user) redirect(redirectUrl);
 
     return (
         /* This isn't a very elegant solution..? */
@@ -23,7 +22,7 @@ export default async function Page({
                     <CardTitle className="text-center">Login</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <LoginForm redirect={redirect_url} />
+                    <LoginForm redirectUrl={redirectUrl} />
                 </CardContent>
             </Card>
         </div>

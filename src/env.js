@@ -12,6 +12,8 @@ export const env = createEnv({
             .enum(['development', 'test', 'production'])
             .default('development'),
         LEPTON_API_URL: z.string().url(),
+        NEXTAUTH_SECRET: z.string(),
+        AUTH_SECRET: z.string(),
     },
 
     /**
@@ -31,6 +33,8 @@ export const env = createEnv({
         DATABASE_URL: process.env.DATABASE_URL,
         NODE_ENV: process.env.NODE_ENV,
         LEPTON_API_URL: process.env.LEPTON_API_URL,
+        NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+        AUTH_SECRET: process.env.AUTH_SECRET,
         // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
     },
     /**

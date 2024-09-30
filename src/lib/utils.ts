@@ -45,7 +45,7 @@ export function getDateAtMousePosition<RelativeMousePositionProps>(
         hours: Math.floor(
             ((e.nativeEvent.target as HTMLDivElement).offsetTop / height) * 24,
         ),
-        minutes: Math.floor( e.nativeEvent.offsetY/48*60),
+        minutes: Math.floor((e.nativeEvent.offsetY / 48) * 60),
     };
 }
 

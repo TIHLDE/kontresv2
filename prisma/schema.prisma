@@ -18,30 +18,30 @@ enum ReservationState {
 }
 
 model BookableItem {
-    itemId         Int       @id @default(autoincrement())
+    itemId          Int       @id @default(autoincrement())
     name            String
     description     String
-    allowsAlcohol  Boolean
-    groupId        String
-    reservation     Reservation[]
-    FAQ             FAQ[]
+    allowsAlcohol   Boolean
+    groupId         String
+    reservations    Reservation[]
+    FAQs            FAQ[] 
     @@index([name])
 }
 
 model Reservation {
-    reservationId              Int @id @default(autoincrement())
+    reservationId   Int @id @default(autoincrement())
     author          String
-    bookableItem   BookableItem @relation(fields: [bookableItemId], references: [itemId])
-    bookableItemId Int
-    startTime      DateTime
-    endTime        DateTime
+    bookableItem    BookableItem @relation(fields: [bookableItemId], references: [itemId])
+    bookableItemId  Int
+    startTime       DateTime
+    endTime         DateTime
     state           ReservationState @default(PENDING)
     description     String
-    acceptedRules  Boolean
+    acceptedRules   Boolean
     group           String
-    servesAlcohol  Boolean
-    soberWatch     String
-    approvedBy     String
+    servesAlcohol   Boolean
+    soberWatch      String
+    approvedBy      String
 }
 
 model FAQ {
@@ -50,6 +50,5 @@ model FAQ {
     answer          String
     group           String
     author          String
-    bookableItem   BookableItem @relation(fields: [bookableItemId], references: [itemId])
-    bookableItemId Int
+    bookableItems   BookableItem[]  
 }

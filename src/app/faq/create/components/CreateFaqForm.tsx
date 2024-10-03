@@ -15,10 +15,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { BookableItem } from "@prisma/client";
+import { Dropdown } from "react-day-picker";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
+import BookableItemsSelect from "./bookableItemsSelect";
 
 const formSchema = z.object({
     question: z.string(),
     answer: z.string(),
+    bookableItemId: z.number(),
 })
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
@@ -32,13 +36,17 @@ export default function createFaqForm(){
 
 
     async function onSubmit(formData: FaqFormValueTypes){
-        await createFaq({
+        try {
+            await createFaq({
             question: formData.question,
             answer: formData.answer,
             group: "KOK",
             author:"Daniel",
-        })
-        
+            bookableItemId: 1//Om formData får den inn
+            })
+        } catch (error) {
+            //legge inn håndtering
+        }
     }
 
     const form = useForm<FaqFormValueTypes>({
@@ -85,6 +93,20 @@ export default function createFaqForm(){
                                     <FormDescription>
                                     Skriv et utfyllende svar på spørsmålet
                                     </FormDescription>
+                                </FormItem>
+                            )} 
+                        >
+                        </FormField>
+
+                        <FormField
+                            control={form.control}
+                            name="bookableItemId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Gjelder spørsmålet en spesifik gjenstand?</FormLabel>
+                                    <FormControl>
+                                        <BookableItemsSelect/>
+                                    </FormControl>
                                 </FormItem>
                             )} 
                         >

@@ -1,3 +1,4 @@
+import BookableItems from '@/components/ui/bookable-items';
 import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
 import { PrismaClient } from '@prisma/client';
 import { group } from 'console';
@@ -10,7 +11,11 @@ export const faqRouter = createTRPCRouter({
 
     //get all FAQs
     getAll: publicProcedure.query(async () => {
-        const faqs = await prisma.fAQ.findMany();
+        const faqs = await prisma.fAQ.findMany({
+            include: {
+                bookableItems: true
+            }
+        });
         return faqs
     }),
 
@@ -23,6 +28,9 @@ export const faqRouter = createTRPCRouter({
         const faq = await prisma.fAQ.findUnique({
             where: {
                 questionId: input.questionId,
+            },
+            include: {
+                bookableItems: true,
             }
         });
 
@@ -39,12 +47,14 @@ export const faqRouter = createTRPCRouter({
         answer: z.string(),
         group: z.string(),
         author: z.string(),
+        bookableItemId: z.number().optional(),
     })).mutation(async ({input}) => {
             const newFAQ = await prisma.fAQ.create({
                 data: {
                     question: input.question,
                     answer: input.answer,
                     group: input.group,
+                    
                     author: input.author
                 },
             });

@@ -14,11 +14,11 @@ import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { BookableItem } from "@prisma/client";
 
 const formSchema = z.object({
     question: z.string(),
     answer: z.string(),
-   // relatedItems:
 })
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
@@ -34,9 +34,9 @@ export default function createFaqForm(){
     async function onSubmit(formData: FaqFormValueTypes){
         await createFaq({
             question: formData.question,
-            answer: formData.question,
+            answer: formData.answer,
             group: "KOK",
-            author:"Daniel"
+            author:"Daniel",
         })
         
     }

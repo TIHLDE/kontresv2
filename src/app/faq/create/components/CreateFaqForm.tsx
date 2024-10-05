@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import {
     Form,
     FormControl,
@@ -11,8 +12,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
+import BookableItemsSelect from './bookableItemsSelect';
 import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { BookableItem } from '@prisma/client';
+import { Dropdown } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -32,17 +36,16 @@ export default function createFaqForm() {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
 
     async function onSubmit(formData: FaqFormValueTypes) {
-        console.log(formData.bookableItemId);
         try {
             await createFaq({
                 question: formData.question,
-                answer: formData.answer,
+                answer: formData.question,
                 group: 'KOK',
                 author: 'Daniel',
-                bookableItemId: formData.bookableItemId,
+                bookableItemId: 1, //Om formData får den inn
             });
         } catch (error) {
-            console.error(error);
+            //legge inn håndtering
         }
     }
 
@@ -106,7 +109,7 @@ export default function createFaqForm() {
                                 Gjelder spørsmålet en spesifik gjenstand?
                             </FormLabel>
                             <FormControl>
-                                <BookableItemsSelect field={field} />
+                                <BookableItemsSelect />
                             </FormControl>
                         </FormItem>
                     )}

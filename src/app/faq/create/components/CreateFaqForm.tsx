@@ -43,7 +43,7 @@ export default function createFaqForm(){
             answer: formData.answer,
             group: "KOK",
             author:"Daniel",
-            bookableItemId: formData.bookableItemId,
+            bookableItemId: formData.bookableItemId, //denne må bli int igjen
             })
         } catch (error) {
             console.error(error)
@@ -51,7 +51,12 @@ export default function createFaqForm(){
     }
 
     const form = useForm<FaqFormValueTypes>({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            question: "",
+            answer: "",
+            bookableItemId: "",
+        }
     });
 
     return(

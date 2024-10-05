@@ -32,16 +32,17 @@ export default function createFaqForm() {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
 
     async function onSubmit(formData: FaqFormValueTypes) {
+        console.log(formData.bookableItemId);
         try {
             await createFaq({
                 question: formData.question,
-                answer: formData.question,
+                answer: formData.answer,
                 group: 'KOK',
                 author: 'Daniel',
-                bookableItemId: 1, //Om formData får den inn
+                bookableItemId: formData.bookableItemId,
             });
         } catch (error) {
-            //legge inn håndtering
+            console.error(error);
         }
     }
 
@@ -105,7 +106,7 @@ export default function createFaqForm() {
                                 Gjelder spørsmålet en spesifik gjenstand?
                             </FormLabel>
                             <FormControl>
-                                <BookableItemsSelect />
+                                <BookableItemsSelect field={field} />
                             </FormControl>
                         </FormItem>
                     )}

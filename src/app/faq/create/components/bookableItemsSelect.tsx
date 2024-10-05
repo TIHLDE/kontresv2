@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/trpc/react";
 
-export default async function BookableItemsSelect(){
-    const {data: bookableItems} = await api.faq.getAll.useQuery();
+export default async function BookableItemsSelect({ field }){
+    const {data: bookableItems} = await api.bookableItem.getAll.useQuery();
 
     return(
-        <Select>
+        <Select value={field.value} onValueChange={field.onChange}>
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Velg en gjenstand" />
             </SelectTrigger>
@@ -22,7 +22,7 @@ export default async function BookableItemsSelect(){
                 <SelectGroup>
                     {
                         bookableItems?.map((item, index) => (
-                            <SelectItem value={item.questionId}>{item.author}</SelectItem>
+                            <SelectItem value={item.itemId.toString()} key={index}>{item.name}</SelectItem>
                         ))
                     }
                 </SelectGroup>

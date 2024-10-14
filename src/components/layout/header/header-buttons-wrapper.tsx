@@ -1,29 +1,20 @@
-import { getItems } from '@/utils/apis/items';
-import { AdminPermissions, type DetailedItem } from '@/utils/apis/types';
-import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
-
-import BookableItems from '../../ui/bookable-items';
+// import { getItems } from '@/utils/apis/items';
+// import { AdminPermissions, type DetailedItem } from '@/utils/apis/types';
+// import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
+// import BookableItems from '../../ui/bookable-items';
 import HeaderLink from '../../ui/header-link';
 import Logo from '../../ui/logo';
 import { UserArea } from '../user-area';
+import { auth } from '@/auth';
 import { cn } from '@/lib/utils';
 
 const HeaderButtonsWrapper = async ({
     className,
     ...props
 }: React.HTMLProps<HTMLDivElement>) => {
-    let admin = false;
-    let items: DetailedItem[] = [];
-    let userData;
+    const session = await auth();
 
-    try {
-        userData = await getCurrentUserData();
-        admin = await checkUserPermissions(AdminPermissions);
-        items = await getItems();
-    } catch (error) {
-        console.error(error);
-    }
-
+    console.log(session);
     return (
         <div
             {...props}
@@ -36,15 +27,15 @@ const HeaderButtonsWrapper = async ({
                 <HeaderLink href="/" className="mr-16">
                     <Logo />
                 </HeaderLink>
-                <BookableItems className="flex gap-6" items={items} />
+                {/* <BookableItems className="flex gap-6" items={items} /> */}
                 <HeaderLink href="/booking">Booking</HeaderLink>
             </nav>
 
-            {userData ? (
+            {session?.user ? (
                 <UserArea
-                    name={userData?.first_name ?? ''}
-                    image={userData?.image ?? ''}
-                    admin={admin}
+                    name={session.user.firstName ?? ''}
+                    image={session.user.profilePicture ?? ''}
+                    admin={session.user.role == 'ADMIN'}
                 />
             ) : undefined}
         </div>

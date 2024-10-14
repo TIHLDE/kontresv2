@@ -1,26 +1,23 @@
-import {
-    type MembershipResponse,
-    getTIHLDEMemberships,
-} from './server/services/lepton/get-memberships';
-import {
-    type TIHLDEUser,
-    getTIHLDEUser,
-} from './server/services/lepton/get-user';
+import { type MembershipResponse, getTIHLDEMemberships } from './server/services/lepton/get-memberships';
+import { type TIHLDEUser, getTIHLDEUser } from './server/services/lepton/get-user';
 import { loginToTIHLDE } from './server/services/lepton/login';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+
 
 type UserRole = 'ADMIN' | 'MEMBER';
 type UserData = {
     id: string;
     firstName: string;
     lastName: string;
+    profilePicture?: string;
     role: UserRole;
+    groups: string[];
     leaderOf: string[];
     TIHLDE_Token: string;
 };
 
-type UserDataNoToken = Omit<UserData, 'TIHLDE_Token'>;
+export type SessionUserData = Omit<UserData, 'TIHLDE_Token'>;
 
 declare module 'next-auth' {
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -28,11 +25,9 @@ declare module 'next-auth' {
     type AdapterUser = object;
 
     interface Session {
-        user: UserDataNoToken;
+        user: SessionUserData;
     }
 }
-
-const MemberCacheValidation = new Map<string, Date>();
 
 // @ts-expect-error JWT module is not defined in next-auth for some reason
 declare module 'next-auth/jwt' {
@@ -95,7 +90,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     id: user.user_id,
                     firstName: user.first_name,
                     lastName: user.last_name,
+                    profilePicture: user.image ?? '',
                     role: TIHLDEInfo.isAdmin ? 'ADMIN' : 'MEMBER',
+                    groups: TIHLDEInfo.groups,
                     leaderOf: TIHLDEInfo.leaderOf,
                     TIHLDE_Token: token,
                 };
@@ -107,10 +104,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async jwt({ user, token }) {
             if (user) {
-                MemberCacheValidation.set(
-                    user.id!,
-                    new Date(Date.now() + 30 * 60 * 1000),
-                );
+                // MemberCacheValidation.set(
+                //     user.id!,
+                //     new Date(Date.now() + 30 * 60 * 1000),
+                // );
                 token.user = user;
             }
 
@@ -133,10 +130,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // @ts-expect-error Session is not in the correct format
         session({ session, token }) {
             const sessionData: {
-                user: UserDataNoToken;
+                user: SessionUserData;
             } = session as never;
-            sessionData.user = token.user as UserDataNoToken;
-            // @ts-expect-error TIHLDE_Token is not in UserDataNoToken
+
+            sessionData.user = token.user as SessionUserData;
+            // @ts-expect-error TIHLDE_Token is not in SessionUserData
             delete sessionData.user.TIHLDE_Token;
 
             return sessionData;
@@ -149,10 +147,17 @@ export function getTIHLDEUserInfo(
     memberships: MembershipResponse | null,
 ):
     | { isMember: false }
-    | { isMember: true; leaderOf: string[]; isAdmin: boolean } {
+    | {
+          isMember: true;
+          groups: string[];
+          leaderOf: string[];
+          isAdmin: boolean;
+      } {
     if (!user) return { isMember: false };
     if (!memberships) return { isMember: false };
     if (user.study.membership_type !== 'MEMBER') return { isMember: false };
+
+    const groups = memberships.results.map((m) => m.group.slug);
 
     const leaderOf = memberships.results
         .filter((m) => m.membership_type === 'LEADER')
@@ -162,6 +167,7 @@ export function getTIHLDEUserInfo(
 
     return {
         isMember: true,
+        groups,
         leaderOf,
         isAdmin: memberships?.results.some((r) =>
             adminGroups.includes(r.group.slug),
@@ -169,6 +175,6 @@ export function getTIHLDEUserInfo(
     };
 }
 
-export function getTIHLDEMemberLeaderInfo(
-    memberships: MembershipResponse | null,
-) {}
+// export function getTIHLDEMemberLeaderInfo(
+//     memberships: MembershipResponse | null,
+// ) {}

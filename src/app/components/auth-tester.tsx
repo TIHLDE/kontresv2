@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
+
+
 import { api } from '@/trpc/react';
-import { SessionProvider, signIn, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 
 export default function AuthTester() {
     const session = useSession();
@@ -16,7 +18,7 @@ export default function AuthTester() {
         api.authTester.memberTest.useQuery();
 
     return (
-        <SessionProvider>
+        <>
             {session.status == 'unauthenticated' && (
                 <Card>
                     <h1>Du er ikke logget inn</h1>
@@ -62,6 +64,6 @@ export default function AuthTester() {
                     </>
                 )}
             </Card>
-        </SessionProvider>
+        </>
     );
 }

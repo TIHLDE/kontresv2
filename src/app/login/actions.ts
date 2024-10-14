@@ -6,16 +6,11 @@ import { signIn } from '@/auth';
 export async function loginUser(
     username: string,
     password: string,
-    redirectUrl = '/',
+    redirectUrl?: string,
 ) {
-    try {
-        await signIn('tihlde', {
-            redirectTo: redirectUrl,
-            username,
-            password,
-        });
-    } catch (error) {
-        // TODO: Show error to user
-        console.error(error);
-    }
+    await signIn('tihlde', {
+        redirectTo: redirectUrl,
+        username,
+        password,
+    });
 }

@@ -6,13 +6,14 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { signOutUser } from '@/utils/apis/user';
+// import { signOutUser } from '@/utils/apis/user';
 import { cn } from '@/utils/cn';
 
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ModeToggle } from '../ui/theme-mode-toggler';
 import { Settings, UserRound } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -34,9 +35,9 @@ export const UserArea = ({
     const router = useRouter();
     const [open, setOpen] = useState(false);
 
-    const signOut = () => {
+    const signOutButton = async () => {
         setOpen(false);
-        signOutUser();
+        await signOut();
         router.refresh();
     };
 
@@ -81,7 +82,7 @@ export const UserArea = ({
                         <Button
                             variant={'destructive'}
                             className="mt-2 w-full"
-                            onClick={signOut}
+                            onClick={signOutButton}
                         >
                             Logg ut
                         </Button>

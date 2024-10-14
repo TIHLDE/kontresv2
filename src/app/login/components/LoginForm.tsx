@@ -1,19 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
+
+
 import { loginUser } from '../actions';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -37,9 +33,12 @@ export function LoginForm({ redirectUrl }: LoginFormProps) {
         },
     });
 
-    const handleSubmit = async (data: LoginFormSubmitEventType) => {
-        await loginUser(data.username, data.password, redirectUrl);
-    };
+    const handleSubmit = useCallback(
+        async (data: LoginFormSubmitEventType) => {
+            await loginUser(data.username, data.password, redirectUrl);
+        },
+        [redirectUrl],
+    );
 
     return (
         <Form {...form}>

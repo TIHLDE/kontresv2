@@ -1,5 +1,6 @@
 import { env } from '../../../env';
 
+
 /**
  * Return basic user info from a given TIHLDE user
  * @param token TIHLDE token
@@ -34,6 +35,7 @@ export interface TIHLDEUser {
     first_name: string;
     last_name: string;
     email: string;
+    image?: string;
     gender: number;
     study: {
         membership_type: string;

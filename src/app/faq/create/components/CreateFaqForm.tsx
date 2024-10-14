@@ -15,13 +15,15 @@ import { Input } from '@/components/ui/input';
 import BookableItemsSelect from './bookableItemsSelect';
 import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { BookableItem } from '@prisma/client';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 const formSchema = z.object({
     question: z.string(),
     answer: z.string(),
-    bookableItemId: z.string(),
+    bookableItemIds: z.array(z.number()),
 });
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
@@ -31,19 +33,24 @@ export default function createFaqForm() {
 
     const form = useForm<FaqFormValueTypes>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            question: '',
+            answer: '',
+            bookableItemIds: [],
+        },
     });
 
     async function onSubmit(formData: FaqFormValueTypes) {
-        console.log(formData.bookableItemId);
+        console.log('Bookable Item ids', formData.bookableItemIds);
         try {
             await createFaq({
                 question: formData.question,
                 answer: formData.answer,
                 group: 'KOK',
                 author: 'Daniel',
-                bookableItemId: formData.bookableItemId
-                    ? parseInt(formData.bookableItemId)
-                    : 0,
+                bookableItemIds: formData.bookableItemIds.map((i) =>
+                    parseInt(i),
+                ),
             });
         } catch (error) {
             console.error(error);
@@ -99,14 +106,17 @@ export default function createFaqForm() {
 
                 <FormField
                     control={form.control}
-                    name="bookableItemId"
+                    name="bookableItemIds"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>
                                 Gjelder spørsmålet en spesifik gjenstand?
                             </FormLabel>
                             <FormControl>
-                                <BookableItemsSelect />
+                                <BookableItemsSelect
+                                    field={field}
+                                    form={form}
+                                />
                             </FormControl>
                         </FormItem>
                     )}

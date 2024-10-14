@@ -47,7 +47,7 @@ export const faqRouter = createTRPCRouter({
         answer: z.string(),
         group: z.string(),
         author: z.string(),
-        bookableItemId: z.number(),
+        bookableItemId: z.number().optional(),
     })).mutation(async ({input}) => {
             const newFAQ = await prisma.fAQ.create({
                 data: {

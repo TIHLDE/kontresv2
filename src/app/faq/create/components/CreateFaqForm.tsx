@@ -14,41 +14,18 @@ import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { BookableItem } from "@prisma/client";
-import { Dropdown } from "react-day-picker";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import BookableItemsSelect from "./bookableItemsSelect";
 
 const formSchema = z.object({
     question: z.string(),
     answer: z.string(),
-    bookableItemId: z.number(),
+    bookableItemId: z.string(),
 })
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
 
-export interface CreateFaqProps {
-    onSubmit: (values: FaqFormValueTypes) => Promise<unknown>
-}
-
 export default function createFaqForm(){
     const {mutateAsync: createFaq} = api.faq.create.useMutation();
-
-
-    async function onSubmit(formData: FaqFormValueTypes){
-        console.log(formData.bookableItemId)
-        try {
-            await createFaq({
-            question: formData.question,
-            answer: formData.answer,
-            group: "KOK",
-            author:"Daniel",
-            bookableItemId: formData.bookableItemId, //denne må bli int igjen
-            })
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     const form = useForm<FaqFormValueTypes>({
         resolver: zodResolver(formSchema),
@@ -58,6 +35,21 @@ export default function createFaqForm(){
             bookableItemId: "",
         }
     });
+
+    async function onSubmit(formData: FaqFormValueTypes){
+        console.log(formData.bookableItemId)
+        try {
+            await createFaq({
+            question: formData.question,
+            answer: formData.answer,
+            group: "KOK",
+            author:"Daniel",
+            bookableItemId: formData.bookableItemId ? parseInt(formData.bookableItemId) : 0, 
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return(
         <Form {...form}>
@@ -118,6 +110,7 @@ export default function createFaqForm(){
                         >
                         </FormField>
 
+              
                         <Button type="submit">Opprett</Button>
                     </form>
                 </Form>

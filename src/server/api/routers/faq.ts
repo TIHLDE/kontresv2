@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import { group } from 'console';
 import { get } from 'http';
 import { z } from 'zod';
+import { BookableItem } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -47,14 +48,18 @@ export const faqRouter = createTRPCRouter({
         answer: z.string(),
         group: z.string(),
         author: z.string(),
-        bookableItemId: z.number().optional(),
+        bookableItemIds: z.array(z.number()),
     })).mutation(async ({input}) => {
             const newFAQ = await prisma.fAQ.create({
                 data: {
                     question: input.question,
                     answer: input.answer,
                     group: input.group,
-                    
+                    bookableItems: {
+                        connect: input.bookableItemIds.map(id => ({
+                            itemId: id,
+                        }))
+                    },
                     author: input.author
                 },
             });

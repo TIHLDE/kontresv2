@@ -15,8 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import BookableItemsSelect from "./bookableItemsSelect";
-import { useState } from "react";
-import { BookableItem } from "@prisma/client";
+import { Textarea } from "@/components/ui/textarea"
 
 const formSchema = z.object({
     question: z.string(),
@@ -69,9 +68,6 @@ export default function createFaqForm(){
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormDescription>
-                                    Hvilket spørsmål skal besvares?
-                                    </FormDescription>
                                 </FormItem>
                             )} 
                         >
@@ -84,15 +80,11 @@ export default function createFaqForm(){
                                 <FormItem>
                                     <FormLabel>Svar</FormLabel>
                                     <FormControl>
-                                        <Input 
-                                            type="textfield"
+                                        <Textarea
                                             placeholder={"Skriv et utfyllende svar på spørsmålet."}
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormDescription>
-                                    Skriv et utfyllende svar på spørsmålet
-                                    </FormDescription>
                                 </FormItem>
                             )} 
                         >
@@ -102,11 +94,14 @@ export default function createFaqForm(){
                             control={form.control}
                             name="bookableItemIds"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Gjelder spørsmålet en spesifik gjenstand?</FormLabel>
+                                <FormItem className="flex flex-col mt-5">
+                                    <FormLabel>Gjelder spørsmålet noen spesifike gjenstander?</FormLabel>
                                     <FormControl>
                                         <BookableItemsSelect field={field} form={form}/>
                                     </FormControl>
+                                    <FormDescription>
+                                        Velg ingen, en, eller flere gjenstander
+                                    </FormDescription>
                                 </FormItem>
                             )} 
                         >

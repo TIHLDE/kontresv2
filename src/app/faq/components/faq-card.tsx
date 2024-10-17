@@ -14,6 +14,8 @@ type FaqCardProps = {
 
 export default async function FaqCard({ description, title,bookableItems, author, group}: FaqCardProps) {
 
+    const descriptionLength = 36;
+
     return (
         <div className="h-full overflow-hidden">
             <Card className="w-100 h-full">
@@ -21,7 +23,9 @@ export default async function FaqCard({ description, title,bookableItems, author
                     <CardTitle className="text-left">{title}</CardTitle>
                 </CardHeader>   
                 <CardContent>
-                    {description}
+                    {description.length > descriptionLength 
+                    ? <>{description.slice(0,descriptionLength)} ...</>
+                    :<> {description} </>}
                 </CardContent>
                 <CardContent className="text-xs text-muted-foreground">
                     {author}, {group}

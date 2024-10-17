@@ -12,9 +12,9 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 
 import { createItem, getItems, invalidateItems } from '@/utils/apis/items';
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 
-import CreateItemForm, { ItemFormValueTypes } from './create-item-form';
+import CreateItemForm, { type ItemFormValueTypes } from './create-item-form';
 import { DataTable } from './data-table';
 import { itemColumns } from './item-columns';
 import { Plus } from 'lucide-react';

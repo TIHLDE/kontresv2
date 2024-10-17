@@ -1,6 +1,6 @@
 import { getCurrentUserData, getUserData } from "../apis/user";
 import { useState } from "react";
-import { User } from "@/types/User";
+import { type User } from "@/types/User";
 
 interface StateType extends Partial<User> {
     loading: boolean;

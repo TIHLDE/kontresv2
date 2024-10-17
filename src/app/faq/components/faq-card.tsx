@@ -1,8 +1,13 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { BookableItem } from "@prisma/client";
-import Link from "next/link"
+import { Badge } from '@/components/ui/badge';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+
+import { BookableItem } from '@prisma/client';
 
 type FaqCardProps = {
     title: string;
@@ -10,36 +15,35 @@ type FaqCardProps = {
     bookableItems: BookableItem[];
     author: string;
     group: string;
-}
+};
 
-export default async function FaqCard({ description, title,bookableItems, author, group}: FaqCardProps) {
-
+export default function FaqCard({
+    description,
+    title,
+    bookableItems,
+    author,
+    group,
+}: FaqCardProps) {
     const descriptionLength = 36;
 
     return (
-        <div className="h-full overflow-hidden">
-            <Card className="w-100 h-full">
-                <CardHeader>
-                    <CardTitle className="text-left">{title}</CardTitle>
-                </CardHeader>   
-                <CardContent>
-                    {description.length > descriptionLength 
-                    ? <>{description.slice(0,descriptionLength)} ...</>
-                    :<> {description} </>}
-                </CardContent>
-                <CardContent className="text-xs text-muted-foreground">
+        <Card className="w-100 h-full flex flex-col">
+            <CardHeader>
+                <CardTitle className="text-left">{title}</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4 h-full">
+                <a className="h-12 line-clamp-2">{description}</a>
+                <span className="text-xs text-muted-foreground ">
                     {author}, {group}
-                </CardContent>
-                <CardContent>
-                {bookableItems.map((item, index) => (
-                    <Link key={index} href={`faq/${""}`}> 
-                    <Badge key={index} className="m-1 ">
+                </span>
+                <span className="mt-auto bottom-5 left-5">
+                    {bookableItems.map((item) => (
+                        <Badge key={item.itemId} className="m-1 ">
                             {item.name}
-                    </Badge>
-                    </Link>   
-                ))}
-                </CardContent>
-            </Card>
-        </div>
+                        </Badge>
+                    ))}
+                </span>
+            </CardContent>
+        </Card>
     );
 }

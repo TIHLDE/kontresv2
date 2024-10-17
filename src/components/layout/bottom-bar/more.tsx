@@ -4,13 +4,13 @@ import { Separator } from '@/components/ui/separator';
 
 
 
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 
 
 
 import { Code } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction } from 'react';
+import { type Dispatch, type SetStateAction } from 'react';
 
 
 interface MoreProps {

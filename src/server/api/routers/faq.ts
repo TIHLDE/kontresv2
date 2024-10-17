@@ -11,13 +11,44 @@ const prisma = new PrismaClient();
 export const faqRouter = createTRPCRouter({
 
     //get all FAQs
-    getAll: publicProcedure.query(async () => {
-        const faqs = await prisma.fAQ.findMany({
+    getAll: publicProcedure
+    .input(z.object({
+        limit: z.number().min(1).max(100).optional(),
+        cursor: z.number().nullish(),
+        direction: z.enum(['forward', 'backward']),
+        filter: z.string().optional(),
+    }))
+    .query(async ({ctx,input}) => {
+        const limit = input.limit ?? 50;
+        const {cursor} = input;
+
+
+        const faqs = await ctx.db.fAQ.findMany({
+            take: limit + 1,
+            cursor: cursor ? {questionId: cursor} : undefined,
+            where: {
+                question: {
+                    contains: input.filter
+                }
+            },
+            orderBy: {
+                questionId: "asc"
+            },
             include: {
-                bookableItems: true
-            }
+                bookableItems: true,
+            } 
         });
-        return faqs
+
+        let nextCursor: typeof cursor | undefined = undefined;
+        if (faqs.length > limit) {
+            const nextItem = faqs.pop();
+            nextCursor = nextItem!.questionId;
+        }
+
+        return {
+            faqs,
+            nextCursor,
+        }
     }),
 
     //get FAQ by id

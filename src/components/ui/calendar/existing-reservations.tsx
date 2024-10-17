@@ -1,4 +1,4 @@
-import { DetailedReservation } from '../../../utils/apis/types';
+import { type DetailedReservation } from '../../../utils/apis/types';
 import ReservationShard from './reservation-shard';
 import {
     add,
@@ -28,9 +28,9 @@ export default function ExistingReservations({
 }: ExistingReservationsProps) {
     let reservationShards = [];
 
-    for (let reservation of reservations) {
+    for (const reservation of reservations) {
         let start = new Date(reservation.start_time);
-        let end = new Date(reservation.end_time);
+        const end = new Date(reservation.end_time);
 
         while (true) {
             if (isSameDay(start, end)) {
@@ -52,7 +52,7 @@ export default function ExistingReservations({
     }
 
     reservationShards = reservationShards.filter((reservation) => {
-        let start = new Date(reservation.reservation!.start_time);
+        const start = new Date(reservation.reservation.start_time);
 
         if (view === 'week') {
             return isSameWeek(start, currentDay, { weekStartsOn: 1 });
@@ -62,7 +62,7 @@ export default function ExistingReservations({
     });
 
     return reservationShards.map((res, index) => {
-        let { start, end, reservation } = res;
+        const { start, end, reservation } = res;
         return (
             <ReservationShard
                 view={view}
@@ -79,7 +79,7 @@ export default function ExistingReservations({
                 key={index}
                 width={100 / 7 + '%'}
                 height={(differenceInMinutes(end, start) * 100) / 1440 + '%'}
-                reservation={reservation!}
+                reservation={reservation}
             />
         );
     });

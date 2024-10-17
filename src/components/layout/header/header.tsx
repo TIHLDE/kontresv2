@@ -1,10 +1,10 @@
-import { User } from '@/types/User';
+import { type User } from '@/types/User';
 
 
 
 import Logo from '@/components/ui/logo';
 
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 
 import HeaderButtonsWrapper from './header-buttons-wrapper';
 import HeaderSkeleton from './header-skeleton';

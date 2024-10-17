@@ -1,6 +1,6 @@
 import styles from './animations.module.css'
 
-import { AnimationHookType, RunType } from "./types"
+import { type AnimationHookType, type RunType } from "./types"
 
 export const usePop: AnimationHookType = () => {
     return { run }

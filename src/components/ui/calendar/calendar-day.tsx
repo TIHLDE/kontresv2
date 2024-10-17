@@ -34,7 +34,7 @@ export default function CalendarDay({
     className,
 }: {
     index: number;
-    className?: String;
+    className?: string;
 }) {
     return (
         <div

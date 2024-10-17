@@ -29,9 +29,9 @@ import {
     invalidateReservations,
     setReservationState,
 } from '@/utils/apis/reservations';
-import { ReservationState } from '@/utils/apis/types';
+import { type ReservationState } from '@/utils/apis/types';
 
-import { StateAtomType, stateAtom } from './ReservationMeta';
+import { type StateAtomType, stateAtom } from './ReservationMeta';
 import { useAtom } from 'jotai';
 import { MoreVertical } from 'lucide-react';
 import { useRouter } from 'next/navigation';

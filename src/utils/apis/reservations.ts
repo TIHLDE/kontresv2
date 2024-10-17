@@ -2,10 +2,10 @@
 
 import { IFetch } from './fetch';
 import {
-    DetailedItem,
-    DetailedReservation,
-    PostReservation,
-    ReservationState,
+    type DetailedItem,
+    type DetailedReservation,
+    type PostReservation,
+    type ReservationState,
     validationTags,
 } from './types';
 import { revalidateTag } from 'next/cache';

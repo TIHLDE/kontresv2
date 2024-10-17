@@ -62,7 +62,7 @@ export default function PossibleBooking({
                                   7 +
                               '%'
                             : '0',
-                    height: dragEnd!.pageY - dragStart!.pageY,
+                    height: dragEnd.pageY - dragStart.pageY,
                     width: view == 'week' ? 100 / 7 + '%' : '100%',
                 }}
             >

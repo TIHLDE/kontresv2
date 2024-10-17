@@ -1,7 +1,7 @@
 'use client';
 
 import { getReservations } from '@/utils/apis/reservations';
-import { DetailedReservation } from '@/utils/apis/types';
+import { type DetailedReservation } from '@/utils/apis/types';
 
 import { DataTable } from '../../app/admin/components/data-table';
 import { reservationColumns } from '../../app/admin/components/reservation-columns';

@@ -1,11 +1,11 @@
 'use client';
 
-import { User } from '@/types/User';
+import { type User } from '@/types/User';
 
 import { Card } from '@/components/ui/card';
 import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
 
-import { BaseGroup, GroupType, ReservationState } from '@/utils/apis/types';
+import { type BaseGroup, GroupType, type ReservationState } from '@/utils/apis/types';
 
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';

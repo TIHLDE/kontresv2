@@ -1,4 +1,4 @@
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 import { getItems } from '../../utils/apis/items';
 import HeaderLink from './header-link';
 

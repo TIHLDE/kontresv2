@@ -14,12 +14,12 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 
 import ItemActions from './item-actions';
 import { HeaderButton } from './reservation-columns';
 import { DialogTitle } from '@radix-ui/react-dialog';
-import { ColumnDef } from '@tanstack/react-table';
+import { type ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, Delete, Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useState } from 'react';
 import { Row } from 'react-day-picker';

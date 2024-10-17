@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, ButtonProps } from '@/components/ui/button';
+import { Button, type ButtonProps } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,

@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@/types/User';
+import { type User } from '@/types/User';
 
 import { Input } from '@/components/ui/input';
 
@@ -9,7 +9,7 @@ import { getUsers } from '@/utils/apis/user';
 import { cn } from '@/lib/utils';
 import { Combobox } from '@headlessui/react';
 import debounce from 'debounce';
-import { ChangeEvent, Fragment, useState } from 'react';
+import { type ChangeEvent, Fragment, useState } from 'react';
 
 export default function UserAutocomplete({ onChange, value, ...rest }: any) {
     const [users, setUsers] = useState<User[]>([]);

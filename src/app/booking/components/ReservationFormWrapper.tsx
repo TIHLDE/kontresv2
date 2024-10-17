@@ -1,4 +1,4 @@
-import { User } from '@/types/User';
+import { type User } from '@/types/User';
 
 import { getGroupMemberships } from '@/utils/apis/groups';
 import { getItems } from '@/utils/apis/items';

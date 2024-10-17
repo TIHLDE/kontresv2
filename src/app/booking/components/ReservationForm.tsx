@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@/types/User';
+import { type User } from '@/types/User';
 
 import {
     AlertDialogAction,
@@ -9,16 +9,16 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/components/ui/use-toast';
 
-import { ErrorType } from '@/utils/apis/fetch';
+import { type ErrorType } from '@/utils/apis/fetch';
 import {
     createReservation,
     invalidateReservations,
 } from '@/utils/apis/reservations';
-import { DetailedItem, Membership } from '@/utils/apis/types';
+import { type DetailedItem, type Membership } from '@/utils/apis/types';
 
 import {
     ReservationFormFields,
-    ReservationFormValueTypes,
+    type ReservationFormValueTypes,
 } from '@/app/booking/components/ReservationFormFields';
 import { parse } from 'date-fns';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -102,11 +102,11 @@ const ReservationForm = ({ items, groups, user }: EventFormType) => {
                 : values?.application_on_behalf;
         // Use the values stored in the state hook
         createReservation({
-            bookable_item: values?.item as string,
-            description: values?.description as string,
-            start_time: values?.from.toISOString() as string,
-            end_time: values?.to.toISOString() as string,
-            group: group as string,
+            bookable_item: values?.item!,
+            description: values?.description!,
+            start_time: values?.from.toISOString()!,
+            end_time: values?.to.toISOString()!,
+            group: group!,
             serves_alcohol: values?.serves_alcohol,
             sober_watch: values?.sober_watch_id,
         })

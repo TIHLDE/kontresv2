@@ -28,9 +28,9 @@ import { Form } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 
 import { deleteItem, invalidateItems, updateItem } from '@/utils/apis/items';
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 
-import CreateItemForm, { ItemFormValueTypes } from './create-item-form';
+import CreateItemForm, { type ItemFormValueTypes } from './create-item-form';
 import { MoreHorizontal, Trash } from 'lucide-react';
 import { resolve } from 'path';
 import { useState } from 'react';

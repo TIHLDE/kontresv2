@@ -2,7 +2,7 @@
 
 import { revalidateTag } from "next/cache";
 import { IFetch } from "./fetch";
-import { DetailedItem, validationTags } from "./types";
+import { type DetailedItem, validationTags } from "./types";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? '';
 

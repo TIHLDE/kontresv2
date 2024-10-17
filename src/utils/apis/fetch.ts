@@ -16,7 +16,7 @@ export interface ErrorType {
 
 export const IFetch = <T extends unknown>({ url, config }: IFetchProps) => {
     let headers: HeadersInit = {};
-    headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value as string;
+    headers[TOKEN_HEADER_NAME] = cookies().get(ACCESS_TOKEN)?.value!;
     headers = {
         ...headers,
         ...config?.headers,

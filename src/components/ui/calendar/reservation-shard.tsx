@@ -1,6 +1,6 @@
 'use client';
 
-import { DetailedReservation } from '../../../utils/apis/types';
+import { type DetailedReservation } from '../../../utils/apis/types';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { motion } from 'framer-motion';
@@ -12,7 +12,7 @@ function hexColorFromUUID(uuid: string) {
     for (let i = 0; i < uuid.length; i++) {
         hash = uuid.charCodeAt(i) + ((hash << 5) - hash);
     }
-    let c = (hash & 0x00ffffff).toString(16).toUpperCase();
+    const c = (hash & 0x00ffffff).toString(16).toUpperCase();
     return '#' + '00000'.substring(0, 6 - c.length) + c;
 }
 

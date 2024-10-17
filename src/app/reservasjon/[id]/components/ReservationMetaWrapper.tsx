@@ -1,7 +1,7 @@
-import { Card } from '@/components/ui/card';
+import { type Card } from '@/components/ui/card';
 
 import { getReservation } from '@/utils/apis/reservations';
-import { BaseGroup } from '@/utils/apis/types';
+import { type BaseGroup } from '@/utils/apis/types';
 
 import ReservationMeta from './ReservationMeta';
 
@@ -20,7 +20,7 @@ const ReservationMetaWrapper = async ({
         <ReservationMeta
             from={from.toISOString()}
             to={to.toISOString()}
-            group={reservation.group_detail as BaseGroup}
+            group={reservation.group_detail!}
             state={reservation.state}
             user={reservation.author_detail}
             soberWatch={reservation.sober_watch}

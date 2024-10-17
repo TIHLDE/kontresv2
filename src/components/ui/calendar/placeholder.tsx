@@ -15,7 +15,7 @@ export default function PossiblePlaceholder({
 }) {
     if (mousePosition == null || dragStart == null) return null;
 
-    const height = mousePosition!.pageY - dragStart!.pageY;
+    const height = mousePosition.pageY - dragStart.pageY;
     return (
         mousePosition &&
         dragStart &&

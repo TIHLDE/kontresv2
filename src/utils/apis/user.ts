@@ -3,10 +3,10 @@
 import { ACCESS_TOKEN } from '../../../constants';
 import { IFetch } from './fetch';
 import {
-    PaginationResponse,
-    PermissionApp,
-    User,
-    UserPermissions,
+    type PaginationResponse,
+    type PermissionApp,
+    type User,
+    type UserPermissions,
 } from './types';
 import { cookies } from 'next/headers';
 

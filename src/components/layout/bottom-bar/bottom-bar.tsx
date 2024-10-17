@@ -1,10 +1,10 @@
 'use client';
 
-import { User } from '@/types/User';
+import { type User } from '@/types/User';
 
 
 
-import { DetailedItem } from '@/utils/apis/types';
+import { type DetailedItem } from '@/utils/apis/types';
 
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
@@ -13,7 +13,7 @@ import More from './more';
 import Profile from './profile';
 import { cn } from '@/lib/utils';
 import {
-    HTMLMotionProps,
+    type HTMLMotionProps,
     motion,
     useAnimate,
     useScroll,
@@ -62,7 +62,7 @@ const BottomBar = ({
     useEffect(() => {
         // Conditionally animate the bottom bar based on the path
         let narrow = false;
-        let calendarPath = new RegExp(
+        const calendarPath = new RegExp(
             '^/calendar/[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$',
         );
         narrow = narrow || calendarPath.test(path);

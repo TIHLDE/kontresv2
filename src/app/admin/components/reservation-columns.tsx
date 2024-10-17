@@ -1,12 +1,12 @@
 'use client';
 
-import { Button, ButtonProps } from '@/components/ui/button';
+import { Button, type ButtonProps } from '@/components/ui/button';
 
-import { DetailedReservation } from '@/utils/apis/types';
+import { type DetailedReservation } from '@/utils/apis/types';
 import { cn } from '@/utils/cn';
 
 import { stateMap } from '@/app/reservasjon/[id]/components/ReservationMeta';
-import { ColumnDef } from '@tanstack/react-table';
+import { type ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { ArrowUpDown } from 'lucide-react';

@@ -17,13 +17,12 @@ export const faqRouter = createTRPCRouter({
         direction: z.enum(['forward', 'backward']),
         filter: z.string().optional(),
     }))
-    .query(async (options) => {
-        const { input } = options;
+    .query(async ({ctx,input}) => {
         const limit = input.limit ?? 50;
         const {cursor} = input;
 
 
-        const faqs = await prisma.fAQ.findMany({
+        const faqs = await ctx.db.fAQ.findMany({
             take: limit + 1,
             cursor: cursor ? {questionId: cursor} : undefined,
             where: {

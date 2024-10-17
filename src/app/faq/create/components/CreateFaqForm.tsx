@@ -60,6 +60,12 @@ export default function createFaqForm() {
             });
         } catch (error) {
             console.error(error);
+            toast({
+                variant: 'destructive',
+                description: 'Noe gikk galt:(',
+                duration: 6000,
+            });
+            return;
         }
         toast({
             description: '🎉Innlegget er opprettet🎉',

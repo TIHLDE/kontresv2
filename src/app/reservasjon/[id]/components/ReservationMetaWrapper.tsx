@@ -20,7 +20,7 @@ const ReservationMetaWrapper = async ({
         <ReservationMeta
             from={from.toISOString()}
             to={to.toISOString()}
-            group={reservation.group_detail as BaseGroup}
+            group={reservation.group_detail!}
             state={reservation.state}
             user={reservation.author_detail}
             soberWatch={reservation.sober_watch}

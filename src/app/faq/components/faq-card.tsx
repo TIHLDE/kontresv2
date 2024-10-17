@@ -12,16 +12,20 @@ type FaqCardProps = {
 
 export default function FaqCard({ description, title,bookableItems, author, group}: FaqCardProps) {
 
+    const descriptionLength = 36;
+
     return (
-        <Card className="w-100 h-full flex flex-col">
-            <CardHeader>
-                <CardTitle className="text-left">{title}</CardTitle>
-            </CardHeader>   
-            <CardContent className="flex flex-col gap-4 h-full">
-                <a className="h-12 line-clamp-2">
-                    {description}   
-                </a>
-                <span className="text-xs text-muted-foreground ">
+        <div className="h-full overflow-hidden">
+            <Card className="w-100 h-full">
+                <CardHeader>
+                    <CardTitle className="text-left">{title}</CardTitle>
+                </CardHeader>   
+                <CardContent>
+                    {description.length > descriptionLength 
+                    ? <>{description.slice(0,descriptionLength)} ...</>
+                    :<> {description} </>}
+                </CardContent>
+                <CardContent className="text-xs text-muted-foreground">
                     {author}, {group}
                 </span>
                 <span className="mt-auto bottom-5 left-5">

@@ -9,19 +9,27 @@ import {
     FormField,
     FormItem,
     FormLabel,
+    FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { ToastAction } from '@/components/ui/toast';
+import { useToast } from '@/components/ui/use-toast';
 
 import BookableItemsSelect from './bookableItemsSelect';
 import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 const formSchema = z.object({
-    question: z.string(),
-    answer: z.string(),
+    question: z.string().min(1, {
+        message: 'Du må legge inn et spørsmål',
+    }),
+    answer: z.string().min(1, {
+        message: 'Legg inn et svar på spørsmålet',
+    }),
     bookableItemIds: z.array(z.number()),
 });
 
@@ -29,6 +37,8 @@ export type FaqFormValueTypes = z.infer<typeof formSchema>;
 
 export default function createFaqForm() {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
+
+    const { toast } = useToast();
 
     const form = useForm<FaqFormValueTypes>({
         resolver: zodResolver(formSchema),
@@ -40,20 +50,29 @@ export default function createFaqForm() {
     });
 
     async function onSubmit(formData: FaqFormValueTypes) {
-        console.log('Bookable Item ids', formData.bookableItemIds);
         try {
             await createFaq({
                 question: formData.question,
                 answer: formData.answer,
                 group: 'KOK',
                 author: 'Daniel',
-                bookableItemIds: formData.bookableItemIds.map((i) =>
-                    parseInt(i),
-                ),
+                bookableItemIds: formData.bookableItemIds,
             });
         } catch (error) {
             console.error(error);
         }
+        toast({
+            description: '🎉Innlegget er opprettet🎉',
+            duration: 5000,
+            action: (
+                <ToastAction altText="Til FAQ-siden" className="border-black">
+                    <Link href={`/faq`} onClick={() => toast}>
+                        Til FAQ-siden{' '}
+                    </Link>
+                </ToastAction>
+            ),
+        });
+        form.reset();
     }
 
     return (
@@ -74,6 +93,7 @@ export default function createFaqForm() {
                                     {...field}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 ></FormField>
@@ -92,6 +112,7 @@ export default function createFaqForm() {
                                     {...field}
                                 />
                             </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 ></FormField>

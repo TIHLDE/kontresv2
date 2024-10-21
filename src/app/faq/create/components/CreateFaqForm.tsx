@@ -17,8 +17,10 @@ import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 
 import BookableItemsSelect from './bookableItemsSelect';
+import { CACHE_TAGS } from '@/lib/cacheTags';
 import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -35,8 +37,9 @@ const formSchema = z.object({
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
 
-export default function createFaqForm() {
+export default function CreateFaqForm() {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
+    const queryClient = useQueryClient();
 
     const { toast } = useToast();
 
@@ -54,16 +57,28 @@ export default function createFaqForm() {
             await createFaq({
                 question: formData.question,
                 answer: formData.answer,
-                group: 'KOK',
-                author: 'Daniel',
                 bookableItemIds: formData.bookableItemIds,
-            });
+                author: 'admin',
+                group: 'index',
+                groupId: '1',
+            })
+                .then(async () => {
+                    await queryClient.invalidateQueries({
+                        queryKey: [CACHE_TAGS.FAQS],
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    toast({
+                        variant: 'destructive',
+                        description: 'Noe gikk galt:(',
+                    });
+                });
         } catch (error) {
             console.error(error);
             toast({
                 variant: 'destructive',
                 description: 'Noe gikk galt:(',
-                duration: 6000,
             });
             return;
         }

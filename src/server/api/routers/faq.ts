@@ -1,18 +1,17 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc';
-
-import BookableItems from '@/components/ui/bookable-items';
+import {
+    createTRPCRouter,
+    groupLeaderProcedure,
+    memberProcedure,
+} from '@/server/api/trpc';
 
 import { PrismaClient } from '@prisma/client';
-import { BookableItem } from '@prisma/client';
-import { group } from 'console';
-import { get } from 'http';
 import { z } from 'zod';
 
 const prisma = new PrismaClient();
 
 export const faqRouter = createTRPCRouter({
     //get all FAQs
-    getAll: publicProcedure
+    getAll: memberProcedure
         .input(
             z.object({
                 limit: z.number().min(1).max(100).optional(),
@@ -56,7 +55,7 @@ export const faqRouter = createTRPCRouter({
         }),
 
     //get FAQ by id
-    getById: publicProcedure
+    getById: memberProcedure
         .input(
             z.object({
                 questionId: z.number(),
@@ -80,7 +79,7 @@ export const faqRouter = createTRPCRouter({
         }),
 
     //create new question
-    create: publicProcedure
+    create: groupLeaderProcedure
         .input(
             z.object({
                 question: z.string(),

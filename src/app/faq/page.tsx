@@ -22,6 +22,7 @@ export default function page() {
 
     return (
         <div className="max-w-page mx-auto min-h-screen flex flex-col gap-5 w-full">
+            <div className='flex justify-between'>
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl w-fit">
                 FAQ
             </h1>
@@ -31,6 +32,7 @@ export default function page() {
                     Opprett ny
                 </Button>
             </Link>
+            </div>
             {hasNextPage}
             <div className="grid md:grid-cols-3 grid-cols-1 gap-5">
                 {data?.pages.map((page) =>

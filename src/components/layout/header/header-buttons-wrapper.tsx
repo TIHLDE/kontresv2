@@ -1,5 +1,4 @@
 import { getItems } from '@/utils/apis/items';
-import { AdminPermissions, type DetailedItem } from '@/utils/apis/types';
 import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
 
 import BookableItems from '../../ui/bookable-items';
@@ -15,7 +14,6 @@ const HeaderButtonsWrapper = async ({
 }: React.HTMLProps<HTMLDivElement>) => {
     const session = await auth();
 
-    console.log(session);
     return (
         <div
             {...props}

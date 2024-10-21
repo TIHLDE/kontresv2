@@ -27,14 +27,14 @@ export default function FaqCard({
     const descriptionLength = 36;
 
     return (
-        <div className="h-full overflow-hidden">
+        <div className="h-full">
             {' '}
             <Card className="w-100 h-full">
                 {' '}
                 <CardHeader>
                     <CardTitle className="text-left">{title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className=" line-clamp-2">
                     {description.length > descriptionLength ? (
                         <>{description.slice(0, descriptionLength)} ...</>
                     ) : (

@@ -1,9 +1,8 @@
+import { faqRouter } from '@/server/api/routers/faq';
 import { postRouter } from '@/server/api/routers/post';
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
 
-import { authTesterRouter } from './routers/auth-tester';
-import { itemRouter } from './routers/itemRouter';
-import { reservationRouter } from './routers/reservationRouter';
+import { bookableItemRouter } from './routers/bookableItem';
 
 /**
  * This is the primary router for your server.
@@ -12,9 +11,8 @@ import { reservationRouter } from './routers/reservationRouter';
  */
 export const appRouter = createTRPCRouter({
     post: postRouter,
-    authTester: authTesterRouter,
-    item: itemRouter,
-    reservation: reservationRouter,
+    faq: faqRouter,
+    bookableItem: bookableItemRouter,
 });
 
 // export type definition of API

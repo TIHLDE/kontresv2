@@ -1,7 +1,8 @@
-// import { getItems } from '@/utils/apis/items';
-// import { AdminPermissions, type DetailedItem } from '@/utils/apis/types';
-// import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
-// import BookableItems from '../../ui/bookable-items';
+import { getItems } from '@/utils/apis/items';
+import { AdminPermissions, type DetailedItem } from '@/utils/apis/types';
+import { checkUserPermissions, getCurrentUserData } from '@/utils/apis/user';
+
+import BookableItems from '../../ui/bookable-items';
 import HeaderLink from '../../ui/header-link';
 import Logo from '../../ui/logo';
 import { UserArea } from '../user-area';
@@ -29,6 +30,7 @@ const HeaderButtonsWrapper = async ({
                 </HeaderLink>
                 {/* <BookableItems className="flex gap-6" items={items} /> */}
                 <HeaderLink href="/booking">Booking</HeaderLink>
+                <HeaderLink href="/faq">FAQ</HeaderLink>
             </nav>
 
             {session?.user ? (

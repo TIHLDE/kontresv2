@@ -1,7 +1,7 @@
 /**
  * Url to backend
  */
-export const TIHLDE_API_URL = process.env.NEXT_PUBLIC_API_URL ?? '';
+export const TIHLDE_API_URL = process.env.LEPTON_API_URL ?? '';
 /**
  * Name of auth-token which is sent to backend to authenticate the user
  */

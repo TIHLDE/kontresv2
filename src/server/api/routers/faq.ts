@@ -41,6 +41,8 @@ export const faqRouter = createTRPCRouter({
                 },
             });
 
+            console.log(faqs);
+
             let nextCursor: typeof cursor | undefined = undefined;
             if (faqs.length > limit) {
                 const nextItem = faqs.pop();

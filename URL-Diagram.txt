@@ -1,0 +1,15 @@
+/ - Home page
+
+/login - login to account
+
+/admin
+    /[groupSlug] - Se oversikt over gruppens gjenstander som kan
+        /[bookableItemSlug] - Se alle reservasjoner for gjenstanden
+
+/booking - Liste over alle gjenstander som kan bookes
+    /[bookableItemSlug] - Får opp en oversikt over når gjenstanden er ledig
+        /new - Lag en ny booking
+
+/reservation/[reservationUUID] - Se detaljer på en reservasjon / evt endre detaljer
+
+/me - Brukeren kan se sine reservasjoner

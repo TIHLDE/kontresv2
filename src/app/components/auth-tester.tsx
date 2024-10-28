@@ -4,8 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
-
-
 import { api } from '@/trpc/react';
 import { signIn, useSession } from 'next-auth/react';
 
@@ -16,6 +14,8 @@ export default function AuthTester() {
         api.authTester.adminTest.useQuery();
     const { data: memberData, isSuccess: memberSuccess } =
         api.authTester.memberTest.useQuery();
+    const { data: groupLeaderData, isSuccess: groupLeaderSuccess } =
+        api.authTester.groupLeaderTest.useQuery({ groupId: 'index' });
 
     return (
         <>
@@ -61,6 +61,22 @@ export default function AuthTester() {
                             Successfully fetched member data
                         </p>
                         <pre>{JSON.stringify(memberData, null, 4)}</pre>
+                    </>
+                )}
+            </Card>
+            <Card className="p-5 my-5">
+                <h1>Group Leader Data</h1>
+                {!groupLeaderSuccess && (
+                    <p className="text-red-500">
+                        Failed to fetch group leader data
+                    </p>
+                )}
+                {groupLeaderSuccess && (
+                    <>
+                        <p className="text-green-500">
+                            Successfully fetched group leader data
+                        </p>
+                        <pre>{JSON.stringify(groupLeaderData, null, 4)}</pre>
                     </>
                 )}
             </Card>

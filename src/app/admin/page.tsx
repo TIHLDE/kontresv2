@@ -1,17 +1,17 @@
-import { Card } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+// import { Card } from '@/components/ui/card';
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import ItemsList from './components/items-list';
-import ItemsListSkeleton from './components/items-list-skeleton';
-import ReservationTableSkeleton from './components/reservation-table-skeleton';
-import ReservationsList from './components/reservations-list';
-import { Suspense } from 'react';
+// import ItemsList from './components/items-list';
+// import ItemsListSkeleton from './components/items-list-skeleton';
+// import ReservationTableSkeleton from './components/reservation-table-skeleton';
+// import ReservationsList from './components/reservations-list';
+// import { Suspense } from 'react';
 
 const Admin = async () => {
     // Get the user
     return (
         <div className="max-w-page mx-auto min-h-screen md:w-full">
-            <Card>
+            {/* <Card>
                 <div className="w-full p-3">
                     <Tabs defaultValue="reservations" className="w-full">
                         <TabsList className="w-full [&>*]:w-full">
@@ -36,7 +36,7 @@ const Admin = async () => {
                         </TabsContent>
                     </Tabs>
                 </div>
-            </Card>
+            </Card> */}
         </div>
     );
 };

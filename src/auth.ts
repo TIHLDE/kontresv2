@@ -1,9 +1,14 @@
-import { type MembershipResponse, getTIHLDEMemberships } from './server/services/lepton/get-memberships';
-import { type TIHLDEUser, getTIHLDEUser } from './server/services/lepton/get-user';
+import {
+    type MembershipResponse,
+    getTIHLDEMemberships,
+} from './server/services/lepton/get-memberships';
+import {
+    type TIHLDEUser,
+    getTIHLDEUser,
+} from './server/services/lepton/get-user';
 import { loginToTIHLDE } from './server/services/lepton/login';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-
 
 type UserRole = 'ADMIN' | 'MEMBER';
 type UserData = {
@@ -25,7 +30,7 @@ declare module 'next-auth' {
     type AdapterUser = object;
 
     interface Session {
-        user: SessionUserData;
+        user: UserData;
     }
 }
 
@@ -102,27 +107,38 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }),
     ],
     callbacks: {
-        async jwt({ user, token }) {
+        async jwt({ token, user }) {
             if (user) {
-                // MemberCacheValidation.set(
-                //     user.id!,
-                //     new Date(Date.now() + 30 * 60 * 1000),
-                // );
                 token.user = user;
+                return token;
             }
 
-            // const cacheValidation = MemberCacheValidation.get(user.id!);
-            // if (!cacheValidation || cacheValidation.getTime() < Date.now()) {
-            //     const [memberships, user] = await Promise.all([
-            //         getTIHLDEMemberships(token),
-            //         getTIHLDEUser(token, credentials.username),
-            //     ]);
+            const [memberships, userObject] = await Promise.all([
+                getTIHLDEMemberships((token.user as UserData).TIHLDE_Token),
+                getTIHLDEUser(
+                    (token.user as UserData).TIHLDE_Token,
+                    (token.user as UserData).id,
+                ),
+            ]);
 
-            //     const TIHLDEInfo = getTIHLDEUserInfo(user, memberships);
-            // }
+            const TIHLDEInfo = getTIHLDEUserInfo(userObject, memberships);
+            if (!TIHLDEInfo.isMember) {
+                console.log('No longer a member of TIHLDE, logging out');
+                return null;
+            }
 
-            //TODO: revalidate memberships
-            // const memberships = await getTIHLDEMemberships(token.user.TIHLDE_Token);
+            const userData = {
+                id: userObject.user_id,
+                firstName: userObject.first_name,
+                lastName: userObject.last_name,
+                profilePicture: userObject.image ?? '',
+                role: TIHLDEInfo.isAdmin ? 'ADMIN' : 'MEMBER',
+                groups: TIHLDEInfo.groups,
+                leaderOf: TIHLDEInfo.leaderOf,
+                TIHLDE_Token: (token.user as UserData).TIHLDE_Token,
+            };
+
+            token.user = userData;
 
             return token;
         },
@@ -130,12 +146,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // @ts-expect-error Session is not in the correct format
         session({ session, token }) {
             const sessionData: {
-                user: SessionUserData;
+                user: UserData;
             } = session as never;
 
-            sessionData.user = token.user as SessionUserData;
-            // @ts-expect-error TIHLDE_Token is not in SessionUserData
-            delete sessionData.user.TIHLDE_Token;
+            sessionData.user = token.user as UserData;
 
             return sessionData;
         },
@@ -174,7 +188,3 @@ export function getTIHLDEUserInfo(
         ),
     };
 }
-
-// export function getTIHLDEMemberLeaderInfo(
-//     memberships: MembershipResponse | null,
-// ) {}

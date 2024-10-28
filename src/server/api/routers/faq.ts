@@ -1,10 +1,10 @@
-import { createTRPCRouter, memberProcedure } from '@/server/api/trpc';
-
-import BookableItems from '@/components/ui/bookable-items';
+import {
+    createTRPCRouter,
+    groupLeaderProcedure,
+    memberProcedure,
+} from '@/server/api/trpc';
 
 import { PrismaClient } from '@prisma/client';
-import { group } from 'console';
-import { get } from 'http';
 import { z } from 'zod';
 
 const prisma = new PrismaClient();
@@ -20,12 +20,11 @@ export const faqRouter = createTRPCRouter({
                 filter: z.string().optional(),
             }),
         )
-        .query(async (options) => {
-            const { input } = options;
+        .query(async ({ ctx, input }) => {
             const limit = input.limit ?? 50;
             const { cursor } = input;
 
-            const faqs = await prisma.fAQ.findMany({
+            const faqs = await ctx.db.fAQ.findMany({
                 take: limit + 1,
                 cursor: cursor ? { questionId: cursor } : undefined,
                 where: {
@@ -78,14 +77,14 @@ export const faqRouter = createTRPCRouter({
         }),
 
     //create new question
-    create: memberProcedure
+    create: groupLeaderProcedure
         .input(
             z.object({
                 question: z.string(),
                 answer: z.string(),
                 group: z.string(),
                 author: z.string(),
-                bookableItemId: z.number(),
+                bookableItemIds: z.array(z.number()),
             }),
         )
         .mutation(async ({ input }) => {
@@ -94,7 +93,11 @@ export const faqRouter = createTRPCRouter({
                     question: input.question,
                     answer: input.answer,
                     group: input.group,
-
+                    bookableItems: {
+                        connect: input.bookableItemIds.map((id) => ({
+                            itemId: id,
+                        })),
+                    },
                     author: input.author,
                 },
             });

@@ -2,12 +2,8 @@
 
 import { cn } from '@/lib/utils';
 import * as SelectPrimitive from '@radix-ui/react-select';
-import {
-    type SelectContentProps,
-    type SelectProps,
-    type SelectTriggerProps,
-} from '@radix-ui/react-select';
 import { Check, ChevronDown, ChevronUp } from 'lucide-react';
+import * as React from 'react';
 
 const Select = SelectPrimitive.Root;
 
@@ -161,82 +157,3 @@ export {
     SelectScrollUpButton,
     SelectScrollDownButton,
 };
-
-export type SelectGroupType = {
-    label: string;
-    options: SelectOptionType[];
-};
-
-export type SelectOptionType = {
-    label: string;
-    value: string;
-};
-
-export type Props = {
-    placeholder: string;
-    options: (SelectOptionType | SelectGroupType)[];
-} & SelectProps &
-    SelectTriggerProps &
-    SelectContentProps;
-
-function isSelectOptionType(
-    option: SelectOptionType | SelectGroupType,
-): option is SelectOptionType {
-    return 'value' in option;
-}
-
-export default function AutoSelect(props: Props) {
-    const {
-        placeholder,
-        options,
-        position,
-        side,
-        sideOffset,
-        align,
-        alignOffset,
-        collisionPadding,
-        ...rest
-    } = props;
-
-    const contentProps = {
-        position,
-        side,
-        sideOffset,
-        align,
-        alignOffset,
-        collisionPadding,
-    };
-
-    return (
-        <Select {...rest}>
-            <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent
-                className="rounded-md border border-accent-100 bg-background p-1.5"
-                {...contentProps}
-            >
-                {options.map((option, index) => {
-                    if (isSelectOptionType(option)) {
-                        return (
-                            <SelectItem key={index} value={option.value}>
-                                {option.label}
-                            </SelectItem>
-                        );
-                    }
-
-                    return (
-                        <SelectGroup key={index}>
-                            <SelectLabel>{option.label}</SelectLabel>
-                            {option.options.map((option, index) => (
-                                <SelectItem key={index} value={option.value}>
-                                    {option.label}
-                                </SelectItem>
-                            ))}
-                        </SelectGroup>
-                    );
-                })}
-            </SelectContent>
-        </Select>
-    );
-}

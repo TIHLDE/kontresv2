@@ -1,3 +1,4 @@
+import { faqRouter } from '@/server/api/routers/faq';
 import { postRouter } from '@/server/api/routers/post';
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
 

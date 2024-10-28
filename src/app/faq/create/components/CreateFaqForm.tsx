@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { DropdownMenu } from '@/components/ui/dropdown-menu';
 import {
     Form,
     FormControl,
@@ -24,6 +23,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { useSession } from 'next-auth/react';
+import GroupSelect from './groupSelect';
 
 const formSchema = z.object({
     question: z.string().min(1, {
@@ -33,6 +34,7 @@ const formSchema = z.object({
         message: 'Legg inn et svar på spørsmålet',
     }),
     bookableItemIds: z.array(z.number()),
+    group: z.string()
 });
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
@@ -41,7 +43,11 @@ export default function CreateFaqForm() {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
     const queryClient = useQueryClient();
 
+    const { data: session } = useSession();
+
     const { toast } = useToast();
+
+    const groups = session?.user.groups
 
     const form = useForm<FaqFormValueTypes>({
         resolver: zodResolver(formSchema),
@@ -49,6 +55,7 @@ export default function CreateFaqForm() {
             question: '',
             answer: '',
             bookableItemIds: [],
+            group: groups ? groups[0] : ""
         },
     });
 
@@ -58,8 +65,8 @@ export default function CreateFaqForm() {
                 question: formData.question,
                 answer: formData.answer,
                 bookableItemIds: formData.bookableItemIds,
-                author: 'admin',
-                group: 'index',
+                author: session?.user?.firstName + " " + session?.user?.lastName,
+                group: formData.group,
                 groupId: '1',
             })
                 .then(async () => {
@@ -158,6 +165,24 @@ export default function CreateFaqForm() {
                         </FormItem>
                     )}
                 ></FormField>
+
+               { (groups ? groups.length>1 : false) &&
+                <FormField
+                    control={form.control}
+                    name="group"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col mt-5">
+                            <FormLabel>
+                                Hvilke grupper gjelder dette spørsmålet?
+                            </FormLabel>
+                            <FormControl>
+                                <GroupSelect
+                                    field={field}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                ></FormField>}
 
                 <Button type="submit">Opprett</Button>
             </form>

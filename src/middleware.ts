@@ -1,25 +1,35 @@
-import { checkUserAuth, getUserData } from '@/utils/apis/user';
+import { auth } from '@/auth';
+import { NextResponse } from 'next/server';
 
-import { type NextRequest, NextResponse } from 'next/server';
+export const middleware = auth((req) => {
+    if (!req.auth) {
+        const url = new URL('/login', req.nextUrl.origin);
+        url.searchParams.set('redirect', req.nextUrl.pathname);
 
-export async function middleware(req: NextRequest) {
-    const isAuthenticated = await checkUserAuth();
-    if (!isAuthenticated) {
-        return NextResponse.redirect(new URL('/login', req.url));
+        return NextResponse.redirect(url);
     }
 
-    return NextResponse.next();
-}
+    if (
+        req.auth.user.role !== 'ADMIN' &&
+        req.nextUrl.pathname.startsWith('/admin')
+    )
+        return NextResponse.redirect(new URL('/', req.nextUrl.origin));
+
+    return;
+});
 
 export const config = {
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - /login
-     */
-    matcher:
-        '/((?!api|login|_next/static|_next/image|_next|.*\\..*|favicon.ico).*)',
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - trpc (tRPC routes)
+         * - login (login page)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         * - $ (root path)
+         */
+        '/((?!api|trpc|login|_next/static|_next/image|favicon.ico|$).*)',
+    ],
 };

@@ -25,6 +25,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSession } from 'next-auth/react';
 import GroupSelect from './groupSelect';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
     question: z.string().min(1, {
@@ -33,16 +34,23 @@ const formSchema = z.object({
     answer: z.string().min(1, {
         message: 'Legg inn et svar på spørsmålet',
     }),
-    bookableItemIds: z.array(z.number()),
-    group: z.string()
+    bookableItemIds: z.array(z.number()).optional(),
+    group: z.string().optional()
 });
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
 
 export default function CreateFaqForm() {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
+    const { mutateAsync: updateFaq } = api.faq.update.useMutation();
     const queryClient = useQueryClient();
 
+    const {data: updateQuestion, isLoading} = 
+        api.faq.getById.useQuery({
+            questionId: 37
+    });
+
+    console.log(updateQuestion)
     const { data: session } = useSession();
 
     const { toast } = useToast();
@@ -55,13 +63,46 @@ export default function CreateFaqForm() {
             question: '',
             answer: '',
             bookableItemIds: [],
-            group: groups ? groups[0] : ""
+            group: (groups ? groups[0] : "")
         },
     });
 
+    useEffect(()=>{
+        if (updateQuestion && !isLoading){
+            form.reset({
+                question: updateQuestion?.question || '',
+                answer: updateQuestion?.answer || '',
+                bookableItemIds: updateQuestion?.bookableItems || [],
+                group: updateQuestion || (groups ? groups[0] : "")
+            })
+        }
+    }, [updateQuestion, isLoading])
+
     async function onSubmit(formData: FaqFormValueTypes) {
         try {
-            await createFaq({
+            true 
+            ? await updateFaq({
+                questionId: 37,//få id fra url
+                question: formData.question,
+                answer: formData.answer,
+                bookableItemIds: formData.bookableItemIds,
+                author: session?.user?.firstName + " " + session?.user?.lastName,
+                group: formData.group,
+                groupId: '1',
+            })
+                .then(async () => {
+                    await queryClient.invalidateQueries({
+                        queryKey: [CACHE_TAGS.FAQS],
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    toast({
+                        variant: 'destructive',
+                        description: 'Noe gikk galt:(',
+                    });
+            })
+            : await createFaq({
                 question: formData.question,
                 answer: formData.answer,
                 bookableItemIds: formData.bookableItemIds,
@@ -101,6 +142,10 @@ export default function CreateFaqForm() {
             ),
         });
         form.reset();
+    }
+
+    if (isLoading){
+        return(<></>)
     }
 
     return (

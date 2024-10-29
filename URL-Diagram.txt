@@ -7,8 +7,9 @@
         /[bookableItemSlug] - Se alle reservasjoner for gjenstanden
 
 /booking - Liste over alle gjenstander som kan bookes
-    /[bookableItemSlug] - Får opp en oversikt over når gjenstanden er ledig
-        /new - Lag en ny booking
+    /[groupSlug] - Se alle gjenstander som kan bookes fra en gruppe
+        /[bookableItemSlug] - Får opp en oversikt over når gjenstanden er ledig
+            /new - Lag en ny booking
 
 /reservation/[reservationUUID] - Se detaljer på en reservasjon / evt endre detaljer
 

@@ -25,7 +25,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSession } from 'next-auth/react';
 import GroupSelect from './groupSelect';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const formSchema = z.object({
     question: z.string().min(1, {
@@ -40,17 +40,20 @@ const formSchema = z.object({
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
 
-export default function CreateFaqForm() {
+export default function CreateFaqForm(params?: {questionId?: string}) {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
     const { mutateAsync: updateFaq } = api.faq.update.useMutation();
     const queryClient = useQueryClient();
 
+    //const [updateQuestion, setUpdateQuestion] = useState(undefined);
+
+
     const {data: updateQuestion, isLoading} = 
         api.faq.getById.useQuery({
-            questionId: 37
+            questionId: parseInt(params?.questionId)
     });
 
-    console.log(updateQuestion)
+
     const { data: session } = useSession();
 
     const { toast } = useToast();
@@ -67,30 +70,42 @@ export default function CreateFaqForm() {
         },
     });
 
-    useEffect(()=>{
+    useEffect(()=> {
         if (updateQuestion && !isLoading){
             form.reset({
                 question: updateQuestion?.question || '',
                 answer: updateQuestion?.answer || '',
-                bookableItemIds: updateQuestion?.bookableItems || [],
-                group: updateQuestion || (groups ? groups[0] : "")
+                bookableItemIds: updateQuestion.bookableItems? updateQuestion?.bookableItems.map((item)=>item.itemId) : [],
+                group: updateQuestion?.group || (groups ? groups[0] : "")
             })
         }
     }, [updateQuestion, isLoading])
 
     async function onSubmit(formData: FaqFormValueTypes) {
         try {
-            true 
+            params?.questionId 
             ? await updateFaq({
-                questionId: 37,//få id fra url
+                questionId: parseInt(params?.questionId),
                 question: formData.question,
                 answer: formData.answer,
                 bookableItemIds: formData.bookableItemIds,
                 author: session?.user?.firstName + " " + session?.user?.lastName,
-                group: formData.group,
+                group: formData.group || session?.user.leaderOf[0],
                 groupId: '1',
             })
                 .then(async () => {
+                    toast({
+                        description: '🎉Innlegget er endret🎉',
+                        duration: 5000,
+                        action: (
+                            <ToastAction altText="Til FAQ-siden" className="border-black">
+                                <Link href={`/faq`} onClick={() => toast}>
+                                    Til FAQ-siden{' '}
+                                </Link>
+                            </ToastAction>
+                        ),
+                    });
+                    form.reset();
                     await queryClient.invalidateQueries({
                         queryKey: [CACHE_TAGS.FAQS],
                     });
@@ -101,16 +116,29 @@ export default function CreateFaqForm() {
                         variant: 'destructive',
                         description: 'Noe gikk galt:(',
                     });
+                    
             })
             : await createFaq({
                 question: formData.question,
                 answer: formData.answer,
                 bookableItemIds: formData.bookableItemIds,
                 author: session?.user?.firstName + " " + session?.user?.lastName,
-                group: formData.group,
+                group: formData.group || session?.user.leaderOf[0],
                 groupId: '1',
             })
                 .then(async () => {
+                    toast({
+                        description: '🎉Innlegget er opprettet🎉',
+                        duration: 5000,
+                        action: (
+                            <ToastAction altText="Til FAQ-siden" className="border-black">
+                                <Link href={`/faq`} onClick={() => toast}>
+                                    Til FAQ-siden{' '}
+                                </Link>
+                            </ToastAction>
+                        ),
+                    });
+                    form.reset();
                     await queryClient.invalidateQueries({
                         queryKey: [CACHE_TAGS.FAQS],
                     });
@@ -130,7 +158,7 @@ export default function CreateFaqForm() {
             });
             return;
         }
-        toast({
+     /*   toast({
             description: '🎉Innlegget er opprettet🎉',
             duration: 5000,
             action: (
@@ -141,11 +169,7 @@ export default function CreateFaqForm() {
                 </ToastAction>
             ),
         });
-        form.reset();
-    }
-
-    if (isLoading){
-        return(<></>)
+        form.reset();*/
     }
 
     return (
@@ -229,7 +253,7 @@ export default function CreateFaqForm() {
                     )}
                 ></FormField>}
 
-                <Button type="submit">Opprett</Button>
+                <Button type="submit">{params?.questionId ? "Oppddater" : "Opprett"}</Button>
             </form>
         </Form>
     );

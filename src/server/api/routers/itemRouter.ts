@@ -17,6 +17,22 @@ export const itemRouter = createTRPCRouter({
         return ctx.db.bookableItem.findMany();
     }),
 
+    getItemFromGroup: memberProcedure
+        .input(
+            z.object({
+                groupId: z.string(),
+                itemId: z.number(),
+            }),
+        )
+        .query(({ input, ctx }) => {
+            return ctx.db.bookableItem.findFirst({
+                where: {
+                    groupId: input.groupId,
+                    itemId: input.itemId,
+                },
+            });
+        }),
+
     createItem: groupLeaderProcedure
         .input(
             z.object({

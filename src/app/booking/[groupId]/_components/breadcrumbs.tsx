@@ -9,6 +9,7 @@ import {
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fragment } from 'react';
 
@@ -34,8 +35,10 @@ export default function Breadcrumbs() {
                     return (
                         <Fragment key={i}>
                             <BreadcrumbItem>
-                                <BreadcrumbLink href={accumulatedPath}>
-                                    {part}
+                                <BreadcrumbLink asChild>
+                                    <Link href={accumulatedPath} prefetch>
+                                        {part}
+                                    </Link>
                                 </BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator />

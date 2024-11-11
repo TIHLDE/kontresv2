@@ -13,33 +13,33 @@ datasource db {
 //Har ikke funnet en måte prisma kan importere fra types.ts, må manuellt passe på at disse stemmer overens
 enum ReservationState {
     PENDING
-    APPROVED 
-    REJECTED 
+    APPROVED
+    REJECTED
 }
 
 model BookableItem {
-    itemId         Int       @id @default(autoincrement())
-    name            String
-    description     String
-    allowsAlcohol  Boolean
-    groupId        String
-    reservation     Reservation[]
+    itemSlug      String        @id
+    name          String
+    description   String
+    allowsAlcohol Boolean
+    groupId       String
+    reservation   Reservation[]
 
     @@index([name])
 }
 
 model Reservation {
-    reservationId              Int @id @default(autoincrement())
-    authorId          String
-    bookableItem   BookableItem @relation(fields: [bookableItemId], references: [itemId])
-    bookableItemId Int
-    startTime      DateTime
-    endTime        DateTime
+    reservationId    String           @id @default(uuid())
+    authorId         String
+    bookableItem     BookableItem     @relation(fields: [bookableItemSlug], references: [itemSlug])
+    bookableItemSlug String
+    startTime        DateTime
+    endTime          DateTime
     status           ReservationState @default(PENDING)
-    description     String
-    acceptedRules  Boolean
-    groupId           String
-    servesAlcohol  Boolean
-    soberWatch     String?
+    description      String
+    acceptedRules    Boolean
+    groupId          String
+    servesAlcohol    Boolean
+    soberWatch       String?
     approvedById     String?
 }

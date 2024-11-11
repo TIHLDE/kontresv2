@@ -4,14 +4,14 @@ import { notFound } from 'next/navigation';
 type Props = {
     params: {
         groupId: string;
-        itemId: string;
+        itemSlug: string;
     };
 };
 
 export default async function Page({ params }: Props) {
     const data = await api.item.getItemFromGroup({
         groupId: params.groupId,
-        itemId: parseInt(params.itemId),
+        itemSlug: params.itemSlug,
     });
 
     if (data == null) return notFound();

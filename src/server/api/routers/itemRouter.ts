@@ -7,10 +7,10 @@ import { z } from 'zod';
 
 export const itemRouter = createTRPCRouter({
     getItem: memberProcedure
-        .input(z.number())
-        .query(({ input: itemId, ctx }) => {
+        .input(z.string())
+        .query(({ input: itemSlug, ctx }) => {
             return ctx.db.bookableItem.findUnique({
-                where: { itemId },
+                where: { itemSlug },
             });
         }),
     getItems: memberProcedure.query(({ ctx }) => {
@@ -21,14 +21,14 @@ export const itemRouter = createTRPCRouter({
         .input(
             z.object({
                 groupId: z.string(),
-                itemId: z.number(),
+                itemSlug: z.string(),
             }),
         )
         .query(({ input, ctx }) => {
             return ctx.db.bookableItem.findFirst({
                 where: {
                     groupId: input.groupId,
-                    itemId: input.itemId,
+                    itemSlug: input.itemSlug,
                 },
             });
         }),
@@ -36,27 +36,21 @@ export const itemRouter = createTRPCRouter({
     createItem: groupLeaderProcedure
         .input(
             z.object({
+                itemSlug: z.string(),
                 name: z.string(),
                 description: z.string(),
                 allowsAlcohol: z.boolean(),
                 groupId: z.string(),
             }),
         )
-        .mutation(({ ctx, input }) => {
-            return ctx.db.bookableItem.create({
-                data: {
-                    name: input.name,
-                    description: input.description,
-                    allowsAlcohol: input.allowsAlcohol,
-                    groupId: input.groupId,
-                },
-            });
+        .mutation(({ ctx, input: data }) => {
+            return ctx.db.bookableItem.create({ data });
         }),
 
     updateItem: groupLeaderProcedure
         .input(
             z.object({
-                itemId: z.number(),
+                itemSlug: z.string(),
                 data: z.object({
                     name: z.string().optional(),
                     description: z.string().optional(),
@@ -67,16 +61,16 @@ export const itemRouter = createTRPCRouter({
         )
         .mutation(({ ctx, input }) => {
             return ctx.db.bookableItem.update({
-                where: { itemId: input.itemId },
+                where: { itemSlug: input.itemSlug },
                 data: input.data,
             });
         }),
 
     deleteItem: groupLeaderProcedure
-        .input(z.object({ itemId: z.number() }))
-        .mutation(({ ctx, input: { itemId } }) => {
+        .input(z.object({ itemSlug: z.string() }))
+        .mutation(({ ctx, input: { itemSlug } }) => {
             return ctx.db.bookableItem.delete({
-                where: { itemId },
+                where: { itemSlug },
             });
         }),
 });

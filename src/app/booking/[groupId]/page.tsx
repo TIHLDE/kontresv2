@@ -19,9 +19,10 @@ export default async function GroupPage({ params }: Props) {
             <h1>Group {params.groupId}</h1>
             <ul>
                 {itemsForGroup.map((item) => (
-                    <li key={item.itemId}>
+                    <li key={item.itemSlug}>
                         <Link
-                            href={`/booking/${params.groupId}/${item.itemId}`}
+                            href={`/booking/${params.groupId}/${item.itemSlug}`}
+                            prefetch
                         >
                             {item.name}
                         </Link>{' '}

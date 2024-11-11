@@ -25,6 +25,8 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useSession } from 'next-auth/react';
 import GroupSelect from './groupSelect';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     question: z.string().min(1, {
@@ -33,15 +35,24 @@ const formSchema = z.object({
     answer: z.string().min(1, {
         message: 'Legg inn et svar på spørsmålet',
     }),
-    bookableItemIds: z.array(z.number()),
-    group: z.string()
+    bookableItemIds: z.array(z.number()).optional(),
+    group: z.string().optional()
 });
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
 
-export default function CreateFaqForm() {
+export default function CreateFaqForm(params?: {questionId?: string}) {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
+    const { mutateAsync: updateFaq } = api.faq.update.useMutation();
     const queryClient = useQueryClient();
+
+    const router = useRouter();
+
+    const {data: updateQuestion, isLoading} = 
+        api.faq.getById.useQuery({
+            questionId: parseInt(params?.questionId)
+    });
+
 
     const { data: session } = useSession();
 
@@ -55,21 +66,68 @@ export default function CreateFaqForm() {
             question: '',
             answer: '',
             bookableItemIds: [],
-            group: groups ? groups[0] : ""
+            group: (groups ? groups[0] : "")
         },
     });
 
+    useEffect(()=> {
+        if (updateQuestion && !isLoading){
+            form.reset({
+                question: updateQuestion?.question || '',
+                answer: updateQuestion?.answer || '',
+                bookableItemIds: updateQuestion.bookableItems? updateQuestion?.bookableItems.map((item)=>item.itemId) : [],
+                group: updateQuestion?.group || (groups ? groups[0] : "")
+            })
+        }
+    }, [updateQuestion, isLoading])
+
     async function onSubmit(formData: FaqFormValueTypes) {
         try {
-            await createFaq({
+            params?.questionId 
+            ? await updateFaq({
+                questionId: parseInt(params?.questionId),
                 question: formData.question,
                 answer: formData.answer,
                 bookableItemIds: formData.bookableItemIds,
                 author: session?.user?.firstName + " " + session?.user?.lastName,
-                group: formData.group,
+                group: formData.group || session?.user.leaderOf[0],
                 groupId: '1',
             })
                 .then(async () => {
+                    await queryClient.invalidateQueries({
+                        queryKey: [CACHE_TAGS.FAQS],
+                    });
+                    router.back()
+                })
+                .catch((err) => {
+                    console.error(err);
+                    toast({
+                        variant: 'destructive',
+                        description: 'Noe gikk galt:(',
+                    });
+                    
+            })
+            : await createFaq({
+                question: formData.question,
+                answer: formData.answer,
+                bookableItemIds: formData.bookableItemIds,
+                author: session?.user?.firstName + " " + session?.user?.lastName,
+                group: formData.group || session?.user.leaderOf[0],
+                groupId: '1',
+            })
+                .then(async () => {
+                    toast({
+                        description: '🎉Innlegget er opprettet🎉',
+                        duration: 5000,
+                        action: (
+                            <ToastAction altText="Til FAQ-siden" className="border-black">
+                                <Link href={`/faq`} onClick={() => toast}>
+                                    Til FAQ-siden{' '}
+                                </Link>
+                            </ToastAction>
+                        ),
+                    });
+                    form.reset();
                     await queryClient.invalidateQueries({
                         queryKey: [CACHE_TAGS.FAQS],
                     });
@@ -89,18 +147,6 @@ export default function CreateFaqForm() {
             });
             return;
         }
-        toast({
-            description: '🎉Innlegget er opprettet🎉',
-            duration: 5000,
-            action: (
-                <ToastAction altText="Til FAQ-siden" className="border-black">
-                    <Link href={`/faq`} onClick={() => toast}>
-                        Til FAQ-siden{' '}
-                    </Link>
-                </ToastAction>
-            ),
-        });
-        form.reset();
     }
 
     return (
@@ -184,7 +230,7 @@ export default function CreateFaqForm() {
                     )}
                 ></FormField>}
 
-                <Button type="submit">Opprett</Button>
+                <Button type="submit">{params?.questionId ? "Oppddater" : "Opprett"}</Button>
             </form>
         </Form>
     );

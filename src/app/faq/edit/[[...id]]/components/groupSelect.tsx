@@ -10,7 +10,7 @@ export default function GroupSelect({ field }: {field: {onChange: any, value: st
     const groups = session?.user.groups
 
     return (
-        <Select defaultValue={field.value} onValueChange={field.onChange} >
+        <Select value={field.value} onValueChange={field.onChange} >
             <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Velg en gruppe" />
             </SelectTrigger>

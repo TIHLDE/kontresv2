@@ -25,7 +25,7 @@ export default function page() {
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl w-fit">
                     FAQ
                 </h1>
-                <Link href={'faq/create'} className="w-fit">
+                <Link href={'faq/edit'} className="w-fit">
                     <Button>
                         <Plus className="w-5 h-5 mr-1" />
                         Opprett ny

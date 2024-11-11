@@ -26,6 +26,7 @@ import * as z from 'zod';
 import { useSession } from 'next-auth/react';
 import GroupSelect from './groupSelect';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     question: z.string().min(1, {
@@ -45,8 +46,7 @@ export default function CreateFaqForm(params?: {questionId?: string}) {
     const { mutateAsync: updateFaq } = api.faq.update.useMutation();
     const queryClient = useQueryClient();
 
-    //const [updateQuestion, setUpdateQuestion] = useState(undefined);
-
+    const router = useRouter();
 
     const {data: updateQuestion, isLoading} = 
         api.faq.getById.useQuery({
@@ -94,21 +94,10 @@ export default function CreateFaqForm(params?: {questionId?: string}) {
                 groupId: '1',
             })
                 .then(async () => {
-                    toast({
-                        description: '🎉Innlegget er endret🎉',
-                        duration: 5000,
-                        action: (
-                            <ToastAction altText="Til FAQ-siden" className="border-black">
-                                <Link href={`/faq`} onClick={() => toast}>
-                                    Til FAQ-siden{' '}
-                                </Link>
-                            </ToastAction>
-                        ),
-                    });
-                    form.reset();
                     await queryClient.invalidateQueries({
                         queryKey: [CACHE_TAGS.FAQS],
                     });
+                    router.back()
                 })
                 .catch((err) => {
                     console.error(err);
@@ -158,18 +147,6 @@ export default function CreateFaqForm(params?: {questionId?: string}) {
             });
             return;
         }
-     /*   toast({
-            description: '🎉Innlegget er opprettet🎉',
-            duration: 5000,
-            action: (
-                <ToastAction altText="Til FAQ-siden" className="border-black">
-                    <Link href={`/faq`} onClick={() => toast}>
-                        Til FAQ-siden{' '}
-                    </Link>
-                </ToastAction>
-            ),
-        });
-        form.reset();*/
     }
 
     return (

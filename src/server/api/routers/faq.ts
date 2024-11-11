@@ -122,7 +122,7 @@ export const faqRouter = createTRPCRouter({
                 answer: input.answer,
                 group: input.group,
                 bookableItems: {
-                    connect: input.bookableItemIds.map((id) => ({
+                    set: input.bookableItemIds.map((id) => ({
                         itemId: id,
                     })),
                 },

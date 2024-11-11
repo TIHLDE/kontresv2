@@ -5,6 +5,11 @@ generator client {
     provider = "prisma-client-js"
 }
 
+generator zod {
+    provider = "zod-prisma"
+    output = "../src/server/db/zod"
+}
+
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
@@ -17,12 +22,19 @@ enum ReservationState {
     REJECTED
 }
 
+model Group {
+    groupSlug     String        @id
+    name          String
+    BookableItems BookableItem[]
+}
+
 model BookableItem {
     itemSlug      String        @id
     name          String
     description   String
     allowsAlcohol Boolean
-    groupId       String
+    groupSlug     String
+    group         Group         @relation(fields: [groupSlug], references: [groupSlug])
     reservation   Reservation[]
 
     @@index([name])

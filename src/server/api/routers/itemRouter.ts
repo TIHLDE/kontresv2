@@ -1,3 +1,5 @@
+import { BookableItemModel, GroupModel } from '@/server/db/zod';
+
 import {
     createTRPCRouter,
     groupLeaderProcedure,
@@ -8,15 +10,32 @@ import { z } from 'zod';
 export const itemRouter = createTRPCRouter({
     getItem: memberProcedure
         .input(z.string())
-        .query(({ input: itemSlug, ctx }) => {
-            return ctx.db.bookableItem.findUnique({
+        .output(BookableItemModel.nullable())
+        .query(async ({ input: itemSlug, ctx }) => {
+            return await ctx.db.bookableItem.findUnique({
                 where: { itemSlug },
             });
         }),
+
     getItems: memberProcedure.query(({ ctx }) => {
-        return ctx.db.bookableItem.findMany();
+        return ctx.db.bookableItem.findMany({});
     }),
 
+    getItemsFromGroup: memberProcedure
+        .input(z.string())
+        .output(
+            z.array(
+                BookableItemModel.extend({ group: GroupModel }).omit({
+                    groupSlug: true,
+                }),
+            ),
+        )
+        .query(({ ctx, input: groupSlug }) => {
+            return ctx.db.bookableItem.findMany({
+                where: { groupSlug },
+                include: { group: true },
+            });
+        }),
     getItemFromGroup: memberProcedure
         .input(
             z.object({
@@ -24,11 +43,21 @@ export const itemRouter = createTRPCRouter({
                 itemSlug: z.string(),
             }),
         )
+        .output(
+            BookableItemModel.extend({
+                group: GroupModel,
+            })
+                .omit({ groupSlug: true })
+                .nullable(),
+        )
         .query(({ input, ctx }) => {
             return ctx.db.bookableItem.findFirst({
                 where: {
-                    groupId: input.groupId,
+                    groupSlug: input.groupId,
                     itemSlug: input.itemSlug,
+                },
+                include: {
+                    group: true,
                 },
             });
         }),
@@ -40,7 +69,7 @@ export const itemRouter = createTRPCRouter({
                 name: z.string(),
                 description: z.string(),
                 allowsAlcohol: z.boolean(),
-                groupId: z.string(),
+                groupSlug: z.string(),
             }),
         )
         .mutation(({ ctx, input: data }) => {

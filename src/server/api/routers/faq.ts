@@ -103,4 +103,32 @@ export const faqRouter = createTRPCRouter({
             });
             return newFAQ;
         }),
+
+    update : memberProcedure.input(
+        z.object({
+            questionId: z.number(),
+            question: z.string(),
+            answer: z.string(),
+            group: z.string(),
+            author: z.string(),
+            bookableItemIds: z.array(z.number()),
+        }),
+    ).mutation(async ({ input }) => {
+        console.log("updatng")
+        const updateFAQ = await prisma.fAQ.update({
+            where: {questionId: input.questionId},
+            data: {
+                question: input.question,
+                answer: input.answer,
+                group: input.group,
+                bookableItems: {
+                    set: input.bookableItemIds.map((id) => ({
+                        itemId: id,
+                    })),
+                },
+                author: input.author,
+            },
+        });
+        return updateFAQ;
+    }),
 });

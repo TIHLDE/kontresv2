@@ -39,7 +39,7 @@ export default async function Page({ params: { id } }: QuestionPageParams) {
                     </CardContent>
                 </Card>
                 {isAdmin && (
-                    <Link href={'./create'} className="w-fit">
+                    <Link href={`./edit/${id}`} className="w-fit">
                         <Button>Rediger</Button>
                     </Link>
                 )}

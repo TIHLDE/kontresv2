@@ -29,15 +29,21 @@ import { api } from '@/trpc/react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { Suspense, useMemo } from 'react';
 
-export default function BookableItemsSelect({ field, form }: {field: { value: number[] }, form: any}) {
+export default function BookableItemsSelect({
+    field,
+    form,
+}: {
+    field: { value: number[] };
+    form: any;
+}) {
     const { data: bookableItems, isLoading } =
         api.bookableItem.getAll.useQuery();
 
     const selectedItems = useMemo(() => {
         if (!bookableItems) return [];
 
-        return bookableItems.filter(v => field.value.includes(v.itemId));
-    }, [field, bookableItems])
+        return bookableItems.filter((v) => field.value.includes(v.itemId));
+    }, [field, bookableItems]);
 
     if (isLoading) return <LoadingSpinner />;
 
@@ -52,7 +58,9 @@ export default function BookableItemsSelect({ field, form }: {field: { value: nu
                         !field.value && 'text-muted-foreground',
                     )}
                 >
-                    {selectedItems.length > 0 ? selectedItems.map(v => v.name).join(", ") : "Velg gjenstander"}
+                    {selectedItems.length > 0
+                        ? selectedItems.map((v) => v.name).join(', ')
+                        : 'Velg gjenstander'}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>

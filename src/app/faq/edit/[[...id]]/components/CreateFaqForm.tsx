@@ -16,17 +16,17 @@ import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 
 import BookableItemsSelect from './bookableItemsSelect';
+import GroupSelect from './groupSelect';
 import { CACHE_TAGS } from '@/lib/cacheTags';
 import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { useSession } from 'next-auth/react';
-import GroupSelect from './groupSelect';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     question: z.string().min(1, {
@@ -36,29 +36,27 @@ const formSchema = z.object({
         message: 'Legg inn et svar på spørsmålet',
     }),
     bookableItemIds: z.array(z.number()).optional(),
-    group: z.string().optional()
+    group: z.string().optional(),
 });
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
 
-export default function CreateFaqForm(params?: {questionId?: string}) {
+export default function CreateFaqForm(params?: { questionId?: string }) {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
     const { mutateAsync: updateFaq } = api.faq.update.useMutation();
     const queryClient = useQueryClient();
 
     const router = useRouter();
 
-    const {data: updateQuestion, isLoading} = 
-        api.faq.getById.useQuery({
-            questionId: parseInt(params?.questionId)
+    const { data: updateQuestion, isLoading } = api.faq.getById.useQuery({
+        questionId: parseInt(params?.questionId),
     });
-
 
     const { data: session } = useSession();
 
     const { toast } = useToast();
 
-    const groups = session?.user.groups
+    const groups = session?.user.groups;
 
     const form = useForm<FaqFormValueTypes>({
         resolver: zodResolver(formSchema),
@@ -66,79 +64,89 @@ export default function CreateFaqForm(params?: {questionId?: string}) {
             question: '',
             answer: '',
             bookableItemIds: [],
-            group: (groups ? groups[0] : "")
+            group: groups ? groups[0] : '',
         },
     });
 
-    useEffect(()=> {
-        if (updateQuestion && !isLoading){
+    useEffect(() => {
+        if (updateQuestion && !isLoading) {
             form.reset({
                 question: updateQuestion?.question || '',
                 answer: updateQuestion?.answer || '',
-                bookableItemIds: updateQuestion.bookableItems? updateQuestion?.bookableItems.map((item)=>item.itemId) : [],
-                group: updateQuestion?.group || (groups ? groups[0] : "")
-            })
+                bookableItemIds: updateQuestion.bookableItems
+                    ? updateQuestion?.bookableItems.map((item) => item.itemId)
+                    : [],
+                group: updateQuestion?.group || (groups ? groups[0] : ''),
+            });
         }
-    }, [updateQuestion, isLoading])
+    }, [updateQuestion, isLoading]);
 
     async function onSubmit(formData: FaqFormValueTypes) {
         try {
-            params?.questionId 
-            ? await updateFaq({
-                questionId: parseInt(params?.questionId),
-                question: formData.question,
-                answer: formData.answer,
-                bookableItemIds: formData.bookableItemIds,
-                author: session?.user?.firstName + " " + session?.user?.lastName,
-                group: formData.group || session?.user.leaderOf[0],
-                groupId: '1',
-            })
-                .then(async () => {
-                    await queryClient.invalidateQueries({
-                        queryKey: [CACHE_TAGS.FAQS],
-                    });
-                    router.back()
-                })
-                .catch((err) => {
-                    console.error(err);
-                    toast({
-                        variant: 'destructive',
-                        description: 'Noe gikk galt:(',
-                    });
-                    
-            })
-            : await createFaq({
-                question: formData.question,
-                answer: formData.answer,
-                bookableItemIds: formData.bookableItemIds,
-                author: session?.user?.firstName + " " + session?.user?.lastName,
-                group: formData.group || session?.user.leaderOf[0],
-                groupId: '1',
-            })
-                .then(async () => {
-                    toast({
-                        description: '🎉Innlegget er opprettet🎉',
-                        duration: 5000,
-                        action: (
-                            <ToastAction altText="Til FAQ-siden" className="border-black">
-                                <Link href={`/faq`} onClick={() => toast}>
-                                    Til FAQ-siden{' '}
-                                </Link>
-                            </ToastAction>
-                        ),
-                    });
-                    form.reset();
-                    await queryClient.invalidateQueries({
-                        queryKey: [CACHE_TAGS.FAQS],
-                    });
-                })
-                .catch((err) => {
-                    console.error(err);
-                    toast({
-                        variant: 'destructive',
-                        description: 'Noe gikk galt:(',
-                    });
-                });
+            params?.questionId
+                ? await updateFaq({
+                      questionId: parseInt(params?.questionId),
+                      question: formData.question,
+                      answer: formData.answer,
+                      bookableItemIds: formData.bookableItemIds,
+                      author:
+                          session?.user?.firstName +
+                          ' ' +
+                          session?.user?.lastName,
+                      group: formData.group || session?.user.leaderOf[0],
+                      groupId: '1',
+                  })
+                      .then(async () => {
+                          await queryClient.invalidateQueries({
+                              queryKey: [CACHE_TAGS.FAQS],
+                          });
+                          router.back();
+                      })
+                      .catch((err) => {
+                          console.error(err);
+                          toast({
+                              variant: 'destructive',
+                              description: 'Noe gikk galt:(',
+                          });
+                      })
+                : await createFaq({
+                      question: formData.question,
+                      answer: formData.answer,
+                      bookableItemIds: formData.bookableItemIds,
+                      author:
+                          session?.user?.firstName +
+                          ' ' +
+                          session?.user?.lastName,
+                      group: formData.group || session?.user.leaderOf[0],
+                      groupId: '1',
+                  })
+                      .then(async () => {
+                          toast({
+                              description: '🎉Innlegget er opprettet🎉',
+                              duration: 5000,
+                              action: (
+                                  <ToastAction
+                                      altText="Til FAQ-siden"
+                                      className="border-black"
+                                  >
+                                      <Link href={`/faq`} onClick={() => toast}>
+                                          Til FAQ-siden{' '}
+                                      </Link>
+                                  </ToastAction>
+                              ),
+                          });
+                          form.reset();
+                          await queryClient.invalidateQueries({
+                              queryKey: [CACHE_TAGS.FAQS],
+                          });
+                      })
+                      .catch((err) => {
+                          console.error(err);
+                          toast({
+                              variant: 'destructive',
+                              description: 'Noe gikk galt:(',
+                          });
+                      });
         } catch (error) {
             console.error(error);
             toast({
@@ -212,25 +220,26 @@ export default function CreateFaqForm(params?: {questionId?: string}) {
                     )}
                 ></FormField>
 
-               { (groups ? groups.length>1 : false) &&
-                <FormField
-                    control={form.control}
-                    name="group"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-col mt-5">
-                            <FormLabel>
-                                Hvilke grupper gjelder dette spørsmålet?
-                            </FormLabel>
-                            <FormControl>
-                                <GroupSelect
-                                    field={field}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                ></FormField>}
+                {(groups ? groups.length > 1 : false) && (
+                    <FormField
+                        control={form.control}
+                        name="group"
+                        render={({ field }) => (
+                            <FormItem className="flex flex-col mt-5">
+                                <FormLabel>
+                                    Hvilke grupper gjelder dette spørsmålet?
+                                </FormLabel>
+                                <FormControl>
+                                    <GroupSelect field={field} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    ></FormField>
+                )}
 
-                <Button type="submit">{params?.questionId ? "Oppddater" : "Opprett"}</Button>
+                <Button type="submit">
+                    {params?.questionId ? 'Oppdater' : 'Opprett'}
+                </Button>
             </form>
         </Form>
     );

@@ -33,8 +33,8 @@ const HeaderButtonsWrapper = async ({
 
             {session?.user ? (
                 <UserArea
-                    name={session.user.firstName ?? ''}
-                    image={session.user.profilePicture ?? ''}
+                    name={session.user.name ?? ''}
+                    image={session.user.image ?? ''}
                     admin={session.user.role == 'ADMIN'}
                 />
             ) : undefined}

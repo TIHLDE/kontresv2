@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import {Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 
-export default function GroupSelect({ field }: {field: {onChange: any, value: string}}) {
+export default function GroupSelect({ field }: {field: {onChange: any, value: string | undefined}}) {
     const { data: session } = useSession();
 
     const groups = session?.user.groups

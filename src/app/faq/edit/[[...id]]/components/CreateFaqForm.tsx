@@ -48,9 +48,10 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
 
     const router = useRouter();
 
-    const { data: updateQuestion, isLoading } = api.faq.getById.useQuery({
-        questionId: parseInt(params?.questionId),
-    });
+    const { data: updateQuestion, isLoading } = params?.questionId ?
+        api.faq.getById.useQuery({
+            questionId: parseInt(params.questionId),
+        }) : {}
 
     const { data: session } = useSession();
 

@@ -94,7 +94,6 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                           ' ' +
                           session?.user?.lastName,
                       group: formData.group || session?.user.leaderOf[0],
-                      groupId: '1',
                   })
                       .then(async () => {
                           await queryClient.invalidateQueries({
@@ -118,7 +117,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                           ' ' +
                           session?.user?.lastName,
                       group: formData.group || session?.user.leaderOf[0],
-                      groupId: '1',
+                      groupId: '1', //denne må fikses etterhvert
                   })
                       .then(async () => {
                           toast({

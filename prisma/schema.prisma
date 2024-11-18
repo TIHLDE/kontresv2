@@ -48,7 +48,7 @@ model FAQ {
     questionId      Int @id @default(autoincrement())
     question        String
     answer          String
-    group           String
+    group           String?
     author          String
-    bookableItems   BookableItem[]  
+    bookableItems   BookableItem[]
 }

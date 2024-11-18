@@ -82,9 +82,9 @@ export const faqRouter = createTRPCRouter({
             z.object({
                 question: z.string(),
                 answer: z.string(),
-                group: z.string(),
+                group: z.string().optional(),
                 author: z.string(),
-                bookableItemIds: z.array(z.number()),
+                bookableItemIds: z.array(z.number()).optional(),
             }),
         )
         .mutation(async ({ input }) => {
@@ -92,12 +92,14 @@ export const faqRouter = createTRPCRouter({
                 data: {
                     question: input.question,
                     answer: input.answer,
-                    group: input.group,
-                    bookableItems: {
-                        connect: input.bookableItemIds.map((id) => ({
-                            itemId: id,
-                        })),
-                    },
+                    group: input.group || "",
+                    ...(input.bookableItemIds?.length ? {
+                        bookableItems: {
+                            connect: input.bookableItemIds.map((id) => ({
+                                itemId: id,
+                            })),
+                        },
+                    }:[]),
                     author: input.author,
                 },
             });
@@ -109,23 +111,28 @@ export const faqRouter = createTRPCRouter({
             questionId: z.number(),
             question: z.string(),
             answer: z.string(),
-            group: z.string(),
+            group: z.string().optional(),
             author: z.string(),
-            bookableItemIds: z.array(z.number()),
+            bookableItemIds: z.array(z.number()).optional(),
         }),
     ).mutation(async ({ input }) => {
-        console.log("updatng")
         const updateFAQ = await prisma.fAQ.update({
             where: {questionId: input.questionId},
             data: {
                 question: input.question,
                 answer: input.answer,
                 group: input.group,
-                bookableItems: {
-                    set: input.bookableItemIds.map((id) => ({
-                        itemId: id,
-                    })),
-                },
+                ...(input.bookableItemIds?.length ? {
+                    bookableItems: {
+                        set: input.bookableItemIds.map((id) => ({
+                            itemId: id,
+                        })),
+                    },
+                }:{
+                    bookableItems: {
+                        set: [],
+                    },
+                }),
                 author: input.author,
             },
         });

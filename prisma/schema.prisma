@@ -18,13 +18,13 @@ enum ReservationState {
 }
 
 model BookableItem {
-    itemId         Int       @id @default(autoincrement())
+    itemId          Int       @id @default(autoincrement())
     name            String
     description     String
-    allowsAlcohol  Boolean
-    groupId        String
-    reservation     Reservation[]
-
+    allowsAlcohol   Boolean
+    groupId         String
+    reservations    Reservation[]
+    FAQs            FAQ[] 
     @@index([name])
 }
 
@@ -42,4 +42,13 @@ model Reservation {
     servesAlcohol  Boolean
     soberWatch     String?
     approvedById     String?
+}
+
+model FAQ {
+    questionId      Int @id @default(autoincrement())
+    question        String
+    answer          String
+    group           String?
+    author          String
+    bookableItems   BookableItem[]
 }

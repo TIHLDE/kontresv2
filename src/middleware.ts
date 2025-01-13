@@ -1,7 +1,6 @@
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
-
 export const middleware = auth((req) => {
     const path = req.nextUrl.pathname;
     if (path === '/') return;

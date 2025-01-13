@@ -29,7 +29,6 @@ export interface RelativeMousePositionProps {
 export function getDateAtMousePosition<RelativeMousePositionProps>(
     e: React.MouseEvent<HTMLDivElement>,
 ) {
-    console.log(e.nativeEvent);
     const yPos = e.nativeEvent.clientY;
     const xPos = e.nativeEvent.clientX;
     const height = e.currentTarget.clientHeight;
@@ -37,7 +36,6 @@ export function getDateAtMousePosition<RelativeMousePositionProps>(
     const day = Math.floor(
         ((xPos - e.currentTarget.getBoundingClientRect().left) / width) * 7,
     );
-    console.log(e.nativeEvent.offsetY);
     return {
         x: xPos,
         y: yPos,

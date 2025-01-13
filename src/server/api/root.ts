@@ -1,7 +1,9 @@
+import { faqRouter } from '@/server/api/routers/faq';
 import { postRouter } from '@/server/api/routers/post';
 import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
 
 import { authTesterRouter } from './routers/auth-tester';
+import { bookableItemRouter } from './routers/bookableItem';
 import { itemRouter } from './routers/itemRouter';
 import { reservationRouter } from './routers/reservationRouter';
 
@@ -14,7 +16,9 @@ export const appRouter = createTRPCRouter({
     post: postRouter,
     authTester: authTesterRouter,
     item: itemRouter,
+    bookableItem: bookableItemRouter,
     reservation: reservationRouter,
+    faq: faqRouter,
 });
 
 // export type definition of API

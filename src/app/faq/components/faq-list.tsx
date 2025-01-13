@@ -5,19 +5,26 @@ import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
 import FaqCard from './faq-card';
 import FAQListSkeleton from './faq-list-skeleton';
+import Error from '@/app/error';
 import { api } from '@/trpc/react';
 import Link from 'next/link';
 
 const FaqList = () => {
-    const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
-        api.faq.getAll.useInfiniteQuery(
-            {
-                limit: 9,
-            },
-            {
-                getNextPageParam: (lastPage) => lastPage.nextCursor,
-            },
-        );
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isLoading,
+        isFetchingNextPage,
+        error,
+    } = api.faq.getAll.useInfiniteQuery(
+        {
+            limit: 9,
+        },
+        {
+            getNextPageParam: (lastPage) => lastPage.nextCursor,
+        },
+    );
     return (
         <>
             <div className="grid md:grid-cols-3 grid-cols-1 gap-5">
@@ -38,7 +45,7 @@ const FaqList = () => {
                     )),
                 )}
             </div>
-            {isLoading && <FAQListSkeleton />}
+            {isLoading && !error && <FAQListSkeleton />}
             <div className="max-w-page mx-auto flex gap-5">
                 {hasNextPage && (
                     <Button onClick={() => fetchNextPage()}>
@@ -46,6 +53,7 @@ const FaqList = () => {
                         {!isFetchingNextPage && 'Last inn flere'}
                     </Button>
                 )}
+                {error && <text>Noe gikk galt</text>}
             </div>
         </>
     );

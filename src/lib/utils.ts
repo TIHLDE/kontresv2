@@ -60,3 +60,7 @@ export function compareMousePositions(
         a.minutes === b.minutes
     );
 }
+
+export interface ParamsProps<T extends Record<string, string>> {
+    searchParams?: T;
+}

@@ -1,8 +1,11 @@
+import { type ReservationWithAuthor } from '@/server/dtos/reservations';
+
 import {
     createTRPCRouter,
     groupLeaderProcedure,
     memberProcedure,
 } from '../trpc';
+import { ReservationState } from '@prisma/client';
 import { z } from 'zod';
 
 export const reservationRouter = createTRPCRouter({
@@ -14,9 +17,58 @@ export const reservationRouter = createTRPCRouter({
             });
         }),
 
-    getReservations: memberProcedure.query(({ ctx }) => {
-        return ctx.db.reservation.findMany();
-    }),
+    getReservations: memberProcedure
+        .input(
+            z.object({
+                limit: z.number().min(1).max(100).optional(),
+                cursor: z.number().nullish(),
+                direction: z.enum(['forward', 'backward']),
+                state: z.nativeEnum(ReservationState).optional(),
+            }),
+        )
+        .query(async ({ ctx, input }) => {
+            const limit = input.limit ?? 20;
+            const { cursor } = input;
+
+            const reservations = (await ctx.db.reservation.findMany({
+                take: limit + 1,
+                cursor: cursor ? { reservationId: cursor } : undefined,
+                where: {
+                    status: input.state,
+                },
+                orderBy: {
+                    reservationId: 'asc',
+                },
+            })) as ReservationWithAuthor[];
+
+            let nextCursor: typeof cursor | undefined = undefined;
+            if (reservations.length > limit) {
+                const nextItem = reservations.pop();
+                nextCursor = nextItem!.reservationId;
+            }
+
+            await Promise.all(
+                reservations.map(async (reservation) => {
+                    // Fetch the proper author object from Lepton for each author
+                    try {
+                        const user = await ctx.Lepton.getUserById(
+                            reservation.authorId,
+                        );
+                        reservation.author = user;
+                    } catch (error) {
+                        console.error(
+                            "Could not fetch user's data from Lepton",
+                            error,
+                        );
+                    }
+                }),
+            );
+
+            return {
+                reservations,
+                nextCursor,
+            };
+        }),
 
     getUserReservations: memberProcedure
         .input(z.object({ userId: z.string() }))

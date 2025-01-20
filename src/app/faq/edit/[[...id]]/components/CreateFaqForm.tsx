@@ -27,6 +27,10 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import DropzoneComponent from './dropZone';
+import Dropzone from 'shadcn-dropzone'
+import { useUser } from '@/utils/hooks/user';
+
 
 const formSchema = z.object({
     question: z.string().min(1, {
@@ -47,6 +51,8 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
     const { mutateAsync: updateFaq } = api.faq.update.useMutation();
     const queryClient = useQueryClient();
 
+    const [file, setFile] = useState<File>();
+
     const router = useRouter();
 
     const { data: updateQuestion, isLoading } = params?.questionId ?
@@ -55,6 +61,8 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
         }) : {}
 
     const { data: session } = useSession();
+
+    const token = session?.user.TIHLDE_Token
 
     const { toast } = useToast();
 
@@ -86,6 +94,8 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
     }, [updateQuestion, isLoading]);
 
     async function onSubmit(formData: FaqFormValueTypes) {
+        const url = getImageUrl(file, token);
+        form.setValue("imageUrl", url)
         try {
             params?.questionId
                 ? await updateFaq({
@@ -242,23 +252,34 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                     ></FormField>
                 )}
 
-                <FormField
-                    control={form.control}
-                    name="imageUrl"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-col mt-5">
-                            <FormLabel>
-                                Bilde
-                            </FormLabel>
-                            <FormControl>
-                                {/*innhold her*/}
-                            </FormControl>
-                            <FormDescription>
-                                Her kan du laste opp et bilde om du ønsker
-                            </FormDescription>
-                        </FormItem>
+                <FormLabel>
+                    Last opp bilde
+                </FormLabel>
+                <Dropzone
+                    onDrop={(acceptedFiles: File) => {
+                    // Do something with the files
+                    console.log(acceptedFiles);
+                    setFile(acceptedFiles)
+                    }}
+                >
+                    {(dropzone: DropzoneState) => (
+                    <>
+                    {
+                        dropzone.isDragAccept ? (
+                            <div className='text-sm font-medium'>Drop your files here!</div>
+                        ) : (
+                            <div className='flex items-center flex-col gap-1.5'>
+                                <div className='flex items-center flex-row gap-0.5 text-sm font-medium'>
+                                    Upload files
+                                </div>
+                            </div>
+                        )
+                    }
+                        <div className='text-xs text-gray-400 font-medium'>
+                        </div>
+                    </>
                     )}
-                ></FormField>
+                </Dropzone>
 
                 <Button type="submit">
                     {params?.questionId ? 'Oppdater' : 'Opprett'}
@@ -266,4 +287,21 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
             </form>
         </Form>
     );
+}
+function getImageUrl(file : Blob, token: string) {
+    if (!file){
+        throw new Error('Ingen fil lastet opp.');
+    }
+    return uploadFile(file, token!!);
+}
+
+export async function uploadFile(file: Blob, token: string) {
+    const formData = new FormData();
+    formData.append("file", file);
+    console.log(file)
+    return fetch(`${process.env.NEXT_PUBLIC_LEPTON_API_URL}/upload/`, {
+        method: 'POST',
+        body: formData,
+        headers: { 'x-csrf-token': token },
+    });
 }

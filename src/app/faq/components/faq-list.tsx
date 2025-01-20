@@ -5,7 +5,6 @@ import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
 import FaqCard from './faq-card';
 import FAQListSkeleton from './faq-list-skeleton';
-import Error from '@/app/error';
 import { api } from '@/trpc/react';
 import Link from 'next/link';
 
@@ -39,7 +38,7 @@ const FaqList = () => {
                                 title={object.question}
                                 bookableItems={object.bookableItems}
                                 author={object.author}
-                                group={object.group}
+                                group={object.group ?? ''}
                             />
                         </Link>
                     )),

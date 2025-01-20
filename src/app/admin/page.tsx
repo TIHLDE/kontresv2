@@ -1,12 +1,9 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Table } from '@/components/ui/table';
 
 import { cn } from '@/utils/cn';
 
 import ApprovedPage from './components/approved-page';
-import BookingList from './components/booking-list/booking-list';
-import { DataTable } from './components/old-components/data-table';
 import ItemsListSkeleton from './components/old-components/items-list-skeleton';
 import { type ParamsProps } from '@/lib/utils';
 import Link from 'next/link';

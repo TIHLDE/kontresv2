@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { auth } from '@/auth';
 import { api } from '@/trpc/server';
+import Image from 'next/image';
 import Link from 'next/link';
 
 type QuestionPageParams = {
@@ -36,6 +37,14 @@ export default async function Page({ params: { id } }: QuestionPageParams) {
                                 </Badge>
                             </Link>
                         ))}
+                        {data.imageUrl != '' && (
+                            <Image
+                                src={data.imageUrl}
+                                width={500}
+                                height={500}
+                                alt=""
+                            />
+                        )}
                     </CardContent>
                 </Card>
                 {isAdmin && (

@@ -39,6 +39,7 @@ export default async function Page({ params: { id } }: QuestionPageParams) {
                         ))}
                         {data.imageUrl != '' && (
                             <Image
+                                className="rounded-lg"
                                 src={data.imageUrl}
                                 width={500}
                                 height={500}

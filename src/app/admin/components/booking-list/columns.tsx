@@ -38,7 +38,10 @@ export const columns: ColumnDef<ReservationWithAuthor>[] = [
     {
         accessorKey: 'author',
         header: 'Author',
-        accessorFn: (row) => `${row.author.first_name} ${row.author.last_name}`,
+        accessorFn: (row) => {
+            if (!row.author?.first_name) return 'Ukjent bruker';
+            return `${row.author.first_name} ${row.author.last_name}`;
+        },
     },
     {
         accessorKey: 'startTime',

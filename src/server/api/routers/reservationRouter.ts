@@ -1,4 +1,5 @@
 import { type ReservationWithAuthor } from '@/server/dtos/reservations';
+import { User } from '@/server/dtos/user';
 
 import {
     createTRPCRouter,
@@ -51,9 +52,12 @@ export const reservationRouter = createTRPCRouter({
                 reservations.map(async (reservation) => {
                     // Fetch the proper author object from Lepton for each author
                     try {
-                        const user = await ctx.Lepton.getUserById(
+                        const user = (await ctx.Lepton.getUserById(
                             reservation.authorId,
-                        );
+                        ).then((user) => user.json())) as User;
+
+                        console.log(user);
+
                         reservation.author = user;
                     } catch (error) {
                         console.error(

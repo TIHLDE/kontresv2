@@ -1,14 +1,22 @@
 // Main file for interacting with lepton services
+import { URLS } from './api/urls';
 import { type User } from './dtos/user';
+import { env } from '@/env';
+
+const getHeaders = (headers?: HeadersInit) => {
+    return {
+        'x-csrf-token': env.LEPTON_API_KEY ?? '',
+        ...headers,
+    };
+};
 
 const getUserById = async (userId: string) => {
-    return {
-        user_id: userId,
-        first_name: 'John',
-        last_name: 'Doe',
-        image: 'https://example.com/image.jpg',
-        email: '',
-    } as User;
+    console.log(`${env.LEPTON_API_URL}/${URLS.USERS}/${userId}/`);
+    return fetch(`${env.LEPTON_API_URL}/${URLS.USERS}/${userId}/`, {
+        headers: {
+            ...getHeaders(),
+        },
+    });
 };
 
 const Lepton = {

@@ -28,7 +28,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import DropzoneComponent from './dropZone';
-import Dropzone from 'shadcn-dropzone'
 import { useUser } from '@/utils/hooks/user';
 import { FileUpload } from '@/components/ui/file-upload';
 
@@ -95,10 +94,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
     }, [updateQuestion, isLoading]);
 
     async function onSubmit(formData: FaqFormValueTypes) {
-        if (!file) return;
-        if (!token) return;
-        
-        const url = await getImageUrl(file, token);
+        const url = file && token ? await getImageUrl(file, token) : '';
         form.setValue("imageUrl", url)
         try {
             params?.questionId
@@ -112,7 +108,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                           ' ' +
                           session?.user?.lastName,
                       group: formData.group || session?.user.leaderOf[0],
-                      imageUrl: formData.imageUrl || ''
+                      imageUrl: url
                   })
                       .then(async () => {
                           await queryClient.invalidateQueries({
@@ -178,7 +174,6 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
 
     function handleFileUpload(file: File): void {
         setFile(file);
-        console.log(file);
     }
 
     return (
@@ -264,9 +259,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                 <FormLabel>
                     Last opp bilde
                 </FormLabel>
-                <FileUpload onChange={(files)=>{files[0] && handleFileUpload(files[0])}}>
-
-                </FileUpload>
+                <FileUpload onChange={(files)=>{files[0] && handleFileUpload(files[0])}}/>
 
                 <Button type="submit">
                     {params?.questionId ? 'Oppdater' : 'Opprett'}
@@ -277,24 +270,23 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
 }
 async function getImageUrl(file : Blob, token: string) {
     if (!file){
-        throw new Error('Invalid file');
+        throw new Error('Invalid file.');
     }
-    const response = await uploadFile(file, token!!);
+    const response = await uploadFile(file, token!!).then(res => res.json()) as FileUploadResponse
     return response.url
 }
 
 export async function uploadFile(file: Blob, token: string) {
     if (!file) {
-        throw new Error("Invalid file or file type is undefined.");
+        throw new Error("Invalid file.");
     }
     const formData = new FormData();
     formData.append("file", file);
-    console.log(file)
     return fetch(`${process.env.NEXT_PUBLIC_LEPTON_API_URL}/upload/`, {
         method: 'POST',
         body: formData,
         headers: { 'x-csrf-token': token }, //'Content-Type': 'image/jpeg'
-    }) as Promise<FileUploadResponse>;
+    });
 }
 
 type FileUploadResponse = {

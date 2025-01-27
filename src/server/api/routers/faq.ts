@@ -119,6 +119,7 @@ export const faqRouter = createTRPCRouter({
                 group: z.string().optional(),
                 author: z.string(),
                 bookableItemIds: z.array(z.number()).optional(),
+                imageUrl: z.string().optional(),
             }),
         )
         .mutation(async ({ input }) => {
@@ -142,6 +143,7 @@ export const faqRouter = createTRPCRouter({
                               },
                           }),
                     author: input.author,
+                    imageUrl: input.imageUrl,
                 },
             });
             return updateFAQ;

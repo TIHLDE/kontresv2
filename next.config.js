@@ -9,14 +9,9 @@ const config = {
     images: {
         remotePatterns: [
             {
-                // Allow all https domains
                 protocol: 'https',
-                hostname: '*',
-            },
-            {
-                // Allow all http domains
-                protocol: 'http',
-                hostname: '*',
+                hostname: 'leptonstoragedev.blob.core.windows.net',
+                pathname: '/**', // Restrict to the path `/imagejpeg/*`
             },
         ],
     },

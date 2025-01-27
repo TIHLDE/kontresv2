@@ -27,7 +27,10 @@ export default async function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={cn(inter.className, 'overflow-x-hidden')}
+                className={cn(
+                    inter.className,
+                    'overflow-x-hidden flex flex-col min-h-screen',
+                )}
                 suppressHydrationWarning
             >
                 <SessionProvider>
@@ -39,9 +42,9 @@ export default async function RootLayout({
                             disableTransitionOnChange
                         >
                             <Header className="lg:flex hidden" />
-                            <div className="py-page pb-32">
+                            <div className="pt-24 flex flex-1">
                                 <Toaster />
-                                <BlurBackground>{children}</BlurBackground>
+                                {children}
                             </div>
                             <div className="lg:hidden fixed bottom-5 w-full flex z-10">
                                 <Suspense>

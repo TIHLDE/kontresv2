@@ -4,6 +4,7 @@ import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc';
 
 import { authTesterRouter } from './routers/auth-tester';
 import { bookableItemRouter } from './routers/bookableItem';
+import { groupRouter } from './routers/groupRouter';
 import { itemRouter } from './routers/itemRouter';
 import { reservationRouter } from './routers/reservationRouter';
 
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
     bookableItem: bookableItemRouter,
     reservation: reservationRouter,
     faq: faqRouter,
+    group: groupRouter,
 });
 
 // export type definition of API

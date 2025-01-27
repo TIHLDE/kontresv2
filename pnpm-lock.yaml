@@ -80,6 +80,9 @@ importers:
       '@t3-oss/env-nextjs':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.3.3)(zod@3.23.8)
+      '@tabler/icons-react':
+        specifier: ^3.29.0
+        version: 3.29.0(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.56.2
         version: 5.56.2(react@18.3.1)
@@ -155,9 +158,6 @@ importers:
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
-      shadcn-dropzone:
-        specifier: ^0.2.1
-        version: 0.2.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.1)
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -1139,6 +1139,14 @@ packages:
       typescript:
         optional: true
 
+  '@tabler/icons-react@3.29.0':
+    resolution: {integrity: sha512-jaa3b3j91CplY7TPgx/Gj/e+PcOnQgYiK6c5qtp1P0ytfKM5WPc1qtXyRLE3NcYlfxS2Pcst4YGy1vUML7SjbQ==}
+    peerDependencies:
+      react: '>= 16'
+
+  '@tabler/icons@3.29.0':
+    resolution: {integrity: sha512-VWNINymdmhay3MDvWVREmRwuWLSrX3YiInKvs5L4AHRF4bAfJabLlEReE0BW/XFsBt22ff8/C8Eam/LXlF97mA==}
+
   '@tanstack/query-core@5.56.2':
     resolution: {integrity: sha512-gor0RI3/R5rVV3gXfddh1MM+hgl0Z4G7tj6Xxpq6p2I03NGPaJ8dITY9Gz05zYYb/EJq9vPas/T4wn9EaDPd4Q==}
 
@@ -1634,10 +1642,6 @@ packages:
 
   clsx@2.1.0:
     resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
-    engines: {node: '>=6'}
-
-  clsx@2.1.1:
-    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
   cmdk@0.2.1:
@@ -2887,12 +2891,6 @@ packages:
     resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
     engines: {node: '>= 0.4'}
 
-  shadcn-dropzone@0.2.1:
-    resolution: {integrity: sha512-eEpZMRPqHcGdjn8tMLTeEks39MTBUhOYEuYv4fe3vwWc8kILOZP5Wg26e9maBgSExcJNF6f9pU3gxs4Bmrqt1A==}
-    peerDependencies:
-      react: ^18
-      react-dom: ^18
-
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
     engines: {node: '>=8'}
@@ -3009,9 +3007,6 @@ packages:
   tailwind-merge@2.2.0:
     resolution: {integrity: sha512-SqqhhaL0T06SW59+JVNfAqKdqLs0497esifRrZ7jOaefP3o64fdFNDMrAQWZFMxTLJPiHVjRLUywT8uFz1xNWQ==}
 
-  tailwind-merge@2.6.0:
-    resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
-
   tailwindcss-animate@1.0.7:
     resolution: {integrity: sha512-bl6mpH3T7I3UFxuvDEXLxy/VuFxBk5bbzplh7tXI68mwMokNYd1t9qPBHlnyTwfa4JGC4zP516I1hYYtQ/vspA==}
     peerDependencies:
@@ -3064,9 +3059,6 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
-
-  truncate@3.0.0:
-    resolution: {integrity: sha512-C+0Xojw7wZPl6MDq5UjMTuxZvBPK04mtdFet7k+GSZPINcvLZFCXg+15kWIL4wAqDB7CksIsKiRLbQ1wa7rKdw==}
 
   ts-api-utils@1.3.0:
     resolution: {integrity: sha512-UQMIo7pb8WRomKR1/+MFVLTroIvDVtMX3K6OUir8ynLyzB8Jeriont2bTAtmNPa1ekAgN7YPDyf6V+ygrdU+eQ==}
@@ -4232,6 +4224,13 @@ snapshots:
     optionalDependencies:
       typescript: 5.3.3
 
+  '@tabler/icons-react@3.29.0(react@18.3.1)':
+    dependencies:
+      '@tabler/icons': 3.29.0
+      react: 18.3.1
+
+  '@tabler/icons@3.29.0': {}
+
   '@tanstack/query-core@5.56.2': {}
 
   '@tanstack/react-query@5.56.2(react@18.3.1)':
@@ -4831,8 +4830,6 @@ snapshots:
   clsx@2.0.0: {}
 
   clsx@2.1.0: {}
-
-  clsx@2.1.1: {}
 
   cmdk@0.2.1(@types/react@18.3.6)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
@@ -6107,19 +6104,6 @@ snapshots:
       functions-have-names: 1.2.3
       has-property-descriptors: 1.0.1
 
-  shadcn-dropzone@0.2.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tailwindcss@3.4.1):
-    dependencies:
-      class-variance-authority: 0.7.0
-      clsx: 2.1.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-dropzone: 14.3.5(react@18.3.1)
-      tailwind-merge: 2.6.0
-      tailwindcss-animate: 1.0.7(tailwindcss@3.4.1)
-      truncate: 3.0.0
-    transitivePeerDependencies:
-      - tailwindcss
-
   shebang-command@2.0.0:
     dependencies:
       shebang-regex: 3.0.0
@@ -6240,8 +6224,6 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.23.7
 
-  tailwind-merge@2.6.0: {}
-
   tailwindcss-animate@1.0.7(tailwindcss@3.4.1):
     dependencies:
       tailwindcss: 3.4.1
@@ -6306,8 +6288,6 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
-
-  truncate@3.0.0: {}
 
   ts-api-utils@1.3.0(typescript@5.3.3):
     dependencies:

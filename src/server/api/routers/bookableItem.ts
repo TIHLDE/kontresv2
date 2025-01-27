@@ -4,11 +4,7 @@ import {
     memberProcedure,
 } from '@/server/api/trpc';
 
-import BookableItems from '@/components/ui/bookable-items';
-
 import { PrismaClient } from '@prisma/client';
-import { group } from 'console';
-import { get } from 'http';
 import { z } from 'zod';
 
 const prisma = new PrismaClient();

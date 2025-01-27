@@ -13,3 +13,5 @@
 /reservation/[reservationUUID] - Se detaljer på en reservasjon / evt endre detaljer
 
 /me - Brukeren kan se sine reservasjoner
+
+/calendar - se en kalender over reservasjoner

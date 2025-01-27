@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils';
 import { TRPCReactProvider } from '@/trpc/react';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
-import { ViewTransitions } from 'next-view-transitions';
 import { Inter } from 'next/font/google';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { Suspense } from 'react';
@@ -29,40 +28,36 @@ export default async function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <ViewTransitions>
-            <html lang="en" suppressHydrationWarning>
-                <body
-                    className={cn(inter.className, 'overflow-x-hidden')}
-                    suppressHydrationWarning
-                >
-                    <NuqsAdapter>
-                        <SessionProvider>
-                            <TRPCReactProvider>
-                                <ThemeProvider
-                                    attribute="class"
-                                    defaultTheme="system"
-                                    enableSystem
-                                    disableTransitionOnChange
-                                >
-                                    <Header className="lg:flex hidden" />
-                                    <div className="py-page pb-32">
-                                        <Toaster />
-                                        <BlurBackground>
-                                            {children}
-                                        </BlurBackground>
-                                    </div>
-                                    <div className="lg:hidden fixed bottom-5 w-full flex z-10">
-                                        <Suspense>
-                                            <BottomBarWrapper />
-                                        </Suspense>
-                                    </div>
-                                    {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
-                                </ThemeProvider>
-                            </TRPCReactProvider>
-                        </SessionProvider>
-                    </NuqsAdapter>
-                </body>
-            </html>
-        </ViewTransitions>
+        <html lang="en" suppressHydrationWarning>
+            <body
+                className={cn(inter.className, 'overflow-x-hidden')}
+                suppressHydrationWarning
+            >
+                <NuqsAdapter>
+                    <SessionProvider>
+                        <TRPCReactProvider>
+                            <ThemeProvider
+                                attribute="class"
+                                defaultTheme="system"
+                                enableSystem
+                                disableTransitionOnChange
+                            >
+                                <Header className="lg:flex hidden" />
+                                <div className="py-page pb-32">
+                                    <Toaster />
+                                    <BlurBackground>{children}</BlurBackground>
+                                </div>
+                                <div className="lg:hidden fixed bottom-5 w-full flex z-10">
+                                    <Suspense>
+                                        <BottomBarWrapper />
+                                    </Suspense>
+                                </div>
+                                {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
+                            </ThemeProvider>
+                        </TRPCReactProvider>
+                    </SessionProvider>
+                </NuqsAdapter>
+            </body>
+        </html>
     );
 }

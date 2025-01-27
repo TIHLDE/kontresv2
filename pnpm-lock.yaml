@@ -140,9 +140,6 @@ importers:
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      next-view-transitions:
-        specifier: ^0.3.4
-        version: 0.3.4(next@14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^2.3.1
         version: 2.3.1(next@14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -2596,13 +2593,6 @@ packages:
       next: '*'
       react: '*'
       react-dom: '*'
-
-  next-view-transitions@0.3.4:
-    resolution: {integrity: sha512-SSiskenQ8JkEFGzPjvFwC5LGGoqgTxM5dxexkeugxvcXFLpWI2ZUh4IsCURD3ovW+8Ue7xXlrtrpy8b7XR7IwQ==}
-    peerDependencies:
-      next: '>=14.0.0'
-      react: ^18.2.0
-      react-dom: ^18.2.0
 
   next@14.2.23:
     resolution: {integrity: sha512-mjN3fE6u/tynneLiEg56XnthzuYw+kD7mCujgVqioxyPqbmiotUCGJpIZGS/VaPg3ZDT1tvWxiVyRzeqJFm/kw==}
@@ -6000,12 +5990,6 @@ snapshots:
       react: 18.3.1
 
   next-themes@0.2.1(next@14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      next: 14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  next-view-transitions@0.3.4(next@14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       next: 14.2.23(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1

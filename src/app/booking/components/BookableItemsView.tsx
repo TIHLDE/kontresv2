@@ -2,22 +2,18 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardTitle } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
+
+
 
 import { datetimeParser, groupParser } from './SearchFilters';
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
-import { Link, useTransitionRouter } from 'next-view-transitions';
-import Image from 'next/image';
+import Link from 'next/link';
 import { parseAsBoolean, parseAsString, useQueryStates } from 'nuqs';
 import { useEffect, useState } from 'react';
+
 
 type BookableItemsViewProps = {
     className?: string;
@@ -26,8 +22,6 @@ type BookableItemsViewProps = {
 export default function BookableItemsView({
     className,
 }: BookableItemsViewProps) {
-    const router = useTransitionRouter();
-
     const [filters] = useQueryStates({
         q: parseAsString,
         groups: groupParser.withDefault([]),
@@ -68,12 +62,6 @@ export default function BookableItemsView({
 
         setFilteredData(filtered);
     }, [filters, setFilteredData, data]);
-
-    function handlePageTransition(itemId: number) {
-        console.log('handlePageTransition', itemId);
-        router.push(`/booking/${itemId}`);
-    }
-
     return (
         <Card
             className={cn(
@@ -87,9 +75,6 @@ export default function BookableItemsView({
                         className="aspect-video object-cover"
                         src="https://images.unsplash.com/photo-1737251043885-1fa62cb12933?q=80&w=2573&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="cover image"
-                        style={{
-                            viewTransitionName: `cover-image-${item.itemId}`,
-                        }}
                     />
                     <CardTitle className="p-3">{item.name}</CardTitle>
                     <CardDescription className="pl-3 mb-2">
@@ -97,10 +82,8 @@ export default function BookableItemsView({
                     </CardDescription>
                     <CardContent>{item.description}</CardContent>
                     <CardFooter className="flex justify-end">
-                        <Button
-                            onClick={() => handlePageTransition(item.itemId)}
-                        >
-                            Åpne
+                        <Button asChild>
+                            <Link href={`/booking/${item.itemId}`}>Åpne</Link>
                         </Button>
                     </CardFooter>
                 </Card>

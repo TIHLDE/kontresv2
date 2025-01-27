@@ -1,6 +1,5 @@
 // Main file for interacting with lepton services
 import { URLS } from './api/urls';
-import { type User } from './dtos/user';
 import { env } from '@/env';
 
 const getHeaders = (headers?: HeadersInit) => {

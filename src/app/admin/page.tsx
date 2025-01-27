@@ -3,7 +3,7 @@ const Admin = async () => {
 
     // Set default values for searchParams if none is defined
 
-    return undefined;
+    return <h1>Tja hva skal vi ha her, mon tro?</h1>;
 };
 
 export default Admin;

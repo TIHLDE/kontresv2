@@ -2,9 +2,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 import { Separator } from '@/components/ui/separator';
 
-import BookingListByState from './components/bookinglist-by-state';
-import ItemsListSkeleton from './components/old-components/items-list-skeleton';
-import ReservationTableSkeleton from './components/old-components/reservation-table-skeleton';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
@@ -18,7 +15,9 @@ const AdminButtons: { label: string; route: string; separated?: boolean }[] = [
 
 export default function AdminLayout({
     children,
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: {
+    children: React.ReactNode;
+}) {
     return (
         <div className="max-w-page h-[80vh] mx-auto md:w-full grid md:grid-cols-[min-content_auto] grid-cols-1 gap-10">
             <Card className="md:min-w-72">

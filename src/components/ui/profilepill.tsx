@@ -1,6 +1,3 @@
-import { User } from '@/types/User';
-
-import { type BaseGroup, GroupType } from '@/utils/apis/types';
 import { cn } from '@/utils/cn';
 
 import { Avatar, AvatarFallback, AvatarImage } from './avatar';
@@ -36,17 +33,6 @@ const genderMap: Record<number, string> = {
     1: 'Mann',
     2: 'Kvinne',
     3: 'Annet',
-};
-
-const groupTypeMap: Record<GroupType, string> = {
-    BOARD: 'Styre',
-    COMMITTEE: 'Komité',
-    INTERESTGROUP: 'Interessegruppe',
-    OTHER: 'Annet',
-    STUDY: 'Studie',
-    STUDYYEAR: 'Kull',
-    SUBGROUP: 'Undergruppe',
-    TIHLDE: 'TIHLDE',
 };
 
 export const UserProfilePill = ({
@@ -124,26 +110,21 @@ export const UserProfilePill = ({
     );
 };
 
-interface GroupProfilePillProps extends React.HTMLProps<HTMLDivElement> {
-    group?: BaseGroup;
-}
-
 export const GroupProfilePill = ({
-    group,
     ...props
-}: GroupProfilePillProps) => {
+}: React.HTMLProps<HTMLDivElement>) => {
     return (
         <HoverCard>
             <HoverCardTrigger>
-                <ProfileButton
+                {/* <ProfileButton
                     {...props}
                     label={group?.name}
                     image={group?.image ?? ''}
-                />
+                /> */}
             </HoverCardTrigger>
             <HoverCardContent className="w-80 border-2 border-[#1d458b]">
                 <div className="flex justify-between space-x-4">
-                    <Avatar>
+                    {/* <Avatar>
                         <AvatarImage
                             src={group?.image ?? ''}
                             alt={'Profilbilde'}
@@ -152,10 +133,10 @@ export const GroupProfilePill = ({
                         <AvatarFallback>
                             <UserRound className="text-foreground" />
                         </AvatarFallback>
-                    </Avatar>
+                    </Avatar> */}
                     <div className="space-y-1 w-full [&_svg]:mr-2 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:opacity-70">
-                        <h4 className="text-sm font-semibold">{group?.name}</h4>
-                        <BioSection
+                        {/* <h4 className="text-sm font-semibold">{group?.name}</h4> */}
+                        {/* <BioSection
                             className="pt-2"
                             items={[
                                 {
@@ -165,7 +146,7 @@ export const GroupProfilePill = ({
                                     ],
                                 },
                             ]}
-                        />
+                        /> */}
                     </div>
                 </div>
             </HoverCardContent>

@@ -1,20 +1,31 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import ReservationTable from '@/components/ui/reservation-table';
-import { Separator } from '@/components/ui/separator';
-import { UserDetail } from '@/components/ui/user-detail';
-
 import {
-    getReservations,
-    getUserReservations,
-} from '@/utils/apis/reservations';
-import { getCurrentUserData } from '@/utils/apis/user';
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 
+import { DataTable } from '../admin/components/data-table';
 import MyPageSkeleton from './components/my-page-skeleton';
 import MyPageWrapper from './components/my-page-wrapper';
-import { motion } from 'framer-motion';
+import { reservationColumns } from './components/reservation-columns';
+import { auth } from '@/auth';
+import { api } from '@/trpc/server';
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 const Page = async () => {
+    const session = await auth();
+    if (!session) redirect('/login');
+    const reservations = await api.reservation.getUserReservations({
+        userId: session.user.id,
+    });
+    console.log('user id ', session.user.id);
     return (
         <div className="max-w-page mx-auto flex flex-col place-content-center">
             <Card className="w-full">
@@ -22,9 +33,66 @@ const Page = async () => {
                     <CardTitle>Min side</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Suspense fallback={<MyPageSkeleton />}>
-                        <MyPageWrapper />
-                    </Suspense>
+                    <DataTable
+                        columns={reservationColumns}
+                        data={reservations}
+                        search
+                        filterProperty="description"
+                        searchPlaceholder="Søk etter navn..."
+                    />
+
+                    {/* <TableHeader>
+                            <TableRow>
+                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Bookable Item
+                                </TableHead>
+                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Start Time
+                                </TableHead>
+                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    End Time
+                                </TableHead>
+                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Status
+                                </TableHead>
+                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Description
+                                </TableHead>
+                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                                    Approved By
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {reservations.map(async (reservation) => (
+                                <TableRow key={reservation.reservationId}>
+                                    <TableCell className="px-6 py-4 text-sm">
+                                        {
+                                            (
+                                                await api.bookableItem.getById({
+                                                    itemId: reservation.bookableItemId,
+                                                })
+                                            ).name
+                                        }
+                                    </TableCell>
+                                    <TableCell className="px-6 py-4 text-sm">
+                                        {reservation.startTime.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell className="px-6 py-4 text-sm">
+                                        {reservation.endTime.toLocaleString()}
+                                    </TableCell>
+                                    <TableCell className="px-6 py-4 text-sm">
+                                        {reservation.status}
+                                    </TableCell>
+                                    <TableCell className="px-6 py-4 text-sm">
+                                        {reservation.description}
+                                    </TableCell>
+                                    <TableCell className="px-6 py-4 text-sm">
+                                        {reservation.approvedById}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody> */}
                 </CardContent>
             </Card>
         </div>

@@ -2,10 +2,11 @@
 
 import { Button, type ButtonProps } from '@/components/ui/button';
 
+import { getUserData } from '@/utils/apis/user';
 import { cn } from '@/utils/cn';
 
 import { stateMap } from '@/app/reservasjon/[id]/components/ReservationMeta';
-import { type Reservation } from '@prisma/client';
+import { BookableItem, type Reservation } from '@prisma/client';
 import { type ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
@@ -23,20 +24,15 @@ export const HeaderButton = ({ className, ...props }: ButtonProps) => {
     );
 };
 
-export const reservationColumns: ColumnDef<Reservation>[] = [
+export const reservationColumns: ColumnDef<
+    Reservation & { bookableItem: BookableItem }
+>[] = [
     {
         accessorKey: 'authorId',
-        accessorFn: (data) => {
-            return (
-                data?.author_detail?.first_name +
-                ' ' +
-                data?.author_detail?.last_name
-            );
-        },
         header: 'Bruker',
     },
     {
-        accessorKey: 'bookable_item_detail',
+        accessorKey: 'bookableItemId',
         header: ({ column }) => {
             return (
                 <HeaderButton
@@ -50,7 +46,11 @@ export const reservationColumns: ColumnDef<Reservation>[] = [
                 </HeaderButton>
             );
         },
-        accessorFn: (data) => data?.bookable_item_detail?.name,
+        accessorFn: (data) => data.bookableItem.name,
+    },
+    {
+        accessorKey: 'description',
+        header: 'Beskrivelse',
     },
     {
         accessorKey: 'startTime',

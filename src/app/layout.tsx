@@ -1,5 +1,3 @@
-import BlurBackground from '@/components/layout/blur-background';
-import BottomBarWrapper from '@/components/layout/bottom-bar/bottom-bar-wrapper';
 import Header from '@/components/layout/header/header';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
@@ -10,7 +8,6 @@ import { TRPCReactProvider } from '@/trpc/react';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
-import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,10 +24,7 @@ export default async function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body
-                className={cn(
-                    inter.className,
-                    'overflow-x-hidden flex flex-col min-h-screen',
-                )}
+                className={cn(inter.className, 'min-h-screen flex flex-col')}
                 suppressHydrationWarning
             >
                 <SessionProvider>
@@ -42,16 +36,8 @@ export default async function RootLayout({
                             disableTransitionOnChange
                         >
                             <Header className="lg:flex hidden" />
-                            <div className="pt-24 flex flex-1">
-                                <Toaster />
-                                {children}
-                            </div>
-                            <div className="lg:hidden fixed bottom-5 w-full flex z-10">
-                                <Suspense>
-                                    <BottomBarWrapper />
-                                </Suspense>
-                            </div>
-                            {/* <Footer /> <-- Denne må fikses for mobilvisning!! */}
+                            {children}
+                            <Toaster />
                         </ThemeProvider>
                     </TRPCReactProvider>
                 </SessionProvider>

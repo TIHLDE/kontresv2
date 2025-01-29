@@ -2,8 +2,6 @@ import { type User } from '@/types/User';
 
 import Logo from '@/components/ui/logo';
 
-import { type DetailedItem } from '@/utils/apis/types';
-
 import HeaderButtonsWrapper from './header-buttons-wrapper';
 import HeaderSkeleton from './header-skeleton';
 import HeaderWrapper from './header-wrapper';
@@ -12,7 +10,6 @@ import { Suspense } from 'react';
 
 interface HeaderProps extends React.HTMLProps<HTMLHeadElement> {
     userData?: User;
-    items?: DetailedItem[];
 }
 
 export default async function Header({ className, ...props }: HeaderProps) {

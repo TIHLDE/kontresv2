@@ -2,6 +2,7 @@ import { addMinutes } from 'date-fns';
 import { createContext, useCallback, useContext, useState } from 'react';
 
 interface DragState {
+    initial: Date;
     start: Date;
     end: Date;
     creating: boolean;
@@ -39,6 +40,7 @@ export function DragProvider({ children }: { children: React.ReactNode }) {
         const snappedDay = dateToInterval(day, snappedY);
 
         setDragState({
+            initial: snappedDay,
             start: snappedDay,
             end: snappedDay,
             creating: true,
@@ -54,7 +56,7 @@ export function DragProvider({ children }: { children: React.ReactNode }) {
             const snappedY = snapToInterval(relativeY);
             const snappedDay = dateToInterval(day, snappedY);
 
-            if (snappedDay.getTime() < dragState.start.getTime()) {
+            if (snappedDay.getTime() < dragState.initial.getTime()) {
                 setDragState((prev) => {
                     if (!prev?.creating) return null;
 
@@ -65,7 +67,19 @@ export function DragProvider({ children }: { children: React.ReactNode }) {
                 });
             }
 
-            if (snappedDay.getTime() > dragState.start.getTime()) {
+            if (snappedDay.getTime() === dragState.initial.getTime()) {
+                setDragState((prev) => {
+                    if (!prev?.creating) return null;
+
+                    return {
+                        ...prev,
+                        start: snappedDay,
+                        end: snappedDay,
+                    };
+                });
+            }
+
+            if (snappedDay.getTime() > dragState.initial.getTime()) {
                 setDragState((prev) => {
                     if (!prev?.creating) return null;
 

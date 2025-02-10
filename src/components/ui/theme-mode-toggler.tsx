@@ -8,8 +8,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { cn } from '@/utils/cn';
-
 import {
     Drawer,
     DrawerClose,
@@ -22,6 +20,7 @@ import {
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import React from 'react';
+import { cn } from '@/lib/utils';
 
 export function MobileModeToggle({ ...props }: ButtonProps) {
     const { setTheme } = useTheme();

@@ -2,15 +2,22 @@
 
 import { Button, type ButtonProps } from '@/components/ui/button';
 
-import { getUserData } from '@/utils/apis/user';
-import { cn } from '@/utils/cn';
 
-import { stateMap } from '@/app/reservasjon/[id]/components/ReservationMeta';
-import { BookableItem, type Reservation } from '@prisma/client';
+
+import { cn } from '@/lib/utils';
+import type { BookableItem, Reservation, ReservationState } from '@prisma/client';
 import { type ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { nb } from 'date-fns/locale/nb';
 import { ArrowUpDown } from 'lucide-react';
+
+
+
+const stateMap: Record<ReservationState, string> = {
+    REJECTED: 'Avslått',
+    APPROVED: 'Bekreftet',
+    PENDING: 'Avventer',
+};
 
 const dateSortingFn = (a: Reservation, b: Reservation) =>
     new Date(a.startTime) > new Date(b.startTime) ? 1 : -1;

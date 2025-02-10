@@ -15,7 +15,7 @@ type QuestionPageParams = {
 export default async function Page({ params: { id } }: QuestionPageParams) {
     const data = await api.faq.getById({ questionId: +id });
     const session = await auth();
-    let isAdmin = session?.user.role === 'ADMIN';
+    const isAdmin = session?.user.role === 'ADMIN';
 
     return (
         <div>

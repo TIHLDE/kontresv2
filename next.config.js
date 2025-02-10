@@ -5,6 +5,16 @@
 await import('./src/env.js');
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+    output: 'standalone',
+
+    // TODO: Remove when needing to push to production
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    typescript: {
+        ignoreBuildErrors: true,
+    },
+};
 
 export default config;

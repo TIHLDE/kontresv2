@@ -25,7 +25,6 @@ const Page = async () => {
     const reservations = await api.reservation.getUserReservations({
         userId: session.user.id,
     });
-    console.log('user id ', session.user.id);
     return (
         <div className="max-w-page mx-auto flex flex-col place-content-center">
             <Card className="w-full">

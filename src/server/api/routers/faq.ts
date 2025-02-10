@@ -123,29 +123,35 @@ export const faqRouter = createTRPCRouter({
             }),
         )
         .mutation(async ({ input }) => {
+            const updateData: any = {
+                question: input.question,
+                answer: input.answer,
+                group: input.group,
+                ...(input.bookableItemIds?.length
+                    ? {
+                          bookableItems: {
+                              set: input.bookableItemIds.map((id) => ({
+                                  itemId: id,
+                              })),
+                          },
+                      }
+                    : {
+                          bookableItems: {
+                              set: [],
+                          },
+                      }),
+                author: input.author,
+            };
+
+            if (input.imageUrl !== undefined && input.imageUrl !== '') {
+                updateData.imageUrl = input.imageUrl;
+            }
+
             const updateFAQ = await prisma.fAQ.update({
                 where: { questionId: input.questionId },
-                data: {
-                    question: input.question,
-                    answer: input.answer,
-                    group: input.group,
-                    ...(input.bookableItemIds?.length
-                        ? {
-                              bookableItems: {
-                                  set: input.bookableItemIds.map((id) => ({
-                                      itemId: id,
-                                  })),
-                              },
-                          }
-                        : {
-                              bookableItems: {
-                                  set: [],
-                              },
-                          }),
-                    author: input.author,
-                    imageUrl: input.imageUrl,
-                },
+                data: updateData,
             });
+
             return updateFAQ;
         }),
 });

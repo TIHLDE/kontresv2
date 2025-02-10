@@ -6,15 +6,13 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 
-// import { signOutUser } from '@/utils/apis/user';
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { ModeToggle } from '../ui/theme-mode-toggler';
-import { Settings, UserRound } from 'lucide-react';
+import { UserRound } from 'lucide-react';
 import { signOut } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -31,7 +29,6 @@ export const UserArea = ({
     className,
     ...props
 }: UserAreaProps) => {
-    // const { data, loading, error, signOut } = useUser();
     const router = useRouter();
     const [open, setOpen] = useState(false);
 

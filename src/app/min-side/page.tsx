@@ -40,59 +40,6 @@ const Page = async () => {
                         filterProperty="description"
                         searchPlaceholder="Søk etter navn..."
                     />
-
-                    {/* <TableHeader>
-                            <TableRow>
-                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    Bookable Item
-                                </TableHead>
-                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    Start Time
-                                </TableHead>
-                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    End Time
-                                </TableHead>
-                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    Status
-                                </TableHead>
-                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    Description
-                                </TableHead>
-                                <TableHead className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                                    Approved By
-                                </TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {reservations.map(async (reservation) => (
-                                <TableRow key={reservation.reservationId}>
-                                    <TableCell className="px-6 py-4 text-sm">
-                                        {
-                                            (
-                                                await api.bookableItem.getById({
-                                                    itemId: reservation.bookableItemId,
-                                                })
-                                            ).name
-                                        }
-                                    </TableCell>
-                                    <TableCell className="px-6 py-4 text-sm">
-                                        {reservation.startTime.toLocaleString()}
-                                    </TableCell>
-                                    <TableCell className="px-6 py-4 text-sm">
-                                        {reservation.endTime.toLocaleString()}
-                                    </TableCell>
-                                    <TableCell className="px-6 py-4 text-sm">
-                                        {reservation.status}
-                                    </TableCell>
-                                    <TableCell className="px-6 py-4 text-sm">
-                                        {reservation.description}
-                                    </TableCell>
-                                    <TableCell className="px-6 py-4 text-sm">
-                                        {reservation.approvedById}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody> */}
                 </CardContent>
             </Card>
         </div>

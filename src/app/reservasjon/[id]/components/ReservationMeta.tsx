@@ -5,7 +5,11 @@ import { type User } from '@/types/User';
 import { Card } from '@/components/ui/card';
 import { GroupProfilePill, UserProfilePill } from '@/components/ui/profilepill';
 
-import { type BaseGroup, GroupType, type ReservationState } from '@/utils/apis/types';
+import {
+    type BaseGroup,
+    GroupType,
+    type ReservationState,
+} from '@/utils/apis/types';
 
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
@@ -24,8 +28,8 @@ interface ReservationMetaProps extends React.ComponentProps<typeof Card> {
 }
 
 export const stateMap: { [key in ReservationState]: StateAtomType } = {
-    CANCELLED: 'Avslått',
-    CONFIRMED: 'Bekreftet',
+    REJECTED: 'Avslått',
+    APPROVED: 'Bekreftet',
     PENDING: 'Avventer',
 };
 
@@ -94,7 +98,7 @@ const ReservationMeta = ({
                 {approvedBy && (
                     <div>
                         <h2 className="font-semibold text-xl text-nowrap">
-                            {state === 'CONFIRMED' ? 'Godkjent' : 'Avslått'} av
+                            {state === 'APPROVED' ? 'Godkjent' : 'Avslått'} av
                         </h2>
                         <UserProfilePill
                             className="w-full"

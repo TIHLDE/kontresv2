@@ -37,6 +37,7 @@ const formSchema = z.object({
     }),
     bookableItemIds: z.array(z.number()).optional(),
     group: z.string().optional(),
+    imageUrl: z.string().optional(),
 });
 
 export type FaqFormValueTypes = z.infer<typeof formSchema>;
@@ -66,6 +67,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
             answer: '',
             bookableItemIds: [],
             group: groups ? groups[0] : '',
+            imageUrl:'',
         },
     });
 
@@ -78,6 +80,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                     ? updateQuestion?.bookableItems.map((item) => item.itemId)
                     : [],
                 group: updateQuestion?.group || (groups ? groups[0] : ''),
+                imageUrl: updateQuestion?.imageUrl || '', //eksisterer ikke enda
             });
         }
     }, [updateQuestion, isLoading]);
@@ -95,6 +98,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                           ' ' +
                           session?.user?.lastName,
                       group: formData.group || session?.user.leaderOf[0],
+                      imageUrl: formData.imageUrl || ''
                   })
                       .then(async () => {
                           await queryClient.invalidateQueries({
@@ -119,6 +123,7 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                           session?.user?.lastName,
                       group: formData.group || session?.user.leaderOf[0],
                       groupId: '1', //denne må fikses etterhvert
+                      imageUrl: formData.imageUrl || '',
                   })
                       .then(async () => {
                           toast({
@@ -236,6 +241,24 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                         )}
                     ></FormField>
                 )}
+
+                <FormField
+                    control={form.control}
+                    name="imageUrl"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-col mt-5">
+                            <FormLabel>
+                                Bilde
+                            </FormLabel>
+                            <FormControl>
+                                {/*innhold her*/}
+                            </FormControl>
+                            <FormDescription>
+                                Her kan du laste opp et bilde om du ønsker
+                            </FormDescription>
+                        </FormItem>
+                    )}
+                ></FormField>
 
                 <Button type="submit">
                     {params?.questionId ? 'Oppdater' : 'Opprett'}

@@ -1,20 +1,30 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import ReservationTable from '@/components/ui/reservation-table';
-import { Separator } from '@/components/ui/separator';
-import { UserDetail } from '@/components/ui/user-detail';
-
 import {
-    getReservations,
-    getUserReservations,
-} from '@/utils/apis/reservations';
-import { getCurrentUserData } from '@/utils/apis/user';
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 
+import { DataTable } from '../admin/components/data-table';
 import MyPageSkeleton from './components/my-page-skeleton';
 import MyPageWrapper from './components/my-page-wrapper';
-import { motion } from 'framer-motion';
+import { reservationColumns } from './components/reservation-columns';
+import { auth } from '@/auth';
+import { api } from '@/trpc/server';
+import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 const Page = async () => {
+    const session = await auth();
+    if (!session) redirect('/login');
+    const reservations = await api.reservation.getUserReservations({
+        userId: session.user.id,
+    });
     return (
         <div className="max-w-page mx-auto flex flex-col place-content-center">
             <Card className="w-full">
@@ -22,9 +32,13 @@ const Page = async () => {
                     <CardTitle>Min side</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <Suspense fallback={<MyPageSkeleton />}>
-                        <MyPageWrapper />
-                    </Suspense>
+                    <DataTable
+                        columns={reservationColumns}
+                        data={reservations}
+                        search
+                        filterProperty="description"
+                        searchPlaceholder="Søk etter navn..."
+                    />
                 </CardContent>
             </Card>
         </div>

@@ -31,9 +31,15 @@ export const stateMap: { [key in ReservationState]: StateAtomType } = {
     REJECTED: 'Avslått',
     APPROVED: 'Bekreftet',
     PENDING: 'Avventer',
+    CANCELLED: 'Avbrutt',
 };
 
-export type StateAtomType = 'Bekreftet' | 'Avventer' | 'Avslått' | 'Laster';
+export type StateAtomType =
+    | 'Bekreftet'
+    | 'Avventer'
+    | 'Avslått'
+    | 'Laster'
+    | 'Avbrutt';
 export const stateAtom = atom<StateAtomType>('Laster');
 
 const ReservationMeta = ({
@@ -137,7 +143,8 @@ const ReservationMeta = ({
                     <span
                         className={`${stateText === 'Avventer' && 'text-yellow-500'} 
                                                 ${stateText === 'Bekreftet' && 'text-green-500'} 
-                                                ${stateText === 'Avslått' && 'text-red-500'}`}
+                                                ${stateText === 'Avslått' && 'text-red-500'}
+                                                ${stateText === 'Avbrutt' && 'text-red-500'}`}
                     >
                         {stateText}
                     </span>

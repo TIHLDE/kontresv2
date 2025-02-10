@@ -13,7 +13,11 @@ export type DetailedReservation = {
     approved_by_detail?: User;
 } & BaseModel;
 
-export type ReservationState = 'APPROVED' | 'PENDING' | 'REJECTED';
+export type ReservationState =
+    | 'APPROVED'
+    | 'PENDING'
+    | 'REJECTED'
+    | 'CANCELLED';
 
 export type PostReservation = {
     bookable_item: string;

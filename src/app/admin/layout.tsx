@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 import { Separator } from '@/components/ui/separator';
 
+import AdminFilters from './components/admin-filters/admin-filters';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React, { Suspense } from 'react';
@@ -20,28 +21,7 @@ export default function AdminLayout({
 }) {
     return (
         <div className="max-w-page h-[80vh] mx-auto md:w-full grid md:grid-cols-[min-content_auto] grid-cols-1 gap-10">
-            <Card className="md:min-w-72">
-                <CardContent className="pt-5 w-full">
-                    <div className="w-full items-start flex flex-col">
-                        {AdminButtons.map((button) => (
-                            <>
-                                {button.separated && (
-                                    <Separator
-                                        orientation="horizontal"
-                                        className="my-1"
-                                    />
-                                )}
-                                <PageButton
-                                    key={button.label}
-                                    route={button.route}
-                                    label={button.label}
-                                    // active={searchParams?.page === button.route}
-                                />
-                            </>
-                        ))}
-                    </div>
-                </CardContent>
-            </Card>
+            <AdminFilters className="min-w-72" />
             <div className="flex flex-col w-full gap-5">
                 <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                     Tittel

@@ -17,7 +17,7 @@ export default async function page() {
                     FAQ
                 </h1>
                 {isAdmin && (
-                    <Link href={'./faq/edit/'} className="w-fit">
+                    <Link href={'./faq/create/'} className="w-fit">
                         <Button>Opprett ny</Button>
                     </Link>
                 )}

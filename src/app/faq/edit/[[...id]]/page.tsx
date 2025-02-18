@@ -33,7 +33,7 @@ export default function page() {
                     Edit FAQ
                 </h1>
                 <Card className="p-4 h-fit max-w-2xl">
-                    <CreateFaqForm key={questionId} question={question} questionId={questionId}/>
+                    <CreateFaqForm question={question} questionId={questionId}/>
                 </Card>
             </div>
         </SessionProvider>

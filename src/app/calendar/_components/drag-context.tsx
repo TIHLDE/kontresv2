@@ -10,6 +10,7 @@ interface DragState {
 
 interface DragContextType {
     dragState: DragState | null;
+    setDragState: React.Dispatch<React.SetStateAction<DragState | null>>;
     onDragStart: (date: Date, e: React.MouseEvent) => void;
     onDragMove: (date: Date, e: React.MouseEvent) => void;
     onDragEnd: () => void;
@@ -110,6 +111,7 @@ export function DragProvider({ children }: { children: React.ReactNode }) {
         <DragContext.Provider
             value={{
                 dragState,
+                setDragState,
                 onDragStart,
                 onDragMove,
                 onDragEnd,

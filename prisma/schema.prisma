@@ -23,25 +23,33 @@ model BookableItem {
     description     String
     allowsAlcohol   Boolean
     groupId         String
+    group           Group @relation(fields: [groupId], references: [groupId])
     reservations    Reservation[]
     FAQs            FAQ[] 
     @@index([name])
 }
 
+model Group {
+    groupId String @id
+    name    String
+
+    BookableItem BookableItem[]
+}
+
 model Reservation {
     reservationId              Int @id @default(autoincrement())
-    authorId          String
-    bookableItem   BookableItem @relation(fields: [bookableItemId], references: [itemId])
-    bookableItemId Int
-    startTime      DateTime
-    endTime        DateTime
-    status           ReservationState @default(PENDING)
+    authorId        String
+    bookableItem    BookableItem @relation(fields: [bookableItemId], references: [itemId])
+    bookableItemId  Int
+    startTime       DateTime
+    endTime         DateTime
+    status          ReservationState @default(PENDING)
     description     String
-    acceptedRules  Boolean
-    groupId           String
-    servesAlcohol  Boolean
-    soberWatch     String?
-    approvedById     String?
+    acceptedRules   Boolean
+    groupId         String
+    servesAlcohol   Boolean
+    soberWatch      String?
+    approvedById    String?
 }
 
 model FAQ {
@@ -51,4 +59,5 @@ model FAQ {
     group           String?
     author          String
     bookableItems   BookableItem[]
+    imageUrl        String
 }

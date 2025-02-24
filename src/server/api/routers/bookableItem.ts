@@ -46,6 +46,20 @@ export const bookableItemRouter = createTRPCRouter({
             return bookableItem;
         }),
 
+    getFilterableList: memberProcedure.query(async ({ ctx }) => {
+        return await ctx.db.bookableItem.findMany({
+            include: {
+                group: true,
+                reservations: {
+                    select: {
+                        startTime: true,
+                        endTime: true,
+                    },
+                },
+            },
+        });
+    }),
+
     //create new bookable item
     create: groupLeaderProcedure
         .input(

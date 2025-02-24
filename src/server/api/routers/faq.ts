@@ -85,6 +85,7 @@ export const faqRouter = createTRPCRouter({
                 group: z.string().optional(),
                 author: z.string(),
                 bookableItemIds: z.array(z.number()).optional(),
+                imageUrl: z.string().optional(),
             }),
         )
         .mutation(async ({ input }) => {
@@ -92,50 +93,57 @@ export const faqRouter = createTRPCRouter({
                 data: {
                     question: input.question,
                     answer: input.answer,
-                    group: input.group || "",
-                    ...(input.bookableItemIds?.length ? {
-                        bookableItems: {
-                            connect: input.bookableItemIds.map((id) => ({
-                                itemId: id,
-                            })),
-                        },
-                    }:[]),
+                    group: input.group || '',
+                    imageUrl: input.imageUrl || '',
+                    ...(input.bookableItemIds?.length
+                        ? {
+                              bookableItems: {
+                                  connect: input.bookableItemIds.map((id) => ({
+                                      itemId: id,
+                                  })),
+                              },
+                          }
+                        : []),
                     author: input.author,
                 },
             });
             return newFAQ;
         }),
 
-    update : memberProcedure.input(
-        z.object({
-            questionId: z.number(),
-            question: z.string(),
-            answer: z.string(),
-            group: z.string().optional(),
-            author: z.string(),
-            bookableItemIds: z.array(z.number()).optional(),
+    update: memberProcedure
+        .input(
+            z.object({
+                questionId: z.number(),
+                question: z.string(),
+                answer: z.string(),
+                group: z.string().optional(),
+                author: z.string(),
+                bookableItemIds: z.array(z.number()).optional(),
+            }),
+        )
+        .mutation(async ({ input }) => {
+            const updateFAQ = await prisma.fAQ.update({
+                where: { questionId: input.questionId },
+                data: {
+                    question: input.question,
+                    answer: input.answer,
+                    group: input.group,
+                    ...(input.bookableItemIds?.length
+                        ? {
+                              bookableItems: {
+                                  set: input.bookableItemIds.map((id) => ({
+                                      itemId: id,
+                                  })),
+                              },
+                          }
+                        : {
+                              bookableItems: {
+                                  set: [],
+                              },
+                          }),
+                    author: input.author,
+                },
+            });
+            return updateFAQ;
         }),
-    ).mutation(async ({ input }) => {
-        const updateFAQ = await prisma.fAQ.update({
-            where: {questionId: input.questionId},
-            data: {
-                question: input.question,
-                answer: input.answer,
-                group: input.group,
-                ...(input.bookableItemIds?.length ? {
-                    bookableItems: {
-                        set: input.bookableItemIds.map((id) => ({
-                            itemId: id,
-                        })),
-                    },
-                }:{
-                    bookableItems: {
-                        set: [],
-                    },
-                }),
-                author: input.author,
-            },
-        });
-        return updateFAQ;
-    }),
 });

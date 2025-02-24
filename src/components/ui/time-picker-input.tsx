@@ -1,12 +1,13 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import {
-    type TimePickerType,
-    getArrowByType,
-    getDateByType,
-    setDateByType,
-} from '@/components/utils/time-picker-utils';
+import { type TimePickerType, getArrowByType, getDateByType, setDateByType } from '@/components/utils/time-picker-utils';
+
+
+
+import { cn } from '@/lib/utils';
+import React from 'react';
+
 
 export interface TimePickerInputProps
     extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -86,13 +87,13 @@ const TimePickerInput = React.forwardRef<
         return (
             <Input
                 ref={ref}
-                id={id || picker}
-                name={name || picker}
+                id={id ?? picker}
+                name={name ?? picker}
                 className={cn(
                     'w-[48px] text-center text-base tabular-nums caret-transparent focus:bg-accent focus:text-accent-foreground [&::-webkit-inner-spin-button]:appearance-none',
                     className,
                 )}
-                value={value || calculatedValue}
+                value={value ?? calculatedValue}
                 onChange={(e) => {
                     e.preventDefault();
                     onChange?.(e);

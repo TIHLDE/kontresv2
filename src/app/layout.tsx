@@ -8,6 +8,7 @@ import { TRPCReactProvider } from '@/trpc/react';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,20 +28,22 @@ export default async function RootLayout({
                 className={cn(inter.className, 'min-h-screen flex flex-col')}
                 suppressHydrationWarning
             >
-                <SessionProvider>
-                    <TRPCReactProvider>
-                        <ThemeProvider
-                            attribute="class"
-                            defaultTheme="system"
-                            enableSystem
-                            disableTransitionOnChange
-                        >
-                            <Header className="lg:flex hidden" />
-                            {children}
-                            <Toaster />
-                        </ThemeProvider>
-                    </TRPCReactProvider>
-                </SessionProvider>
+                <NuqsAdapter>
+                    <SessionProvider>
+                        <TRPCReactProvider>
+                            <ThemeProvider
+                                attribute="class"
+                                defaultTheme="system"
+                                enableSystem
+                                disableTransitionOnChange
+                            >
+                                <Header className="lg:flex hidden" />
+                                {children}
+                                <Toaster />
+                            </ThemeProvider>
+                        </TRPCReactProvider>
+                    </SessionProvider>
+                </NuqsAdapter>
             </body>
         </html>
     );

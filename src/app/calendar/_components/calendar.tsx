@@ -13,6 +13,8 @@ import {
 import { DragProvider, useDrag } from './drag-context';
 import { DragOverlay, EventsOverlay } from './overlay';
 import { useClock } from '@/hooks/useClock';
+import { api } from '@/trpc/react';
+import { useMediaQuery } from '@uidotdev/usehooks';
 import {
     addDays,
     addWeeks,
@@ -21,20 +23,25 @@ import {
     endOfWeek,
     format,
     getWeek,
-    isSameDay,
     isToday,
-    isWithinInterval,
     startOfDay,
     startOfWeek,
 } from 'date-fns';
 import { nb } from 'date-fns/locale';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import {
+    parseAsInteger,
+    parseAsIsoDate,
+    parseAsStringEnum,
+    useQueryState,
+} from 'nuqs';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 enum CalendarView {
-    DAY = 'day',
-    THREE_DAYS = 'threeDays',
-    WEEK = 'week',
+    DAY = 'dag',
+    THREE_DAYS = 'tre-dager',
+    WEEK = 'uke',
 }
 
 export interface Event {
@@ -45,9 +52,22 @@ export interface Event {
     color?: string;
 }
 
-export default function Calendar({ events }: { events: Event[] }) {
-    const [currentDate, setCurrentDate] = useState<Date>(new Date());
-    const [view, setView] = useState<CalendarView>(CalendarView.WEEK);
+export default function Calendar() {
+    const [itemId] = useQueryState('id', parseAsInteger);
+
+    const [currentDate, setCurrentDate] = useQueryState(
+        'dato',
+        parseAsIsoDate.withDefault(new Date()),
+    );
+
+    const isSmallDevice = !useMediaQuery('(min-width: 1024px)');
+
+    const [view, setView] = useQueryState(
+        'visning',
+        parseAsStringEnum(Object.values(CalendarView)).withDefault(
+            isSmallDevice ? CalendarView.THREE_DAYS : CalendarView.WEEK,
+        ),
+    );
 
     const getDateRange = useCallback(() => {
         switch (view) {
@@ -71,6 +91,25 @@ export default function Calendar({ events }: { events: Event[] }) {
 
     const { start, end } = getDateRange();
 
+    const prevWeekStart = startOfWeek(addWeeks(currentDate, -1), {
+        locale: nb,
+    });
+    const nextWeekEnd = endOfWeek(addWeeks(currentDate, 1), { locale: nb });
+
+    const { data } = api.reservation.getReservationsByBookableItemId.useQuery({
+        bookableItemId: itemId,
+        startDate: prevWeekStart,
+        endDate: nextWeekEnd,
+    });
+
+    const events =
+        data?.reservations.map((reservation) => ({
+            id: reservation.reservationId,
+            title: reservation.authorId,
+            start: new Date(reservation.startTime),
+            end: new Date(reservation.endTime),
+        })) ?? [];
+
     return (
         <Card className="flex-grow overflow-auto">
             <CalendarHeader
@@ -80,9 +119,17 @@ export default function Calendar({ events }: { events: Event[] }) {
                 start={start}
                 end={end}
             />
-            <DragProvider>
-                <CalendarContent start={start} end={end} events={events} />
-            </DragProvider>
+            {itemId ? (
+                <DragProvider>
+                    <CalendarContent start={start} end={end} events={events} />
+                </DragProvider>
+            ) : (
+                <CardContent className="flex justify-center items-center w-full h-[calc(100%-94px)]">
+                    <h1 className="text-2xl font-bold">
+                        Velg en gjenstand for å se kalenderen
+                    </h1>
+                </CardContent>
+            )}
         </Card>
     );
 }
@@ -141,13 +188,13 @@ function CalendarHeader({
     }, [view, start, end]);
 
     return (
-        <CardHeader className="flex flex-row justify-between items-center sticky top-0 bg-card z-10">
+        <CardHeader className="flex flex-row justify-between items-center sticky top-0 bg-card z-20">
             <CardTitle>Calendar</CardTitle>
             <div className="flex justify-center items-center gap-2">
                 <Button size="icon" variant="outline" onClick={handlePrevious}>
                     <ChevronLeft />
                 </Button>
-                <span className="text-lg font-semibold capitalize">
+                <span className="text-lg font-semibold capitalize hidden lg:block">
                     {formatDateRange()}
                 </span>
                 <Button size="icon" variant="outline" onClick={handleNext}>
@@ -157,11 +204,11 @@ function CalendarHeader({
                     value={view}
                     onValueChange={(v) => setView(v as CalendarView)}
                 >
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[100px]">
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value={CalendarView.DAY}>Dag</SelectItem>
+                        <SelectItem value={CalendarView.DAY}>I dag</SelectItem>
                         <SelectItem value={CalendarView.THREE_DAYS}>
                             3 dager
                         </SelectItem>
@@ -248,7 +295,7 @@ function CurrentTimeIndicator() {
     return (
         <div
             ref={indicatorRef}
-            className="border-red-500 border-t border-b w-full absolute scroll-m-40"
+            className="border-red-500 border-t border-b w-full absolute scroll-m-40 duration-150 z-10"
             style={style}
         ></div>
     );
@@ -256,16 +303,27 @@ function CurrentTimeIndicator() {
 
 function DayColumn({ day, events }: { day: Date; events: Event[] }) {
     const today = isToday(day);
-    const { onDragStart, onDragMove, onDragEnd } = useDrag();
+    const { onDragStart, onDragMove, onDragEnd, dragState, setDragState } =
+        useDrag();
+    const router = useRouter();
+    const [id] = useQueryState('id', parseAsInteger);
 
     return (
         <div className="flex flex-col w-full select-none relative">
             <DayHeader day={day} />
             <div
                 className="relative"
-                onMouseDown={(e) => onDragStart(day, e)}
+                onMouseDown={(e) => {
+                    onDragStart(day, e);
+                }}
                 onMouseMove={(e) => onDragMove(day, e)}
-                onMouseUp={onDragEnd}
+                onMouseUp={() => {
+                    onDragEnd();
+                    if (dragState?.start !== dragState?.end) {
+                        router.push(`/booking/${id}/new`);
+                        setDragState(null);
+                    }
+                }}
             >
                 {Array.from({ length: 24 }, (_, i) => (
                     <HourCell key={i} />

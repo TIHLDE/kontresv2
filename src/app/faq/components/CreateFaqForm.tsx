@@ -172,46 +172,51 @@ export default function CreateFaqForm({
                     )}
                 ></FormField>
 
-                <FormField
-                    control={form.control}
-                    name="bookableItemIds"
-                    render={({ field }) => (
-                        <FormItem className="flex flex-col mt-5">
-                            <FormLabel>
-                                Gjelder spørsmålet noen spesifike gjenstander?
-                            </FormLabel>
-                            <FormControl>
-                                <BookableItemsSelect
-                                    field={field}
-                                    form={form}
-                                />
-                            </FormControl>
-                            <FormDescription>
-                                Velg ingen, en, eller flere gjenstander
-                            </FormDescription>
-                        </FormItem>
-                    )}
-                ></FormField>
-
-                {(groups ? groups.length > 1 : false) && (
+                <div className="w-full flex gap-10">
                     <FormField
                         control={form.control}
-                        name="group"
+                        name="bookableItemIds"
                         render={({ field }) => (
                             <FormItem className="flex flex-col mt-5">
                                 <FormLabel>
-                                    Hvilke grupper gjelder dette spørsmålet?
+                                    Gjelder spørsmålet noen spesifike
+                                    gjenstander?
                                 </FormLabel>
                                 <FormControl>
-                                    <GroupSelect field={field} />
+                                    <BookableItemsSelect
+                                        field={field}
+                                        form={form}
+                                    />
                                 </FormControl>
+                                <FormDescription>
+                                    Velg ingen, én, eller flere gjenstander
+                                </FormDescription>
                             </FormItem>
                         )}
                     ></FormField>
-                )}
+                    {(groups ? groups.length > 1 : false) && (
+                        <FormField
+                            control={form.control}
+                            name="group"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col mt-5">
+                                    <FormLabel>
+                                        Hvilke grupper gjelder dette spørsmålet?
+                                    </FormLabel>
+                                    <FormControl>
+                                        <GroupSelect field={field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Velg minst én gruppe
+                                    </FormDescription>
+                                </FormItem>
+                            )}
+                        ></FormField>
+                    )}
+                </div>
 
-                <FormLabel>Last opp bilde</FormLabel>
                 <FileUpload
+                    accept="image/*"
                     onChange={(files) => {
                         files[0] && handleFileUpload(files[0]);
                     }}

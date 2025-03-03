@@ -33,7 +33,7 @@ export default function BookableItemsSelect({
     field,
     form,
 }: {
-    field: { value: number[] | undefined};
+    field: { value: number[] | undefined };
     form: any;
 }) {
     const { data: bookableItems, isLoading } =
@@ -42,7 +42,9 @@ export default function BookableItemsSelect({
     const selectedItems = useMemo(() => {
         if (!bookableItems) return [];
 
-        return bookableItems.filter((v) => (field.value ?? []).includes(v.itemId));
+        return bookableItems.filter((v) =>
+            (field.value ?? []).includes(v.itemId),
+        );
     }, [field, bookableItems]);
 
     if (isLoading) return <LoadingSpinner />;
@@ -54,7 +56,7 @@ export default function BookableItemsSelect({
                     variant="outline"
                     role="combobox"
                     className={cn(
-                        'w-[200px] justify-between',
+                        'w-full justify-between',
                         !field.value && 'text-muted-foreground',
                     )}
                 >
@@ -75,7 +77,7 @@ export default function BookableItemsSelect({
                                     value={item.itemId.toString()}
                                     key={item.name}
                                     onSelect={() => {
-                                        let newItems = (field.value ?? []);
+                                        let newItems = field.value ?? [];
                                         let index = newItems.findIndex(
                                             (v: number) => v == item.itemId,
                                         );
@@ -95,7 +97,9 @@ export default function BookableItemsSelect({
                                     <Check
                                         className={cn(
                                             'mr-2 h-4 w-4',
-                                            (field.value ?? []).includes(item.itemId)
+                                            (field.value ?? []).includes(
+                                                item.itemId,
+                                            )
                                                 ? 'opacity-100'
                                                 : 'opacity-0',
                                         )}

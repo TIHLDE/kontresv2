@@ -1,3 +1,3 @@
 export const CACHE_TAGS = {
-    FAQS: 'FAQS',
+    FAQS: 'faqs',
 };

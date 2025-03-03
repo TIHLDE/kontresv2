@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { FileUpload } from '@/components/ui/file-upload';
 import {
     Form,
     FormControl,
@@ -16,8 +17,10 @@ import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 
 import BookableItemsSelect from './bookableItemsSelect';
+import { FaqFormValueTypes, formSchema } from './faqSchema';
 import GroupSelect from './groupSelect';
-import { CACHE_TAGS } from '@/lib/cacheTags';
+import { getImageUrl } from './uploadFile';
+import { CACHE_TAGS } from '@/lib/cache_tags';
 import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
@@ -26,12 +29,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FileUpload } from '@/components/ui/file-upload';
-import { FaqFormValueTypes, formSchema } from './faqSchema';
-import { getImageUrl } from './uploadFile';
 
-
-export default function CreateFaqForm({question, questionId} : { question?: FaqFormValueTypes, questionId?: string}) {
+export default function CreateFaqForm({
+    question,
+    questionId,
+}: {
+    question?: FaqFormValueTypes;
+    questionId?: string;
+}) {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
     const { mutateAsync: updateFaq } = api.faq.update.useMutation();
     const queryClient = useQueryClient();
@@ -41,7 +46,7 @@ export default function CreateFaqForm({question, questionId} : { question?: FaqF
     const router = useRouter();
 
     const { data: session } = useSession();
-    const token = session?.user.TIHLDE_Token
+    const token = session?.user.TIHLDE_Token;
     const groups = session?.user.groups;
 
     const { toast } = useToast();
@@ -53,7 +58,7 @@ export default function CreateFaqForm({question, questionId} : { question?: FaqF
             answer: '',
             bookableItemIds: [],
             group: groups ? groups[0] : '',
-            imageUrl:'',
+            imageUrl: '',
         },
     });
 
@@ -64,15 +69,16 @@ export default function CreateFaqForm({question, questionId} : { question?: FaqF
                 answer: question?.answer || '',
                 bookableItemIds: question.bookableItemIds || [],
                 group: question?.group || (groups ? groups[0] : ''),
-                imageUrl: question?.imageUrl || '', 
+                imageUrl: question?.imageUrl || '',
             });
         }
     }, [question, groups, form]);
 
     async function onSubmit(formData: FaqFormValueTypes) {
         try {
-            const imageUrl = file && token ? await getImageUrl(file, token) : '';
-            form.setValue("imageUrl", imageUrl);
+            const imageUrl =
+                file && token ? await getImageUrl(file, token) : '';
+            form.setValue('imageUrl', imageUrl);
 
             const faqData = {
                 question: formData.question,
@@ -86,29 +92,38 @@ export default function CreateFaqForm({question, questionId} : { question?: FaqF
             if (questionId) {
                 await updateFaq({
                     ...faqData,
-                    questionId: parseInt(questionId)
-                })
+                    questionId: parseInt(questionId),
+                });
             } else {
                 await createFaq({
                     ...faqData,
-                    groupId: '1' //må finne ut hva groupId skal være
-                })
+                    groupId: '1', //må finne ut hva groupId skal være
+                });
             }
 
             toast({
-                description: questionId ? '✅ FAQ oppdatert!' : '🎉 FAQ opprettet!',
+                description: questionId
+                    ? '✅ FAQ oppdatert!'
+                    : '🎉 FAQ opprettet!',
                 duration: 5000,
                 action: (
-                    <ToastAction altText="Til FAQ-siden" className="border-black">
-                        <Link href={`/faq`} onClick={() => toast}>Til FAQ-siden</Link>
+                    <ToastAction
+                        altText="Til FAQ-siden"
+                        className="border-black"
+                    >
+                        <Link href={`/faq`} onClick={() => toast}>
+                            Til FAQ-siden
+                        </Link>
                     </ToastAction>
                 ),
             });
 
-            await queryClient.invalidateQueries({ queryKey: [CACHE_TAGS.FAQS] });
+            await queryClient.invalidateQueries({
+                queryKey: [CACHE_TAGS.FAQS],
+            });
             router.back();
         } catch (error) {
-            console.error("Error i oppretting  av FAQ: ", error)
+            console.error('Error i oppretting  av FAQ: ', error);
             toast({ variant: 'destructive', description: 'Noe gikk galt 😢' });
         }
     }
@@ -148,9 +163,7 @@ export default function CreateFaqForm({question, questionId} : { question?: FaqF
                             <FormLabel>Svar</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder={
-                                        'Skriv et svar på spørsmålet.'
-                                    }
+                                    placeholder={'Skriv et svar på spørsmålet.'}
                                     {...field}
                                 />
                             </FormControl>
@@ -198,7 +211,11 @@ export default function CreateFaqForm({question, questionId} : { question?: FaqF
                 )}
 
                 <FormLabel>Last opp bilde</FormLabel>
-                <FileUpload onChange={(files)=>{files[0] && handleFileUpload(files[0])}}/>
+                <FileUpload
+                    onChange={(files) => {
+                        files[0] && handleFileUpload(files[0]);
+                    }}
+                />
 
                 <Button type="submit">
                     {questionId ? 'Oppdater' : 'Opprett'}

@@ -23,9 +23,17 @@ model BookableItem {
     description     String
     allowsAlcohol   Boolean
     groupId         String
+    group           Group @relation(fields: [groupId], references: [groupId])
     reservations    Reservation[]
     FAQs            FAQ[] 
     @@index([name])
+}
+
+model Group {
+    groupId String @id
+    name    String
+
+    BookableItem BookableItem[]
 }
 
 model Reservation {

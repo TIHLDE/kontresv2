@@ -14,9 +14,11 @@ import { DataTable } from '../admin/components/data-table';
 import MyPageSkeleton from './components/my-page-skeleton';
 import MyPageWrapper from './components/my-page-wrapper';
 import { reservationColumns } from './components/reservation-columns';
+import ReservationView from './components/reservation-view';
 import { auth } from '@/auth';
 import { api } from '@/trpc/server';
-import { redirect } from 'next/navigation';
+import { Reservation } from '@prisma/client';
+import { redirect, useRouter } from 'next/navigation';
 import { Suspense } from 'react';
 
 const Page = async () => {
@@ -32,13 +34,7 @@ const Page = async () => {
                     <CardTitle>Min side</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <DataTable
-                        columns={reservationColumns}
-                        data={reservations}
-                        search
-                        filterProperty="description"
-                        searchPlaceholder="Søk etter navn..."
-                    />
+                    <ReservationView reservations={reservations} />
                 </CardContent>
             </Card>
         </div>

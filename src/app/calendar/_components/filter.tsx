@@ -6,11 +6,18 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 import { api } from '@/trpc/react';
 import { parseAsInteger, useQueryState } from 'nuqs';
+import { useEffect } from 'react';
 
-export default function Filter() {
+export default function Filter({ id }: { id: number }) {
     const { data: bookableItems } = api.bookableItem.getAll.useQuery();
 
-    const [id, setId] = useQueryState('id', parseAsInteger);
+    const [itemId, setItemId] = useQueryState('id', parseAsInteger);
+
+    useEffect(() => {
+        if (!itemId && id) {
+            void setItemId(id);
+        }
+    }, [itemId, id, setItemId]);
 
     return (
         <Card className="h-fit w-full lg:w-96">
@@ -19,8 +26,8 @@ export default function Filter() {
             </CardHeader>
             <CardContent>
                 <RadioGroup
-                    defaultValue={id?.toString()}
-                    onValueChange={(v) => setId(Number(v))}
+                    defaultValue={itemId?.toString()}
+                    onValueChange={(v) => setItemId(Number(v))}
                 >
                     {bookableItems?.map((item) => (
                         <div

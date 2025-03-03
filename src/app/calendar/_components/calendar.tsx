@@ -10,33 +10,28 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-import { DragProvider, useDrag } from './drag-context';
-import { DragOverlay, EventsOverlay } from './overlay';
+import { CalendarProvider, useCalendar } from './useCalendar';
+import { DragProvider, useDrag } from './useDrag';
 import { useClock } from '@/hooks/useClock';
+import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
-import { useMediaQuery } from '@uidotdev/usehooks';
 import {
-    addDays,
     addWeeks,
     eachDayOfInterval,
     endOfDay,
-    endOfWeek,
     format,
     getWeek,
+    isSameDay,
     isToday,
+    isWithinInterval,
     startOfDay,
-    startOfWeek,
+    subWeeks,
 } from 'date-fns';
 import { nb } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LucidePlus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import {
-    parseAsInteger,
-    parseAsIsoDate,
-    parseAsStringEnum,
-    useQueryState,
-} from 'nuqs';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { parseAsInteger, useQueryState } from 'nuqs';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 enum CalendarView {
     DAY = 'dag',
@@ -44,139 +39,58 @@ enum CalendarView {
     WEEK = 'uke',
 }
 
-export interface Event {
-    id: number;
-    title: string;
-    start: Date;
-    end: Date;
-    color?: string;
-}
+const TIMESCALE_WIDTH = 60;
+const HOUR_HEIGHT = 40;
+const TOTAL_HEIGHT = 24 * HOUR_HEIGHT;
 
-export default function Calendar() {
-    const [itemId] = useQueryState('id', parseAsInteger);
+export default function Calendar({ id }: { id: number }) {
+    const [itemId, setItemId] = useQueryState('id', parseAsInteger);
+    const [activeId, setActiveId] = useState<number | null>(itemId ?? id);
 
-    const [currentDate, setCurrentDate] = useQueryState(
-        'dato',
-        parseAsIsoDate.withDefault(new Date()),
-    );
-
-    const isSmallDevice = !useMediaQuery('(min-width: 1024px)');
-
-    const [view, setView] = useQueryState(
-        'visning',
-        parseAsStringEnum(Object.values(CalendarView)).withDefault(
-            isSmallDevice ? CalendarView.THREE_DAYS : CalendarView.WEEK,
-        ),
-    );
-
-    const getDateRange = useCallback(() => {
-        switch (view) {
-            case CalendarView.DAY:
-                return {
-                    start: startOfDay(currentDate),
-                    end: endOfDay(currentDate),
-                };
-            case CalendarView.THREE_DAYS:
-                return {
-                    start: startOfDay(currentDate),
-                    end: endOfDay(addDays(currentDate, 2)),
-                };
-            case CalendarView.WEEK:
-                return {
-                    start: startOfWeek(currentDate, { locale: nb }),
-                    end: endOfWeek(currentDate, { locale: nb }),
-                };
+    useEffect(() => {
+        if (!itemId && id) {
+            void setItemId(id);
         }
-    }, [currentDate, view]);
-
-    const { start, end } = getDateRange();
-
-    const prevWeekStart = startOfWeek(addWeeks(currentDate, -1), {
-        locale: nb,
-    });
-    const nextWeekEnd = endOfWeek(addWeeks(currentDate, 1), { locale: nb });
-
-    const { data } = api.reservation.getReservationsByBookableItemId.useQuery({
-        bookableItemId: itemId,
-        startDate: prevWeekStart,
-        endDate: nextWeekEnd,
-    });
-
-    const events =
-        data?.reservations.map((reservation) => ({
-            id: reservation.reservationId,
-            title: reservation.authorId,
-            start: new Date(reservation.startTime),
-            end: new Date(reservation.endTime),
-        })) ?? [];
+        if (itemId) {
+            setActiveId(itemId);
+        }
+    }, [itemId, id, setItemId]);
 
     return (
-        <Card className="flex-grow overflow-auto">
-            <CalendarHeader
-                setCurrentDate={setCurrentDate}
-                view={view}
-                setView={setView}
-                start={start}
-                end={end}
-            />
-            {itemId ? (
-                <DragProvider>
-                    <CalendarContent start={start} end={end} events={events} />
-                </DragProvider>
-            ) : (
-                <CardContent className="flex justify-center items-center w-full h-[calc(100%-94px)]">
-                    <h1 className="text-2xl font-bold">
-                        Velg en gjenstand for å se kalenderen
-                    </h1>
-                </CardContent>
-            )}
-        </Card>
+        <CalendarProvider>
+            <DragProvider>
+                <Card className="flex-grow">
+                    <CalendarHeader />
+                    <CardContent className="flex flex-col w-full h-[calc(100%-94px)]">
+                        {activeId ? (
+                            <>
+                                {' '}
+                                <CalendarDayHeader />
+                                <div className="flex overflow-y-auto">
+                                    <CalendarTimescale />
+                                    <CalendarContent id={activeId} />
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex w-full h-full justify-center items-center">
+                                <h3 className="text-2xl font-bold">
+                                    Velg en gjendstand
+                                </h3>
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+            </DragProvider>
+        </CalendarProvider>
     );
 }
 
-function CalendarHeader({
-    setCurrentDate,
-    view,
-    setView,
-    start,
-    end,
-}: {
-    setCurrentDate: (date: (date: Date) => Date) => void;
-    view: CalendarView;
-    setView: (view: CalendarView) => void;
-    start: Date;
-    end: Date;
-}) {
-    const handleNext = () => {
-        switch (view) {
-            case CalendarView.DAY:
-                setCurrentDate((d) => addDays(d, 1));
-                break;
-            case CalendarView.THREE_DAYS:
-                setCurrentDate((d) => addDays(d, 3));
-                break;
-            case CalendarView.WEEK:
-                setCurrentDate((d) => addWeeks(d, 1));
-                break;
-        }
-    };
-
-    const handlePrevious = () => {
-        switch (view) {
-            case CalendarView.DAY:
-                setCurrentDate((d) => addDays(d, -1));
-                break;
-            case CalendarView.THREE_DAYS:
-                setCurrentDate((d) => addDays(d, -3));
-                break;
-            case CalendarView.WEEK:
-                setCurrentDate((d) => addWeeks(d, -1));
-                break;
-        }
-    };
+function CalendarHeader() {
+    const { start, end, view, setView, handleNext, handlePrevious } =
+        useCalendar();
 
     const formatDateRange = useCallback(() => {
-        switch (view) {
+        switch (view as CalendarView) {
             case CalendarView.DAY:
                 return format(start, 'EEE d. MMM', { locale: nb });
             case CalendarView.THREE_DAYS:
@@ -220,50 +134,331 @@ function CalendarHeader({
     );
 }
 
-function CalendarContent({
-    start,
-    end,
-    events,
-}: {
-    start: Date;
-    end: Date;
-    events: Event[];
-}) {
+function CalendarDayHeader() {
+    const { start, end } = useCalendar();
+
+    const days = eachDayOfInterval({ start, end });
+
     return (
-        <CardContent className="flex flex-row">
-            <TimeScale />
-            <DayGrid start={start} end={end} events={events} />
-        </CardContent>
+        <div
+            style={{ paddingLeft: TIMESCALE_WIDTH }}
+            className="flex w-full border-b"
+        >
+            {days.map((day) => (
+                <h3
+                    key={day.toISOString()}
+                    className="text-2xl font-bold w-full p-2"
+                >
+                    {format(day, 'EEE dd', { locale: nb })}
+                </h3>
+            ))}
+        </div>
     );
 }
 
-function TimeScale() {
+function CalendarTimescale() {
     return (
-        <div className="flex flex-col w-16 border-r">
-            <div className="h-12"></div>
+        <div
+            style={{ width: TIMESCALE_WIDTH, height: TOTAL_HEIGHT }}
+            className="border-r"
+        >
             {Array.from({ length: 24 }, (_, i) => (
-                <div key={i} className="h-20 relative">
-                    <span className="absolute -translate-y-1/2">
-                        {String(i).padStart(2, '0')}:00
-                    </span>
+                <div
+                    key={i}
+                    style={{ height: HOUR_HEIGHT, minHeight: HOUR_HEIGHT }}
+                    className="flex justify-center items-start border-b text-sm text-muted-foreground"
+                >
+                    {String(i).padStart(2, '0')}:00
                 </div>
             ))}
         </div>
     );
 }
 
-function DayHeader({ day }: { day: Date }) {
+function CalendarContent({ id }: { id: number }) {
+    const { start, end } = useCalendar();
+    const { handleDragStart, handleDragMove, handleDragEnd, dragState } =
+        useDrag();
+    const router = useRouter();
+
+    const days = eachDayOfInterval({ start, end });
+
+    const fetchRange = useMemo(() => {
+        return {
+            start: subWeeks(startOfDay(start), 2),
+            end: addWeeks(endOfDay(end), 2),
+        };
+    }, [start, end]);
+
+    const { data: reservations } =
+        api.reservation.getReservationsByBookableItemId.useQuery({
+            bookableItemId: id,
+            startDate: fetchRange.start,
+            endDate: fetchRange.end,
+        });
+
+    const events: Event[] =
+        reservations?.reservations.map((reservation) => ({
+            id: reservation.reservationId,
+            title: reservation.authorId,
+            start: new Date(reservation.startTime),
+            end: new Date(reservation.endTime),
+        })) ?? [];
+
+    const getTimeFromMouseEvent = (e: React.MouseEvent, day: Date) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+
+        const totalMinutes = Math.floor((y / HOUR_HEIGHT) * 60);
+        const snappedMinutes = Math.floor(totalMinutes / 30) * 30;
+        const hours = Math.floor(snappedMinutes / 60);
+        const minutes = snappedMinutes % 60;
+
+        return new Date(
+            day.getFullYear(),
+            day.getMonth(),
+            day.getDate(),
+            hours,
+            minutes,
+        );
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        const target = e.target as HTMLElement;
+
+        const isEvent =
+            target.hasAttribute('data-event-id') ||
+            target.parentElement?.hasAttribute('data-event-id');
+
+        if (isEvent) return;
+
+        const columnEl = target.closest('[data-day]');
+        if (!columnEl) return;
+
+        const day = new Date(columnEl.getAttribute('data-day')!);
+        const time = getTimeFromMouseEvent(e, day);
+        handleDragStart(time);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!e.buttons) return;
+        const target = e.target as HTMLElement;
+        const columnEl = target.closest('[data-day]');
+        if (!columnEl) return;
+
+        const day = new Date(columnEl.getAttribute('data-day')!);
+        const time = getTimeFromMouseEvent(e, day);
+        handleDragMove(time);
+    };
+
+    const handleMouseUp = () => {
+        if (!dragState?.isDragging) {
+            handleDragEnd();
+            return;
+        }
+
+        handleDragEnd();
+
+        if (
+            dragState.isDragging &&
+            dragState?.endDate.getTime() !== dragState?.startDate.getTime()
+        ) {
+            router.push(`booking/${id}/new`);
+        }
+    };
+
     return (
-        <div>
-            <div className="h-12 border-b border-r capitalize flex justify-center items-center font-bold text-lg">
-                {format(day, 'EEE dd', { locale: nb })}
-            </div>
+        <div
+            style={{ height: TOTAL_HEIGHT }}
+            className={cn(
+                'flex w-full relative',
+                dragState?.isDragging && 'select-none',
+            )}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleDragEnd}
+        >
+            {days.map((day) => (
+                <CalendarDayColumn
+                    key={day.toISOString()}
+                    day={day}
+                    events={events}
+                />
+            ))}
+            <Button
+                className="fixed z-30 right-4 bottom-4 w-12 h-12"
+                size="icon"
+                onClick={() => router.push(`booking/${id}/new`)}
+            >
+                <LucidePlus size={32} />
+            </Button>
         </div>
     );
 }
 
-function HourCell() {
-    return <div className="h-20 border-b border-r"></div>;
+export function DragOverlay({ day }: { day: Date }) {
+    const { dragState } = useDrag();
+
+    if (!dragState) return null;
+
+    if (dragState.startDate.getTime() === dragState.endDate.getTime())
+        return null;
+
+    const [earlierDate, laterDate] = [dragState.startDate, dragState.endDate]
+        .slice()
+        .sort((a, b) => a.getTime() - b.getTime()) as [Date, Date];
+
+    const isWithinDrag = isWithinInterval(startOfDay(day), {
+        start: startOfDay(earlierDate),
+        end: startOfDay(laterDate),
+    });
+
+    if (!isWithinDrag) return null;
+
+    let top = 0;
+    let height = TOTAL_HEIGHT;
+
+    if (isSameDay(day, earlierDate)) {
+        const minutes = earlierDate.getHours() * 60 + earlierDate.getMinutes();
+        top = Math.min((minutes / 60) * HOUR_HEIGHT, TOTAL_HEIGHT);
+    }
+
+    if (isSameDay(day, laterDate)) {
+        const minutes = laterDate.getHours() * 60 + laterDate.getMinutes();
+        height = Math.min((minutes / 60) * HOUR_HEIGHT, TOTAL_HEIGHT);
+    }
+
+    if (isSameDay(earlierDate, laterDate)) {
+        height = Math.min(height - top, TOTAL_HEIGHT - top);
+    }
+
+    if (top + height > TOTAL_HEIGHT) {
+        height = TOTAL_HEIGHT - top;
+    }
+
+    const borderRadiusClass =
+        isSameDay(day, earlierDate) && isSameDay(day, laterDate)
+            ? 'rounded-md'
+            : isSameDay(day, earlierDate)
+              ? 'rounded-t-md'
+              : isSameDay(day, laterDate)
+                ? 'rounded-b-md'
+                : '';
+
+    const isStartDay = isSameDay(day, earlierDate);
+    const isEndDay = isSameDay(day, laterDate);
+
+    const positionStyle = {
+        top: isStartDay ? top + 4 : top,
+        height:
+            isStartDay && isEndDay
+                ? height - 8
+                : isStartDay || isEndDay
+                  ? height - 4
+                  : height,
+    };
+
+    return (
+        <div
+            className={cn(
+                `absolute z-10 left-1 right-1 bg-primary/20 hover:bg-primary/30 hover:cursor-pointer border-l-4 border-l-primary p-2`,
+                borderRadiusClass,
+                dragState?.isDragging && 'pointer-events-none',
+            )}
+            style={positionStyle}
+        />
+    );
+}
+
+interface Event {
+    id: number;
+    title: string;
+    start: Date;
+    end: Date;
+}
+
+export function EventOverlay({ day, events }: { day: Date; events: Event[] }) {
+    const { dragState } = useDrag();
+    const router = useRouter();
+
+    const dayEvents = events.filter(
+        (event) => isSameDay(day, event.start) || isSameDay(day, event.end),
+    );
+
+    if (dayEvents.length === 0) return null;
+
+    return (
+        <>
+            {dayEvents.map((event) => {
+                let top = 0;
+                let height = TOTAL_HEIGHT;
+
+                if (isSameDay(day, event.start)) {
+                    const minutes =
+                        event.start.getHours() * 60 + event.start.getMinutes();
+                    top = Math.min((minutes / 60) * HOUR_HEIGHT, TOTAL_HEIGHT);
+                }
+
+                if (isSameDay(day, event.end)) {
+                    const minutes =
+                        event.end.getHours() * 60 + event.end.getMinutes();
+                    height = Math.min(
+                        (minutes / 60) * HOUR_HEIGHT,
+                        TOTAL_HEIGHT,
+                    );
+                }
+
+                if (isSameDay(event.start, event.end)) {
+                    height = Math.min(height - top, TOTAL_HEIGHT - top);
+                }
+
+                if (top + height > TOTAL_HEIGHT) {
+                    height = TOTAL_HEIGHT - top;
+                }
+
+                const borderRadiusClass =
+                    isSameDay(day, event.start) && isSameDay(day, event.end)
+                        ? 'rounded-md'
+                        : isSameDay(day, event.start)
+                          ? 'rounded-t-md'
+                          : isSameDay(day, event.end)
+                            ? 'rounded-b-md'
+                            : '';
+
+                const isStartDay = isSameDay(day, event.start);
+                const isEndDay = isSameDay(day, event.end);
+
+                const positionStyle = {
+                    top: isStartDay ? top + 4 : top,
+                    height:
+                        isStartDay && isEndDay
+                            ? height - 8
+                            : isStartDay || isEndDay
+                              ? height - 4
+                              : height,
+                };
+
+                return (
+                    <div
+                        key={event.id}
+                        data-event-id={event.id}
+                        className={cn(
+                            `absolute z-10 left-1 right-1 bg-primary/20 hover:bg-primary/30 hover:cursor-pointer duration-150 border-l-4 border-l-primary p-2`,
+                            borderRadiusClass,
+                            dragState?.isDragging && 'pointer-events-none',
+                        )}
+                        style={positionStyle}
+                        onClick={() => router.push(`reservation/${event.id}`)}
+                    >
+                        <span className="text-sm font-medium select-none">
+                            {event.title}
+                        </span>
+                    </div>
+                );
+            })}
+        </>
+    );
 }
 
 function CurrentTimeIndicator() {
@@ -286,7 +481,7 @@ function CurrentTimeIndicator() {
     useClock(() => setNow(new Date()));
 
     const minutesSinceStartOfDay = now.getHours() * 60 + now.getMinutes();
-    const topPosition = (minutesSinceStartOfDay / 60) * 80;
+    const topPosition = (minutesSinceStartOfDay / 60) * HOUR_HEIGHT;
 
     const style = {
         top: `${topPosition}px`,
@@ -295,64 +490,36 @@ function CurrentTimeIndicator() {
     return (
         <div
             ref={indicatorRef}
-            className="border-red-500 border-t border-b w-full absolute scroll-m-40 duration-150 z-10"
+            className="border-red-500 z-30 border-t border-b w-full absolute scroll-m-40 duration-150"
             style={style}
         ></div>
     );
 }
 
-function DayColumn({ day, events }: { day: Date; events: Event[] }) {
-    const today = isToday(day);
-    const { onDragStart, onDragMove, onDragEnd, dragState, setDragState } =
-        useDrag();
-    const router = useRouter();
-    const [id] = useQueryState('id', parseAsInteger);
-
+function CalendarDayColumn({ day, events }: { day: Date; events: Event[] }) {
     return (
-        <div className="flex flex-col w-full select-none relative">
-            <DayHeader day={day} />
-            <div
-                className="relative"
-                onMouseDown={(e) => {
-                    onDragStart(day, e);
-                }}
-                onMouseMove={(e) => onDragMove(day, e)}
-                onMouseUp={() => {
-                    onDragEnd();
-                    if (dragState?.start !== dragState?.end) {
-                        router.push(`/booking/${id}/new`);
-                        setDragState(null);
-                    }
-                }}
-            >
-                {Array.from({ length: 24 }, (_, i) => (
-                    <HourCell key={i} />
-                ))}
-
-                {today && <CurrentTimeIndicator />}
-                <DragOverlay day={day} />
-                <EventsOverlay day={day} events={events} />
-            </div>
+        <div
+            data-day={day.toISOString()}
+            style={{ height: TOTAL_HEIGHT }}
+            className="flex flex-col w-full border-r relative"
+        >
+            {Array.from({ length: 24 }, (_, i) => (
+                <CalendarHourCell key={i} />
+            ))}
+            <DragOverlay day={day} />
+            <EventOverlay day={day} events={events} />
+            {isToday(day) && <CurrentTimeIndicator />}
         </div>
     );
 }
 
-function DayGrid({
-    start,
-    end,
-    events,
-}: {
-    start: Date;
-    end: Date;
-    events: Event[];
-}) {
-    const days = eachDayOfInterval({ start, end });
-
+function CalendarHourCell() {
     return (
-        <div className="flex w-full relative">
-            {days.map((day) => (
-                <DayColumn key={day.toISOString()} day={day} events={events} />
-            ))}
+        <div
+            style={{ height: HOUR_HEIGHT, minHeight: HOUR_HEIGHT }}
+            className="relative border-b"
+        >
+            <span className="absolute top-1/2 -translate-y-1/2 w-full border-t border-dashed" />
         </div>
     );
 }

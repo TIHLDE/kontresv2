@@ -32,12 +32,14 @@ type DataTableProps<TData, TValue> = {
     filterProperty?: keyof TData;
     searchPlaceholder?: string;
     headerItem?: React.ReactNode;
+    displaySearch?: boolean;
 };
 
 export function DataTable<TData, TValue>({
     columns,
     data,
     rowClickCallback,
+    displaySearch = false,
     searchPlaceholder,
     filterProperty,
     headerItem,
@@ -62,18 +64,20 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder={searchPlaceholder ?? 'Søk...'}
-                    onChange={(event) =>
-                        table
-                            .getColumn(filterProperty as string)
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
-                {headerItem}
-            </div>
+            {displaySearch && (
+                <div className="flex items-center py-4">
+                    <Input
+                        placeholder={searchPlaceholder ?? 'Søk...'}
+                        onChange={(event) =>
+                            table
+                                .getColumn(filterProperty as string)
+                                ?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
+                    {headerItem}
+                </div>
+            )}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

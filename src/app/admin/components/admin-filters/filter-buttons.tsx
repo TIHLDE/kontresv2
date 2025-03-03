@@ -9,8 +9,15 @@ import {
 } from '@/components/ui/collapsible';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
-import { StateAtomType } from '@/app/reservasjon/[id]/components/ReservationMeta';
+import { TimeDirection } from './admin-filters';
 import { cn } from '@/lib/utils';
 import { ReservationState } from '@prisma/client';
 import { CheckIcon, ChevronRight, Search } from 'lucide-react';
@@ -19,6 +26,8 @@ import { Dispatch, useState } from 'react';
 interface FilterButtonsProps extends React.HTMLProps<HTMLDivElement> {
     state: ReservationState;
     setState: Dispatch<ReservationState>;
+    timeDirection: TimeDirection;
+    setTimeDirection: Dispatch<TimeDirection>;
 }
 
 export const stateMap: { [key in ReservationState]: string } = {
@@ -30,6 +39,8 @@ export const stateMap: { [key in ReservationState]: string } = {
 export default function FilterButtons({
     state,
     setState,
+    timeDirection,
+    setTimeDirection,
     className,
     ...props
 }: FilterButtonsProps) {
@@ -47,7 +58,11 @@ export default function FilterButtons({
                     <Input type="text" className="pl-8" />
                 </div>
             </div>
-            <Collapsible open={statusOpen} onOpenChange={setStatusOpen}>
+            <Collapsible
+                open={statusOpen}
+                onOpenChange={setStatusOpen}
+                className="h-fit"
+            >
                 <CollapsibleTrigger asChild>
                     <Button variant="outline" className="w-full">
                         <div className="flex items-center flex-row justify-between w-full">
@@ -82,6 +97,30 @@ export default function FilterButtons({
                     ))}
                 </CollapsibleContent>
             </Collapsible>
+            <div className="flex flex-col gap-1 w-full -mt-2">
+                <span>Vis forespørsler i...</span>
+                <Select
+                    defaultValue={TimeDirection.forward}
+                    onValueChange={(e) => {
+                        setTimeDirection(e as TimeDirection);
+                    }}
+                >
+                    <SelectTrigger>
+                        <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value={TimeDirection.forward}>
+                            Fremtiden
+                        </SelectItem>
+                        <SelectItem value={TimeDirection.backward}>
+                            Fortiden
+                        </SelectItem>
+                        <SelectItem value={TimeDirection.none}>
+                            Når som helst
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
         </div>
     );
 }

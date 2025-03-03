@@ -4,30 +4,37 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 import FilterButtons from './filter-buttons';
-import { groupParser } from '@/app/booking/components/SearchFilters';
 import { ReservationState } from '@prisma/client';
-import { RotateCcw, RotateCcwIcon, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { parseAsStringEnum, useQueryState } from 'nuqs';
 import React from 'react';
 
 interface AdminFiltersProps extends React.ComponentProps<typeof Card> {}
+export enum TimeDirection {
+    none = 'none',
+    forward = 'forward',
+    backward = 'backward',
+}
 
 export default function AdminFilters({ ...props }: AdminFiltersProps) {
     const [query, setQuery] = useQueryState('q');
-    const [groups, setGroups] = useQueryState(
-        'groups',
-        groupParser.withDefault([]),
-    );
+    const [group, setGroup] = useQueryState('group');
     const [state, setState] = useQueryState<ReservationState>(
         'state',
         parseAsStringEnum(Object.values(ReservationState)).withDefault(
             'APPROVED',
         ),
     );
+    const [timeDirection, setTimeDirection] = useQueryState(
+        'timeDirection',
+        parseAsStringEnum(Object.values(TimeDirection)).withDefault(
+            TimeDirection.none,
+        ),
+    );
 
     const clearFilters = () => {
-        setQuery(null).catch(console.error);
-        setGroups([]).catch(console.error);
+        setQuery('').catch(console.error);
+        setGroup('').catch(console.error);
         setState('APPROVED').catch(console.error);
     };
 
@@ -40,7 +47,12 @@ export default function AdminFilters({ ...props }: AdminFiltersProps) {
                 </Button>
             </CardHeader>
             <CardContent>
-                <FilterButtons state={state} setState={setState} />
+                <FilterButtons
+                    state={state}
+                    setState={setState}
+                    timeDirection={timeDirection}
+                    setTimeDirection={setTimeDirection}
+                />
             </CardContent>
         </Card>
     );

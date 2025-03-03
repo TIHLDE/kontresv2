@@ -23,19 +23,51 @@ export const reservationRouter = createTRPCRouter({
             z.object({
                 limit: z.number().min(1).max(100).optional(),
                 cursor: z.number().nullish(),
-                direction: z.enum(['forward', 'backward']),
-                state: z.nativeEnum(ReservationState).optional(),
+                direction: z.enum(['forward', 'backward']).default('forward'),
+                filters: z.object({
+                    state: z.nativeEnum(ReservationState).optional(),
+                    group: z.string().optional(),
+                    fromDate: z.string().optional(),
+                    toDate: z.string().optional(),
+                }),
             }),
         )
         .query(async ({ ctx, input }) => {
             const limit = input.limit ?? 20;
             const { cursor } = input;
+            console.log('STATE: ', input.filters.state);
+
+            try {
+                if (input.filters.fromDate)
+                    input.filters.fromDate = new Date(
+                        input.filters.fromDate,
+                    ).toISOString();
+
+                if (input.filters.toDate)
+                    input.filters.toDate = new Date(
+                        input.filters.toDate,
+                    ).toISOString();
+            } catch (error) {
+                console.error('Could not parse date', error);
+                // Handle error?
+                return {
+                    reservations: [],
+                    nextCursor: undefined,
+                };
+            }
 
             const reservations = (await ctx.db.reservation.findMany({
                 take: limit + 1,
                 cursor: cursor ? { reservationId: cursor } : undefined,
                 where: {
-                    status: input.state,
+                    status: input.filters.state,
+                    groupId: input.filters.group,
+                    startTime: {
+                        gte: input.filters.fromDate,
+                    },
+                    endTime: {
+                        lte: input.filters.toDate,
+                    },
                 },
                 orderBy: {
                     reservationId: 'asc',

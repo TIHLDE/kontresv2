@@ -1,14 +1,18 @@
 'use client';
 
-import { TimeDirection } from '../components/admin-filters/admin-filters';
+import { Input } from '@/components/ui/input';
+
+import AdminFilters, {
+    TimeDirection,
+} from '../components/admin-filters/admin-filters';
 import BookingList from '../components/booking-list/booking-list';
 import ReservationTableSkeleton from '../components/old-components/reservation-table-skeleton';
 import { api } from '@/trpc/react';
 import { ReservationState } from '@prisma/client';
 import { parseAsString, parseAsStringEnum, useQueryStates } from 'nuqs';
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 
-export default function Approved() {
+export default function Page() {
     const [filters] = useQueryStates({
         q: parseAsString,
         group: parseAsString,
@@ -42,7 +46,17 @@ export default function Approved() {
 
     return (
         <Suspense fallback={<ReservationTableSkeleton />}>
-            <BookingList items={data?.reservations ?? []} />
+            <div className="gap-5 flex flex-col">
+                <div className="flex gap-5">
+                    <Input
+                        type="search"
+                        placeholder="Søk..."
+                        className="w-fit"
+                    />
+                    <AdminFilters />
+                </div>
+                <BookingList items={data?.reservations ?? []} />
+            </div>
         </Suspense>
     );
 }

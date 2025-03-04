@@ -1,59 +1,71 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 
-import FilterButtons from './filter-buttons';
-import { ReservationState } from '@prisma/client';
-import { X } from 'lucide-react';
-import { parseAsStringEnum, useQueryState } from 'nuqs';
-import React from 'react';
+import filterList from './filter-list';
+import Filters, { FilterCallbackType } from './filters';
+import { api } from '@/trpc/react';
+import React, { useEffect, useState } from 'react';
 
-interface AdminFiltersProps extends React.ComponentProps<typeof Card> {}
 export enum TimeDirection {
     none = 'none',
     forward = 'forward',
     backward = 'backward',
 }
 
-export default function AdminFilters({ ...props }: AdminFiltersProps) {
-    const [query, setQuery] = useQueryState('q');
-    const [group, setGroup] = useQueryState('group');
-    const [state, setState] = useQueryState<ReservationState>(
-        'state',
-        parseAsStringEnum(Object.values(ReservationState)).withDefault(
-            'APPROVED',
-        ),
-    );
-    const [timeDirection, setTimeDirection] = useQueryState(
-        'timeDirection',
-        parseAsStringEnum(Object.values(TimeDirection)).withDefault(
-            TimeDirection.none,
-        ),
-    );
+export default function AdminFilters({
+    ...props
+}: React.ComponentProps<typeof Card>) {
+    const [open, setOpen] = useState(false);
+    const { data: groups } = api.group.getAll.useQuery();
+    const { data: items } = api.item.getItems.useQuery();
+    const [filters, setFilters] = useState<FilterCallbackType[]>([]);
 
-    const clearFilters = () => {
-        setQuery('').catch(console.error);
-        setGroup('').catch(console.error);
-        setState('APPROVED').catch(console.error);
+    const onFilterChange = (value: FilterCallbackType) => {
+        console.log('Filter changed:', value);
     };
 
+    // Register shortcut listener
+    useEffect(() => {
+        const callback = (e: KeyboardEvent) => {
+            if (!(e.ctrlKey && e.key === 'k')) return;
+
+            setOpen((prev) => {
+                console.log('Setting open to', !prev);
+                return !prev;
+            });
+        };
+
+        const ignore = (e: KeyboardEvent) => {
+            if (e.ctrlKey && e.key === 'k') {
+                e.preventDefault();
+            }
+        };
+
+        window.addEventListener('keydown', ignore);
+
+        window.addEventListener('keydown', callback);
+
+        return () => {
+            window.removeEventListener('keydown', callback);
+            window.removeEventListener('keydown', ignore);
+        };
+    }, []);
+
     return (
-        <Card {...props}>
-            <CardHeader className="flex flex-row justify-between items-center">
-                <h2>Filtre</h2>
-                <Button variant={'destructive'} onClick={clearFilters}>
-                    <X />
-                </Button>
-            </CardHeader>
-            <CardContent>
-                <FilterButtons
-                    state={state}
-                    setState={setState}
-                    timeDirection={timeDirection}
-                    setTimeDirection={setTimeDirection}
-                />
-            </CardContent>
-        </Card>
+        <Filters
+            open={open}
+            setOpen={setOpen}
+            filters={filters}
+            setFilters={setFilters}
+            filterGroups={filterList({
+                groups: groups ?? [],
+                items: items ?? [],
+            })}
+            onFilterChange={(value) => {
+                onFilterChange(value);
+                setOpen(false);
+            }}
+        />
     );
 }

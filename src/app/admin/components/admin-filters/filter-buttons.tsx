@@ -47,9 +47,8 @@ export default function FilterButtons({
     const [statusOpen, setStatusOpen] = useState(false);
 
     return (
-        <div className={cn('flex flex-col gap-5', className)} {...props}>
+        <div className={cn('flex items-start gap-5', className)} {...props}>
             <div className="flex flex-col gap-1 w-full">
-                <span>Søk</span>
                 <div className="relative">
                     <Search
                         className="absolute top-1/2 -translate-y-1/2 left-2.5"
@@ -68,7 +67,6 @@ export default function FilterButtons({
                         <div className="flex items-center flex-row justify-between w-full">
                             <div className="flex gap-2 items-center">
                                 <CheckIcon size={16} />
-                                <span>Status</span>
                             </div>
                             <ChevronRight
                                 className={cn(
@@ -97,8 +95,7 @@ export default function FilterButtons({
                     ))}
                 </CollapsibleContent>
             </Collapsible>
-            <div className="flex flex-col gap-1 w-full -mt-2">
-                <span>Vis forespørsler i...</span>
+            <div className="flex flex-col gap-1 w-full">
                 <Select
                     defaultValue={TimeDirection.forward}
                     onValueChange={(e) => {

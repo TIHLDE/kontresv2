@@ -149,6 +149,9 @@ export const reservationRouter = createTRPCRouter({
         .query(({ input, ctx }) => {
             return ctx.db.reservation.findMany({
                 where: { authorId: input.userId },
+                include: {
+                    bookableItem: true,
+                },
             });
         }),
 

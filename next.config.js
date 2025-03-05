@@ -7,13 +7,37 @@ await import('./src/env.js');
 /** @type {import("next").NextConfig} */
 const config = {
     output: 'standalone',
-
-    // TODO: Remove when needing to push to production
     eslint: {
         ignoreDuringBuilds: true,
     },
+
     typescript: {
         ignoreBuildErrors: true,
+    },
+
+    images: {
+        remotePatterns: [
+            {
+                // Allow all https domains
+                protocol: 'https',
+                hostname: '*',
+            },
+            {
+                // Allow all http domains
+                protocol: 'http',
+                hostname: '*',
+            },
+            {
+                protocol: 'https',
+                hostname: 'leptonstoragedev.blob.core.windows.net',
+                pathname: '/**', // Restrict to the path `/imagejpeg/*`
+            },
+            {
+                protocol: 'https',
+                hostname: 'leptonstoragepro.blob.core.windows.net',
+                pathname: '/**', // Restrict to the path `/imagejpeg/*`
+            },
+        ],
     },
 };
 

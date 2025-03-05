@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default async function page() {
     const session = await auth();
-    let isAdmin = session?.user.role === 'ADMIN';
+    const isAdmin = session?.user.role === 'ADMIN';
 
     return (
         <div className="max-w-page mx-auto min-h-screen flex flex-col gap-10 w-full">
@@ -17,7 +17,7 @@ export default async function page() {
                     FAQ
                 </h1>
                 {isAdmin && (
-                    <Link href={'./faq/edit/'} className="w-fit">
+                    <Link href={'./faq/create/'} className="w-fit">
                         <Button>Opprett ny</Button>
                     </Link>
                 )}

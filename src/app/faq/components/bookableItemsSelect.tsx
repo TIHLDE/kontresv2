@@ -48,7 +48,7 @@ export default function BookableItemsSelect({
                     variant="outline"
                     role="combobox"
                     className={cn(
-                        'w-[200px] justify-between',
+                        'w-full justify-between',
                         !field.value && 'text-muted-foreground',
                     )}
                 >

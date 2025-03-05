@@ -9,6 +9,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
+import { cn } from '@/lib/utils';
 import { SelectProps } from '@radix-ui/react-select';
 
 interface GroupSelectProps extends SelectProps {
@@ -26,10 +27,10 @@ export default function GroupSelect({
 }: GroupSelectProps) {
     return (
         <Select value={value} onValueChange={onChange} {...props}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
                 <SelectValue
                     placeholder="Velg en gruppe"
-                    className={className}
+                    className={cn(className)}
                 />
             </SelectTrigger>
             <SelectContent>

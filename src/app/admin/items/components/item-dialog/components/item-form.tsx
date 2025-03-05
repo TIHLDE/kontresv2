@@ -11,6 +11,7 @@ import {
 import GroupSelect from '@/components/ui/group-select';
 import { Input } from '@/components/ui/input';
 
+import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
@@ -38,7 +39,13 @@ export default function ItemForm() {
     };
 
     const { data: session } = useSession();
-    const groups = useMemo(() => session?.user.groups, [session]);
+    const membershipGroups = useMemo(() => session?.user.groups, [session]);
+    const { data: allGroups } = api.group.getAll.useQuery();
+    const pickableGroups = useMemo(() => {
+        return allGroups
+            ?.filter((g) => membershipGroups?.includes(g.groupId))
+            .map((g) => g.name);
+    }, [allGroups, membershipGroups]);
 
     return (
         <Form {...form}>
@@ -70,6 +77,7 @@ export default function ItemForm() {
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={form.control}
                     name="group"
@@ -78,8 +86,7 @@ export default function ItemForm() {
                             <FormLabel>Gruppe</FormLabel>
                             <FormControl>
                                 <GroupSelect
-                                    className="w-full"
-                                    groups={groups}
+                                    groups={pickableGroups}
                                     onChange={onChange}
                                     value={value}
                                 />

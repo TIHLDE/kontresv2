@@ -18,7 +18,6 @@ import { useToast } from '@/components/ui/use-toast';
 
 import BookableItemsSelect from './bookableItemsSelect';
 import { FaqFormValueTypes, formSchema } from './faqSchema';
-import GroupSelect from './groupSelect';
 import { getImageUrl } from './uploadFile';
 import { CACHE_TAGS } from '@/lib/cache_tags';
 import { api } from '@/trpc/react';
@@ -29,6 +28,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import GroupSelect from '@/components/ui/group-select';
 
 export default function CreateFaqForm({
     question,
@@ -198,13 +198,13 @@ export default function CreateFaqForm({
                         <FormField
                             control={form.control}
                             name="group"
-                            render={({ field }) => (
+                            render={({ field: {onChange, value} }) => (
                                 <FormItem className="flex flex-col mt-5">
                                     <FormLabel>
                                         Hvilke grupper gjelder dette spørsmålet?
                                     </FormLabel>
                                     <FormControl>
-                                        <GroupSelect field={field} />
+                                        <GroupSelect onChange={onChange} value={value}  />
                                     </FormControl>
                                     <FormDescription>
                                         Velg minst én gruppe

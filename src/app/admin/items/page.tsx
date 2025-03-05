@@ -1,17 +1,19 @@
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import FilterHeader from './components/filter-header/filter-header';
-import AdminItemFilters from './components/item-filters/item-filters';
-import { api } from '@/trpc/react';
+import ItemList from './components/item-list/item-list';
+import { api } from '@/trpc/server';
 
-export default function Page() {
+export default async function Page() {
+    const items = await api.item.getItems();
     return (
         <>
             <CardHeader>
                 <CardTitle>Gjenstander</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="gap-2.5 flex flex-col">
                 <FilterHeader />
+                <ItemList items={items} />
             </CardContent>
         </>
     );

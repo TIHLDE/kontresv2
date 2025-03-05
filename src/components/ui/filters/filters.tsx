@@ -9,10 +9,10 @@ import {
 } from '@/components/ui/command';
 
 import FilterBadge from './filter-badge';
-import { GroupIcons } from './filter-list';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ListFilterIcon } from 'lucide-react';
-import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Dispatch, HTMLAttributes, ReactNode, SetStateAction } from 'react';
 
 export type Filter = {
     name: string;
@@ -23,7 +23,6 @@ export type Filter = {
 export type FilterGroup = {
     header: string;
     value: string;
-    icon?: ReactNode;
     filters: Filter[];
 };
 
@@ -38,17 +37,49 @@ export type FilterCallbackType = {
     parentValue: string;
 };
 
-interface FiltersProps {
+interface FiltersProps extends HTMLAttributes<HTMLDivElement> {
+    /**
+     * Whether or not to display the filter modal.
+     */
     open?: boolean;
+    /**
+     * Callback to set the open state of the filter modal.
+     */
     setOpen?: Dispatch<SetStateAction<boolean>>;
+    /**
+     * List of selected filters.
+     */
     filters?: FilterCallbackType[];
+    /**
+     * Callback to set the list of selected filters.
+     */
     setFilters?: Dispatch<SetStateAction<FilterCallbackType[]>>;
+    /**
+     * Whether or not to display icons in each filter group header.
+     */
+    displayGroupIcons?: boolean;
+    /**
+     * Object containing icons for each filter group header.
+     * The key is the group value and the value is the icon (ReactNode).
+     */
+    groupIcons?: Record<string, ReactNode>;
+    /**
+     * Function that is called when a filter is selected.
+     */
     onFilterChange?: (value: FilterCallbackType) => void;
     /**
-     * List of filter groups to display. Needs a header and a list of filters.
+     * List of filter groups to display. Each group contains a header and a list of filters.
      */
     filterGroups: FilterGroup[];
 }
+
+/**
+ * To use this component, you need to pass in a list of filter groups, which contains a header and a list of filters.
+ * Remember to define the filters and setFilters props
+ *
+ * @param param0
+ * @returns
+ */
 export default function Filters({
     open,
     setOpen,
@@ -56,6 +87,10 @@ export default function Filters({
     setFilters,
     filterGroups,
     onFilterChange,
+    groupIcons,
+    displayGroupIcons = true,
+    className,
+    ...props
 }: FiltersProps) {
     // Function for adding a filter if it is not already in the filters list
     const addFilter = (filter: FilterCallbackType) => {
@@ -85,8 +120,8 @@ export default function Filters({
     };
 
     return (
-        <div className="flex gap-2 items-center">
-            <div className="flex gap-1 items-center">
+        <div className={cn('flex gap-2 items-center flex-wrap', className)}>
+            <div className="flex gap-1 max-w-full flex-wrap items-center">
                 {filters?.map((filter, index) => (
                     <motion.div
                         key={filter.filter.value + index}
@@ -104,7 +139,10 @@ export default function Filters({
                             }}
                         >
                             <FilterBadge
-                                groupIcon={GroupIcons[filter.parentValue]}
+                                groupIcon={
+                                    displayGroupIcons &&
+                                    groupIcons?.[filter.parentValue]
+                                }
                                 icon={filter.filter.icon}
                                 label={filter.filter.name}
                                 parent={filter.parentValue}
@@ -140,7 +178,13 @@ export default function Filters({
                     ></CommandGroup>
                     {filterGroups.map((group, index) => (
                         <CommandGroup
-                            heading={group.header}
+                            heading={
+                                <span className="flex items-center gap-2">
+                                    {displayGroupIcons &&
+                                        groupIcons?.[group.value]}
+                                    {group.header}
+                                </span>
+                            }
                             key={group.header + index}
                         >
                             {group.filters.map((filter, index) => (

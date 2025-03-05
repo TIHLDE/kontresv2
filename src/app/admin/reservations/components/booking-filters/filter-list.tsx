@@ -1,17 +1,17 @@
-import { TimeDirection } from '../../utils/enums';
-import { Filter, FilterGroup } from './filters';
-import StatusIndicator from './status-indicator';
+import { FilterGroup } from '@/components/ui/filters/filters';
+import StatusIndicator from '@/components/ui/filters/status-indicator';
+
+import { TimeDirection } from '../../../utils/enums';
 import { BookableItem, Group, ReservationState } from '@prisma/client';
 import {
     AlertCircleIcon,
     ClockIcon,
-    LucideIcon,
     ShapesIcon,
     UsersIcon,
 } from 'lucide-react';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-export default function filterList({
+export default function reservationFilterList({
     groups,
     items,
 }: {
@@ -28,11 +28,7 @@ export default function filterList({
                     name: 'Kommende',
                     value: TimeDirection.FORWARD,
                 },
-                {
-                    icon: <StatusIndicator variant={'pending'} />,
-                    name: 'Pågående',
-                    value: TimeDirection.PRESENT,
-                },
+
                 {
                     icon: <StatusIndicator variant={'rejected'} />,
                     name: 'Utløpt',
@@ -68,7 +64,7 @@ export default function filterList({
                 return {
                     name: item.name,
                     value: item.itemId.toString(),
-                } as Filter;
+                };
             }),
         },
         {
@@ -78,7 +74,7 @@ export default function filterList({
                 return {
                     name: group.name,
                     value: group.groupId.toString(),
-                } as Filter;
+                };
             }),
         },
     ];

@@ -1,10 +1,11 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
+import Filters, { FilterCallbackType } from '@/components/ui/filters/filters';
 
-import { TimeDirection } from '../../utils/enums';
-import filterList from './filter-list';
-import Filters, { FilterCallbackType } from './filters';
+import { TimeDirection } from '../../../utils/enums';
+import filterList, { GroupIcons } from './filter-list';
+import itemFilterList from './filter-list';
 import { groupParser } from '@/app/booking/components/SearchFilters';
 import { api } from '@/trpc/react';
 import { ReservationState } from '@prisma/client';
@@ -24,7 +25,7 @@ export const timeDirectionParser = parseAsArrayOf<TimeDirection>(
     parseAsStringEnum(Object.values(TimeDirection)),
 );
 
-export default function AdminFilters({
+export default function AdminItemFilters({
     ...props
 }: React.ComponentProps<typeof Card>) {
     const [open, setOpen] = useState(false);
@@ -119,7 +120,8 @@ export default function AdminFilters({
             setOpen={setOpen}
             filters={filters}
             setFilters={setFilters}
-            filterGroups={filterList({
+            groupIcons={GroupIcons}
+            filterGroups={itemFilterList({
                 groups: groups ?? [],
                 items: items ?? [],
             })}

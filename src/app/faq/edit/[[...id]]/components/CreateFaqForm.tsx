@@ -15,8 +15,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { ToastAction } from '@/components/ui/toast';
 import { useToast } from '@/components/ui/use-toast';
 
+import GroupSelect from '../../../../../components/ui/group-select';
 import BookableItemsSelect from './bookableItemsSelect';
-import GroupSelect from './groupSelect';
 import { CACHE_TAGS } from '@/lib/cacheTags';
 import { api } from '@/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -44,14 +44,16 @@ export type FaqFormValueTypes = z.infer<typeof formSchema>;
 export default function CreateFaqForm(params?: { questionId?: string }) {
     const { mutateAsync: createFaq } = api.faq.create.useMutation();
     const { mutateAsync: updateFaq } = api.faq.update.useMutation();
+
     const queryClient = useQueryClient();
 
     const router = useRouter();
 
-    const { data: updateQuestion, isLoading } = params?.questionId ?
-        api.faq.getById.useQuery({
-            questionId: parseInt(params.questionId),
-        }) : {}
+    const { data: updateQuestion, isLoading } = params?.questionId
+        ? api.faq.getById.useQuery({
+              questionId: parseInt(params.questionId),
+          })
+        : {};
 
     const { data: session } = useSession();
 
@@ -224,13 +226,17 @@ export default function CreateFaqForm(params?: { questionId?: string }) {
                     <FormField
                         control={form.control}
                         name="group"
-                        render={({ field }) => (
+                        render={({ field: { onChange, value } }) => (
                             <FormItem className="flex flex-col mt-5">
                                 <FormLabel>
                                     Hvilke grupper gjelder dette spørsmålet?
                                 </FormLabel>
                                 <FormControl>
-                                    <GroupSelect field={field} />
+                                    <GroupSelect
+                                        groups={groups}
+                                        onChange={onChange}
+                                        value={value}
+                                    />
                                 </FormControl>
                             </FormItem>
                         )}

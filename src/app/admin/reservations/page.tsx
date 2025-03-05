@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
-import AdminFilters, {
+import BookingList from '../components/booking-list/booking-list';
+import AdminBookingFilters, {
     reservationStateParser,
     timeDirectionParser,
-} from '../components/admin-filters/admin-filters';
-import BookingList from '../components/booking-list/booking-list';
+} from './components/booking-filters/booking-filters';
 import { groupParser } from '@/app/booking/components/SearchFilters';
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
@@ -61,9 +61,7 @@ export default function Page() {
             </CardHeader>
             <CardContent className="">
                 <div className="gap-5 flex flex-col">
-                    <div className="flex gap-5">
-                        <AdminFilters />
-                    </div>
+                    <AdminBookingFilters />
                     <div
                         className={cn(
                             'w-full h-full transition-all gap-5 flex flex-col',

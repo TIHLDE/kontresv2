@@ -1,0 +1,46 @@
+'use client';
+
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+
+import { SelectProps } from '@radix-ui/react-select';
+
+interface GroupSelectProps extends SelectProps {
+    onChange: (value: string) => void;
+    value?: string;
+    groups?: string[];
+    className?: string;
+}
+export default function GroupSelect({
+    groups,
+    onChange,
+    className,
+    value,
+    ...props
+}: GroupSelectProps) {
+    return (
+        <Select value={value} onValueChange={onChange} {...props}>
+            <SelectTrigger className="w-[180px]">
+                <SelectValue
+                    placeholder="Velg en gruppe"
+                    className={className}
+                />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectGroup>
+                    {groups?.map((item, index) => (
+                        <SelectItem value={item} key={index}>
+                            {item}
+                        </SelectItem>
+                    ))}
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+    );
+}

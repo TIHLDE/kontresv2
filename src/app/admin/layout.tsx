@@ -2,8 +2,8 @@ import { Button, ButtonProps } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
-import AdminFilters from './components/admin-filters/admin-filters';
 import AdminSidebar from './components/sidebar/admin-sidebar';
+import AdminBookingFilters from './reservations/components/booking-filters/booking-filters';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React, { ReactNode, Suspense } from 'react';

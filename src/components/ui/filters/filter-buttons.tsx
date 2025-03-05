@@ -17,7 +17,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-import { TimeDirection } from './admin-filters';
+import { TimeDirection } from '../../../app/admin/reservations/components/booking-filters/booking-filters';
 import { cn } from '@/lib/utils';
 import { ReservationState } from '@prisma/client';
 import { CheckIcon, ChevronRight, Search } from 'lucide-react';

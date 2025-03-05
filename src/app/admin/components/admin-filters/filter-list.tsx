@@ -2,6 +2,14 @@ import { TimeDirection } from '../../utils/enums';
 import { Filter, FilterGroup } from './filters';
 import StatusIndicator from './status-indicator';
 import { BookableItem, Group, ReservationState } from '@prisma/client';
+import {
+    AlertCircleIcon,
+    ClockIcon,
+    LucideIcon,
+    ShapesIcon,
+    UsersIcon,
+} from 'lucide-react';
+import { FC, ReactNode } from 'react';
 
 export default function filterList({
     groups,
@@ -75,3 +83,17 @@ export default function filterList({
         },
     ];
 }
+
+type GroupIconsType = {
+    [key in (typeof filterList extends (...args: any) => infer R
+        ? R
+        : never)[number]['value']]: ReactNode;
+};
+
+// Object containing filterLists group values as keys, and an icon as value
+export const GroupIcons: GroupIconsType = {
+    group: <UsersIcon size={12} />,
+    status: <AlertCircleIcon size={12} />,
+    item: <ShapesIcon size={12} />,
+    time: <ClockIcon size={12} />,
+};

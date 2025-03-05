@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/command';
 
 import FilterBadge from './filter-badge';
+import { GroupIcons } from './filter-list';
 import { motion } from 'framer-motion';
 import { ListFilterIcon } from 'lucide-react';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
@@ -22,6 +23,7 @@ export type Filter = {
 export type FilterGroup = {
     header: string;
     value: string;
+    icon?: ReactNode;
     filters: Filter[];
 };
 
@@ -102,6 +104,7 @@ export default function Filters({
                             }}
                         >
                             <FilterBadge
+                                groupIcon={GroupIcons[filter.parentValue]}
                                 icon={filter.filter.icon}
                                 label={filter.filter.name}
                                 parent={filter.parentValue}

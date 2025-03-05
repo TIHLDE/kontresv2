@@ -1,13 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
 import AdminFilters, {
@@ -18,12 +12,7 @@ import BookingList from '../components/booking-list/booking-list';
 import { groupParser } from '@/app/booking/components/SearchFilters';
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
-import {
-    parseAsArrayOf,
-    parseAsString,
-    parseAsStringEnum,
-    useQueryStates,
-} from 'nuqs';
+import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
 import { useState } from 'react';
 
 export default function Page() {

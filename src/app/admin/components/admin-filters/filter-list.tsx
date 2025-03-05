@@ -84,14 +84,8 @@ export default function filterList({
     ];
 }
 
-type GroupIconsType = {
-    [key in (typeof filterList extends (...args: any) => infer R
-        ? R
-        : never)[number]['value']]: ReactNode;
-};
-
 // Object containing filterLists group values as keys, and an icon as value
-export const GroupIcons: GroupIconsType = {
+export const GroupIcons: Record<string, ReactNode> = {
     group: <UsersIcon size={12} />,
     status: <AlertCircleIcon size={12} />,
     item: <ShapesIcon size={12} />,

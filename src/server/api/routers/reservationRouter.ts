@@ -27,6 +27,7 @@ export const reservationRouter = createTRPCRouter({
                 direction: z.enum(['forward', 'backward']).default('forward'),
                 filters: z.object({
                     state: z.nativeEnum(ReservationState).array().optional(),
+                    query: z.string().optional(),
                     group: z.string().array().optional(),
                     fromDate: z.string().optional(),
                     toDate: z.string().optional(),

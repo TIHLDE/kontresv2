@@ -73,11 +73,6 @@ export default function Page() {
             <CardContent className="">
                 <div className="gap-5 flex flex-col">
                     <div className="flex gap-5">
-                        <Input
-                            type="search"
-                            placeholder="Søk..."
-                            className="w-fit"
-                        />
                         <AdminFilters />
                     </div>
                     <div

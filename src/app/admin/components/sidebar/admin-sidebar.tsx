@@ -3,16 +3,18 @@
 import { Card, CardContent } from '@/components/ui/card';
 
 import { SideBarNavigationButton } from '../../layout';
-import { usePathname, useRouter } from 'next/navigation';
+import { CalendarIcon, GamepadIcon, Shapes } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export default function AdminSidebar() {
     const pathname = usePathname();
 
     return (
-        <Card className="h-full min-w-72">
+        <Card className="h-fit min-w-72 sticky top-24">
             <CardContent className="pt-6">
                 <div className="flex flex-col">
                     <SideBarNavigationButton
+                        icon={<CalendarIcon size={16} />}
                         route="/admin/reservations"
                         highlighted={pathname === '/admin/reservations'}
                     >
@@ -20,15 +22,17 @@ export default function AdminSidebar() {
                     </SideBarNavigationButton>
                     <SideBarNavigationButton
                         route="/admin/items"
+                        icon={<Shapes size={16} />}
                         highlighted={pathname === '/admin/items'}
                     >
                         Gjenstander
                     </SideBarNavigationButton>
                     <SideBarNavigationButton
+                        icon={<GamepadIcon size={16} />}
                         route="/admin/reservations"
                         highlighted={pathname === '/admin/mystery'}
                     >
-                        ???
+                        Snake
                     </SideBarNavigationButton>
                 </div>
             </CardContent>

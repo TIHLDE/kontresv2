@@ -1,62 +1,115 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import {
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
 import AdminFilters, {
     TimeDirection,
+    reservationStateParser,
 } from '../components/admin-filters/admin-filters';
 import BookingList from '../components/booking-list/booking-list';
-import ReservationTableSkeleton from '../components/old-components/reservation-table-skeleton';
+import { groupParser } from '@/app/booking/components/SearchFilters';
+import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
-import { ReservationState } from '@prisma/client';
-import { parseAsString, parseAsStringEnum, useQueryStates } from 'nuqs';
-import { Suspense } from 'react';
+import {
+    parseAsArrayOf,
+    parseAsString,
+    parseAsStringEnum,
+    useQueryStates,
+} from 'nuqs';
+import { useState } from 'react';
 
 export default function Page() {
+    const [currentPage, setCurrentPage] = useState(0);
     const [filters] = useQueryStates({
         q: parseAsString,
-        group: parseAsString,
+        groups: groupParser.withDefault([]),
         fromDate: parseAsString,
         toDate: parseAsString,
-        state: parseAsStringEnum(Object.values(ReservationState)),
+        states: reservationStateParser.withDefault([]),
+        items: parseAsArrayOf<string>(parseAsString).withDefault([]),
         timeDirection: parseAsStringEnum(Object.values(TimeDirection)),
     });
 
     // Fetch the reservations based on filter params
-    const { data } = api.reservation.getReservations.useQuery(
+    const {
+        data,
+        isLoading,
+        hasNextPage,
+        hasPreviousPage,
+        fetchNextPage,
+        isFetchingNextPage,
+    } = api.reservation.getReservations.useInfiniteQuery(
         {
-            direction: 'forward',
             filters: {
-                fromDate:
-                    filters.timeDirection === TimeDirection.forward
-                        ? new Date().toISOString()
+                group: filters.groups.length > 0 ? filters.groups : undefined,
+                state:
+                    filters.states && filters?.states?.length > 0
+                        ? filters.states
                         : undefined,
-                toDate:
-                    filters.timeDirection === TimeDirection.backward
-                        ? new Date().toISOString()
+                bookableItem:
+                    filters.items && filters.items.length > 0
+                        ? filters.items.map(Number)
                         : undefined,
-                state: filters.state ?? undefined,
-                group: filters.group ?? undefined,
             },
+            limit: 5,
         },
-        {
-            retry: false,
-        },
+        { getNextPageParam: (lastPage) => lastPage.nextCursor },
     );
 
     return (
-        <Suspense fallback={<ReservationTableSkeleton />}>
-            <div className="gap-5 flex flex-col">
-                <div className="flex gap-5">
-                    <Input
-                        type="search"
-                        placeholder="Søk..."
-                        className="w-fit"
-                    />
-                    <AdminFilters />
+        <>
+            <CardHeader>
+                <CardTitle>Reservasjoner</CardTitle>
+            </CardHeader>
+            <CardContent className="">
+                <div className="gap-5 flex flex-col">
+                    <div className="flex gap-5">
+                        <Input
+                            type="search"
+                            placeholder="Søk..."
+                            className="w-fit"
+                        />
+                        <AdminFilters />
+                    </div>
+                    <div
+                        className={cn(
+                            'w-full h-full transition-all gap-5 flex flex-col',
+                            isLoading ? 'blur-sm' : '',
+                        )}
+                    >
+                        <BookingList
+                            items={
+                                data?.pages.flatMap(
+                                    (page) => page.reservations,
+                                ) ?? []
+                            }
+                        />
+                        {hasNextPage && (
+                            <Button
+                                className="ml-auto gap-2.5 items-center"
+                                onClick={() => fetchNextPage()}
+                                disabled={isFetchingNextPage}
+                            >
+                                {isFetchingNextPage ? (
+                                    <>
+                                        <LoadingSpinner /> Henter mer
+                                    </>
+                                ) : (
+                                    'Last inn mer'
+                                )}
+                            </Button>
+                        )}
+                    </div>
                 </div>
-                <BookingList items={data?.reservations ?? []} />
-            </div>
-        </Suspense>
+            </CardContent>
+        </>
     );
 }

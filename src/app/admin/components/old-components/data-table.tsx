@@ -32,12 +32,16 @@ type DataTableProps<TData, TValue> = {
     filterProperty?: keyof TData;
     searchPlaceholder?: string;
     headerItem?: React.ReactNode;
+    displayPageNavigation?: boolean;
     displaySearch?: boolean;
+    pageSize?: number;
 };
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    pageSize,
+    displayPageNavigation = true,
     rowClickCallback,
     displaySearch = false,
     searchPlaceholder,
@@ -50,6 +54,7 @@ export function DataTable<TData, TValue>({
     const table = useReactTable({
         data,
         columns,
+        rowCount: pageSize ?? data.length,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
@@ -135,24 +140,26 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Forrige
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Neste
-                </Button>
-            </div>
+            {displayPageNavigation && (
+                <div className="flex items-center justify-end space-x-2 py-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Forrige
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Neste
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,7 +1,12 @@
+import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 export default function Page() {
     return (
-        <div>
-            <h1>Items</h1>
-        </div>
+        <>
+            <CardHeader>
+                <CardTitle>Gjenstander</CardTitle>
+            </CardHeader>
+            <CardContent></CardContent>
+        </>
     );
 }

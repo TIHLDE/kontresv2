@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     CommandDialog,
@@ -9,11 +8,7 @@ import {
     CommandList,
 } from '@/components/ui/command';
 
-import { cn } from '@/utils/cn';
-
 import FilterBadge from './filter-badge';
-import StatusIndicator from './status-indicator';
-import { VariantProps, cva } from 'class-variance-authority';
 import { motion } from 'framer-motion';
 import { ListFilterIcon } from 'lucide-react';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
@@ -62,19 +57,20 @@ export default function Filters({
 }: FiltersProps) {
     // Function for adding a filter if it is not already in the filters list
     const addFilter = (filter: FilterCallbackType) => {
-        if (
-            !filters?.some(
-                (f) =>
-                    f.filter.value === filter.filter.value &&
-                    f.parentValue === filter.parentValue,
-            )
-        ) {
+        if (!isInFilters(filter)) {
             setFilters?.((prev) => [...prev, filter]);
         } else {
             // remove the filter instead
             removeFilter(filter);
         }
     };
+
+    const isInFilters = (filter: FilterCallbackType) =>
+        filters?.some(
+            (f) =>
+                f.filter.value === filter.filter.value &&
+                f.parentValue === filter.parentValue,
+        );
 
     const removeFilter = (filter: FilterCallbackType) => {
         setFilters?.((prev) =>
@@ -161,6 +157,16 @@ export default function Filters({
                                 >
                                     {filter.icon}
                                     {filter.name}
+                                    {isInFilters({
+                                        filter: filter,
+                                        parentValue: group.value,
+                                    }) ? (
+                                        <span className="opacity-50">
+                                            (valgt)
+                                        </span>
+                                    ) : (
+                                        ''
+                                    )}
                                 </CommandItem>
                             ))}
                         </CommandGroup>

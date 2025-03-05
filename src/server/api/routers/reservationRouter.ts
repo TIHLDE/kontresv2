@@ -25,10 +25,11 @@ export const reservationRouter = createTRPCRouter({
                 cursor: z.number().nullish(),
                 direction: z.enum(['forward', 'backward']).default('forward'),
                 filters: z.object({
-                    state: z.nativeEnum(ReservationState).optional(),
-                    group: z.string().optional(),
+                    state: z.nativeEnum(ReservationState).array().optional(),
+                    group: z.string().array().optional(),
                     fromDate: z.string().optional(),
                     toDate: z.string().optional(),
+                    bookableItem: z.number().array().optional(),
                 }),
             }),
         )
@@ -60,13 +61,22 @@ export const reservationRouter = createTRPCRouter({
                 take: limit + 1,
                 cursor: cursor ? { reservationId: cursor } : undefined,
                 where: {
-                    status: input.filters.state,
-                    groupId: input.filters.group,
+                    status: {
+                        in: input.filters.state,
+                    },
+                    groupId: {
+                        in: input.filters.group,
+                    },
                     startTime: {
                         gte: input.filters.fromDate,
                     },
                     endTime: {
                         lte: input.filters.toDate,
+                    },
+                    bookableItem: {
+                        itemId: {
+                            in: input.filters.bookableItem,
+                        },
                     },
                 },
                 orderBy: {

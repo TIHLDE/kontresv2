@@ -8,5 +8,11 @@ interface BookingListProps {
 }
 
 export default function BookingList({ items }: BookingListProps) {
-    return <DataTable columns={columns} data={items} />;
+    return (
+        <DataTable
+            columns={columns}
+            data={items}
+            displayPageNavigation={false}
+        />
+    );
 }

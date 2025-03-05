@@ -6,7 +6,7 @@ import AdminFilters from './components/admin-filters/admin-filters';
 import AdminSidebar from './components/sidebar/admin-sidebar';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import React, { Suspense } from 'react';
+import React, { ReactNode, Suspense } from 'react';
 
 const AdminButtons: { label: string; route: string; separated?: boolean }[] = [
     { label: 'Avventende søknader', route: 'awaiting' },
@@ -18,10 +18,13 @@ const AdminButtons: { label: string; route: string; separated?: boolean }[] = [
 interface SideBarNavigationButtonProps extends ButtonProps {
     route: string;
     highlighted?: boolean;
+    icon?: ReactNode;
 }
 export function SideBarNavigationButton({
     highlighted,
     route,
+    icon,
+    children,
     ...props
 }: SideBarNavigationButtonProps) {
     return (
@@ -29,8 +32,11 @@ export function SideBarNavigationButton({
             <Button
                 variant={highlighted ? 'default' : 'ghost'}
                 {...props}
-                className="w-full"
-            />
+                className="w-full gap-2.5 items-center"
+            >
+                {icon}
+                {children}
+            </Button>
         </Link>
     );
 }
@@ -45,11 +51,9 @@ export default function AdminLayout({
             <AdminSidebar />
             <div className="flex flex-col w-full gap-5">
                 <Card className="md:min-w-72 h-full">
-                    <CardContent className="pt-5 w-full h-full">
-                        <Suspense fallback={<LoadingSpinner />}>
-                            {children}
-                        </Suspense>
-                    </CardContent>
+                    <Suspense fallback={<LoadingSpinner />}>
+                        {children}
+                    </Suspense>
                 </Card>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import { Filter, FilterGroup } from './filters';
 import StatusIndicator from './status-indicator';
-import { BookableItem, Group } from '@prisma/client';
+import { BookableItem, Group, ReservationState } from '@prisma/client';
 
 export default function filterList({
     groups,
@@ -38,17 +38,17 @@ export default function filterList({
                 {
                     icon: <StatusIndicator variant={'approved'} />,
                     name: 'Godkjent',
-                    value: 'approved',
+                    value: ReservationState.APPROVED,
                 },
                 {
                     icon: <StatusIndicator variant={'pending'} />,
                     name: 'Avventer',
-                    value: 'awaiting',
+                    value: ReservationState.PENDING,
                 },
                 {
                     icon: <StatusIndicator variant={'rejected'} />,
                     name: 'Avslått',
-                    value: 'rejected',
+                    value: ReservationState.REJECTED,
                 },
             ],
         },

@@ -53,4 +53,8 @@ export const columns: ColumnDef<ReservationWithAuthor>[] = [
                 locale: nb,
             })}`,
     },
+    {
+        accessorKey: 'bookableItemId',
+        header: 'Gjenstand',
+    },
 ];

@@ -2,6 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 
+import { TimeDirection } from '../../utils/enums';
 import filterList from './filter-list';
 import Filters, { FilterCallbackType } from './filters';
 import { groupParser } from '@/app/booking/components/SearchFilters';
@@ -15,14 +16,12 @@ import {
 } from 'nuqs';
 import React, { useEffect, useState } from 'react';
 
-export enum TimeDirection {
-    none = 'none',
-    forward = 'forward',
-    backward = 'backward',
-}
-
 export const reservationStateParser = parseAsArrayOf<ReservationState>(
     parseAsStringEnum(Object.values(ReservationState)),
+);
+
+export const timeDirectionParser = parseAsArrayOf<TimeDirection>(
+    parseAsStringEnum(Object.values(TimeDirection)),
 );
 
 export default function AdminFilters({
@@ -36,19 +35,24 @@ export default function AdminFilters({
 
     const [filters, setFilters] = useState<FilterCallbackType[]>([]);
 
-    const [queryGroups, setQueryGroups] = useQueryState(
+    const [_, setQueryGroups] = useQueryState(
         'groups',
         groupParser.withDefault([]),
     );
 
-    const [queryStates, setQueryStates] = useQueryState(
+    const [__, setQueryStates] = useQueryState(
         'states',
         reservationStateParser.withDefault([]),
     );
 
-    const [queryItems, setQueryItems] = useQueryState(
+    const [___, setQueryItems] = useQueryState(
         'items',
         parseAsArrayOf<string>(parseAsString),
+    );
+
+    const [____, setQueryTimeDirection] = useQueryState(
+        'time',
+        timeDirectionParser.withDefault([]),
     );
 
     const onFilterChange = (value: FilterCallbackType) => {
@@ -74,6 +78,11 @@ export default function AdminFilters({
             filters
                 .filter((g) => g.parentValue === 'item')
                 .map((g) => g.filter.value),
+        );
+        setQueryTimeDirection(
+            filters
+                .filter((g) => g.parentValue === 'time')
+                .map((g) => g.filter.value as TimeDirection),
         );
     }, [filters]);
 

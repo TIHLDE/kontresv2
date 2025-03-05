@@ -1,3 +1,4 @@
+import { TimeDirection } from '../../utils/enums';
 import { Filter, FilterGroup } from './filters';
 import StatusIndicator from './status-indicator';
 import { BookableItem, Group, ReservationState } from '@prisma/client';
@@ -17,17 +18,17 @@ export default function filterList({
                 {
                     icon: <StatusIndicator variant={'approved'} />,
                     name: 'Kommende',
-                    value: 'upcoming',
+                    value: TimeDirection.FORWARD,
                 },
                 {
                     icon: <StatusIndicator variant={'pending'} />,
                     name: 'Pågående',
-                    value: 'ongoing',
+                    value: TimeDirection.PRESENT,
                 },
                 {
                     icon: <StatusIndicator variant={'rejected'} />,
                     name: 'Utløpt',
-                    value: 'expired',
+                    value: TimeDirection.BACKWARD,
                 },
             ],
         },

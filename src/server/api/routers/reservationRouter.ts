@@ -6,6 +6,7 @@ import {
     groupLeaderProcedure,
     memberProcedure,
 } from '../trpc';
+import { TimeDirection } from '@/app/admin/utils/enums';
 import { ReservationState } from '@prisma/client';
 import { z } from 'zod';
 
@@ -30,13 +31,16 @@ export const reservationRouter = createTRPCRouter({
                     fromDate: z.string().optional(),
                     toDate: z.string().optional(),
                     bookableItem: z.number().array().optional(),
+                    timeDirection: z
+                        .nativeEnum(TimeDirection)
+                        .array()
+                        .optional(),
                 }),
             }),
         )
         .query(async ({ ctx, input }) => {
             const limit = input.limit ?? 20;
             const { cursor } = input;
-            console.log('STATE: ', input.filters.state);
 
             try {
                 if (input.filters.fromDate)
@@ -67,12 +71,37 @@ export const reservationRouter = createTRPCRouter({
                     groupId: {
                         in: input.filters.group,
                     },
-                    startTime: {
-                        gte: input.filters.fromDate,
-                    },
-                    endTime: {
-                        lte: input.filters.toDate,
-                    },
+
+                    ...(input.filters.fromDate ||
+                    input.filters.toDate ||
+                    (input.filters.timeDirection &&
+                        input.filters.timeDirection?.length > 0)
+                        ? {
+                              OR: [
+                                  {
+                                      startTime: {
+                                          gte:
+                                              (input.filters.fromDate ??
+                                              input.filters.timeDirection?.includes(
+                                                  TimeDirection.FORWARD,
+                                              ))
+                                                  ? new Date()
+                                                  : undefined,
+                                      },
+                                      endTime: {
+                                          lte:
+                                              (input.filters.toDate ??
+                                              input.filters.timeDirection?.includes(
+                                                  TimeDirection.BACKWARD,
+                                              ))
+                                                  ? new Date()
+                                                  : undefined,
+                                      },
+                                  },
+                              ],
+                          }
+                        : {}),
+
                     bookableItem: {
                         itemId: {
                             in: input.filters.bookableItem,
@@ -97,8 +126,6 @@ export const reservationRouter = createTRPCRouter({
                         const user = (await ctx.Lepton.getUserById(
                             reservation.authorId,
                         ).then((user) => user.json())) as User;
-
-                        console.log(user);
 
                         reservation.author = user;
                     } catch (error) {

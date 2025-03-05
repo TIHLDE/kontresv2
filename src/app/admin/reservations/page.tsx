@@ -11,8 +11,8 @@ import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
 import AdminFilters, {
-    TimeDirection,
     reservationStateParser,
+    timeDirectionParser,
 } from '../components/admin-filters/admin-filters';
 import BookingList from '../components/booking-list/booking-list';
 import { groupParser } from '@/app/booking/components/SearchFilters';
@@ -33,9 +33,9 @@ export default function Page() {
         groups: groupParser.withDefault([]),
         fromDate: parseAsString,
         toDate: parseAsString,
+        time: timeDirectionParser.withDefault([]),
         states: reservationStateParser.withDefault([]),
         items: parseAsArrayOf<string>(parseAsString).withDefault([]),
-        timeDirection: parseAsStringEnum(Object.values(TimeDirection)),
     });
 
     // Fetch the reservations based on filter params
@@ -58,6 +58,7 @@ export default function Page() {
                     filters.items && filters.items.length > 0
                         ? filters.items.map(Number)
                         : undefined,
+                timeDirection: filters.time,
             },
             limit: 5,
         },

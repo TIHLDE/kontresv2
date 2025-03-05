@@ -27,13 +27,6 @@ export default function AdminSidebar() {
                     >
                         Gjenstander
                     </SideBarNavigationButton>
-                    <SideBarNavigationButton
-                        icon={<GamepadIcon size={16} />}
-                        route="/admin/reservations"
-                        highlighted={pathname === '/admin/mystery'}
-                    >
-                        Snake
-                    </SideBarNavigationButton>
                 </div>
             </CardContent>
         </Card>

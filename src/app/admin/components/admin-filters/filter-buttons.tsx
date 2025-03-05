@@ -97,7 +97,7 @@ export default function FilterButtons({
             </Collapsible>
             <div className="flex flex-col gap-1 w-full">
                 <Select
-                    defaultValue={TimeDirection.forward}
+                    defaultValue={TimeDirection.FORWARD}
                     onValueChange={(e) => {
                         setTimeDirection(e as TimeDirection);
                     }}
@@ -106,13 +106,13 @@ export default function FilterButtons({
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value={TimeDirection.forward}>
+                        <SelectItem value={TimeDirection.FORWARD}>
                             Fremtiden
                         </SelectItem>
-                        <SelectItem value={TimeDirection.backward}>
+                        <SelectItem value={TimeDirection.BACKWARD}>
                             Fortiden
                         </SelectItem>
-                        <SelectItem value={TimeDirection.none}>
+                        <SelectItem value={TimeDirection.PRESENT}>
                             Når som helst
                         </SelectItem>
                     </SelectContent>

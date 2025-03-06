@@ -13,6 +13,7 @@ import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
 interface ItemListProps {
     items: BookableItem[];
 }
+
 export default function ItemList({ items }: ItemListProps) {
     const [filters] = useQueryStates({
         groups: parseAsArrayOf<string>(parseAsString).withDefault([]),

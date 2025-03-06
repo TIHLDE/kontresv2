@@ -11,6 +11,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
+import GroupSelect from '@/components/ui/group-select';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ToastAction } from '@/components/ui/toast';
@@ -26,9 +27,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import GroupSelect from '@/components/ui/group-select';
 
 export default function CreateFaqForm({
     question,
@@ -46,8 +46,14 @@ export default function CreateFaqForm({
     const router = useRouter();
 
     const { data: session } = useSession();
-    const token = session?.user.TIHLDE_Token;
-    const groups = session?.user.groups;
+    const { data: allGroups } = api.group.getAll.useQuery();
+    const [token, groups, admin] = useMemo(() => {
+        return [
+            session?.user.TIHLDE_Token,
+            session?.user.groups,
+            session?.user.role === 'ADMIN',
+        ];
+    }, [session]);
 
     const { toast } = useToast();
 
@@ -198,13 +204,33 @@ export default function CreateFaqForm({
                         <FormField
                             control={form.control}
                             name="group"
-                            render={({ field: {onChange, value} }) => (
+                            render={({ field: { onChange, value } }) => (
                                 <FormItem className="flex flex-col mt-5">
                                     <FormLabel>
                                         Hvilke grupper gjelder dette spørsmålet?
                                     </FormLabel>
                                     <FormControl>
-                                        <GroupSelect onChange={onChange} value={value}  />
+                                        <GroupSelect
+                                            onChange={onChange}
+                                            value={value}
+                                            groups={
+                                                admin
+                                                    ? allGroups?.map((g) => ({
+                                                          label: g.name,
+                                                          value: g.groupId,
+                                                      }))
+                                                    : allGroups
+                                                          ?.filter((g) =>
+                                                              groups?.includes(
+                                                                  g.groupId,
+                                                              ),
+                                                          )
+                                                          .map((g) => ({
+                                                              label: g.name,
+                                                              value: g.groupId,
+                                                          }))
+                                            }
+                                        />
                                     </FormControl>
                                     <FormDescription>
                                         Velg minst én gruppe

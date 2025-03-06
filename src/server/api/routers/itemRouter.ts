@@ -56,6 +56,9 @@ export const itemRouter = createTRPCRouter({
                 orderBy: {
                     name: 'asc',
                 },
+                include: {
+                    group: true,
+                },
             });
 
             let nextCursor: typeof cursor | undefined = undefined;

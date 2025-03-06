@@ -94,7 +94,10 @@ export default function ItemForm({ onSubmit, isSubmitting }: ItemFormProps) {
                                 <FormLabel>Gruppe</FormLabel>
                                 <FormControl>
                                     <GroupSelect
-                                        groups={membershipGroups}
+                                        groups={allGroups?.map((g) => ({
+                                            label: g.name,
+                                            value: g.groupId,
+                                        }))}
                                         onChange={onChange}
                                         value={value}
                                     />

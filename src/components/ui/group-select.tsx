@@ -12,10 +12,15 @@ import {
 import { cn } from '@/lib/utils';
 import { SelectProps } from '@radix-ui/react-select';
 
+type InputGroup = {
+    value: string;
+    label: string;
+};
+
 interface GroupSelectProps extends SelectProps {
     onChange: (value: string) => void;
     value?: string;
-    groups?: string[];
+    groups?: InputGroup[];
     className?: string;
 }
 export default function GroupSelect({
@@ -36,8 +41,8 @@ export default function GroupSelect({
             <SelectContent>
                 <SelectGroup>
                     {groups?.map((item, index) => (
-                        <SelectItem value={item} key={index}>
-                            {item}
+                        <SelectItem value={item.value} key={index}>
+                            {item.label}
                         </SelectItem>
                     ))}
                 </SelectGroup>

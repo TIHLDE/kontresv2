@@ -3,9 +3,8 @@
 import { Card } from '@/components/ui/card';
 import Filters, { FilterCallbackType } from '@/components/ui/filters/filters';
 
-import { TimeDirection } from '../../../utils/enums';
-import filterList, { GroupIcons } from './filter-list';
-import itemFilterList from './filter-list';
+import itemFilterList, { GroupIcons } from './filter-list';
+import { TimeDirection } from '@/app/admin/utils/enums';
 import { groupParser } from '@/app/booking/components/SearchFilters';
 import { api } from '@/trpc/react';
 import { ReservationState } from '@prisma/client';
@@ -32,7 +31,7 @@ export default function AdminItemFilters({
 
     // Get groups and items, as they are used in the filters
     const { data: groups } = api.group.getAll.useQuery();
-    const { data: items } = api.item.getItems.useQuery();
+    const { data: items } = api.item.getItems.useQuery({});
 
     const [filters, setFilters] = useState<FilterCallbackType[]>([]);
 
@@ -41,49 +40,23 @@ export default function AdminItemFilters({
         groupParser.withDefault([]),
     );
 
-    const [__, setQueryStates] = useQueryState(
-        'states',
-        reservationStateParser.withDefault([]),
-    );
-
     const [___, setQueryItems] = useQueryState(
         'items',
         parseAsArrayOf<string>(parseAsString),
     );
 
-    const [____, setQueryTimeDirection] = useQueryState(
-        'time',
-        timeDirectionParser.withDefault([]),
-    );
-
-    const onFilterChange = (value: FilterCallbackType) => {
-        console.log('Filter changed:', value);
-    };
-
     useEffect(() => {
         // if (queryGroups || queryStates || queryItems) return;
-
         setQueryGroups(
             filters
                 .filter((g) => g.parentValue === 'group')
                 .map((g) => g.filter.value),
         );
 
-        setQueryStates(
-            filters
-                .filter((g) => g.parentValue === 'status')
-                .map((g) => g.filter.value as ReservationState),
-        );
-
         setQueryItems(
             filters
                 .filter((g) => g.parentValue === 'item')
                 .map((g) => g.filter.value),
-        );
-        setQueryTimeDirection(
-            filters
-                .filter((g) => g.parentValue === 'time')
-                .map((g) => g.filter.value as TimeDirection),
         );
     }, [filters]);
 
@@ -123,10 +96,9 @@ export default function AdminItemFilters({
             groupIcons={GroupIcons}
             filterGroups={itemFilterList({
                 groups: groups ?? [],
-                items: items ?? [],
+                items: items?.items ?? [],
             })}
             onFilterChange={(value) => {
-                onFilterChange(value);
                 setOpen(false);
             }}
         />

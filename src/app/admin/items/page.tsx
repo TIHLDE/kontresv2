@@ -5,7 +5,7 @@ import ItemList from './components/item-list/item-list';
 import { api } from '@/trpc/server';
 
 export default async function Page() {
-    const items = await api.item.getItems();
+    const items = await api.item.getItems({});
     return (
         <>
             <CardHeader>
@@ -13,7 +13,7 @@ export default async function Page() {
             </CardHeader>
             <CardContent className="gap-2.5 flex flex-col">
                 <FilterHeader />
-                <ItemList items={items} />
+                <ItemList items={items.items} />
             </CardContent>
         </>
     );

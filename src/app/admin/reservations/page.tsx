@@ -13,10 +13,8 @@ import { groupParser } from '@/app/booking/components/SearchFilters';
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
-import { useState } from 'react';
 
 export default function Page() {
-    const [currentPage, setCurrentPage] = useState(0);
     const [filters] = useQueryStates({
         q: parseAsString,
         groups: groupParser.withDefault([]),

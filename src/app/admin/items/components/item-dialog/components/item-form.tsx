@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { DialogFooter } from '@/components/ui/dialog';
 import FileInput from '@/components/ui/file-input';
 import {
     Form,
@@ -122,6 +121,7 @@ export default function ItemForm({ onSubmit, isSubmitting }: ItemFormProps) {
                 <Button
                     onClick={() => formSubmitRef.current?.click()}
                     disabled={isSubmitting}
+                    className="gap-2.5"
                 >
                     {isSubmitting ? (
                         <>

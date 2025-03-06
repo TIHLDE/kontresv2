@@ -31,7 +31,7 @@ export default function AdminBookingFilters({
 
     // Get groups and items, as they are used in the filters
     const { data: groups } = api.group.getAll.useQuery();
-    const { data: items } = api.item.getItems.useQuery();
+    const { data: items } = api.item.getItems.useQuery({});
 
     const [filters, setFilters] = useState<FilterCallbackType[]>([]);
 
@@ -123,7 +123,7 @@ export default function AdminBookingFilters({
             displayGroupIcons={true}
             filterGroups={reservationFilterList({
                 groups: groups ?? [],
-                items: items ?? [],
+                items: items?.items ?? [],
             })}
             onFilterChange={(value) => {
                 onFilterChange(value);

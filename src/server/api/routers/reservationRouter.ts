@@ -23,8 +23,11 @@ export const reservationRouter = createTRPCRouter({
         .input(
             z.object({
                 limit: z.number().min(1).max(100).optional(),
-                cursor: z.number().nullish(),
-                direction: z.enum(['forward', 'backward']).default('forward'),
+                cursor: z.number().nullish().optional(),
+                direction: z
+                    .enum(['forward', 'backward'])
+                    .default('forward')
+                    .optional(),
                 filters: z.object({
                     state: z.nativeEnum(ReservationState).array().optional(),
                     query: z.string().optional(),

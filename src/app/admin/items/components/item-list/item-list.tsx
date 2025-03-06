@@ -1,5 +1,7 @@
 'use client';
 
+import { AppRouter } from '@/server/api/root';
+
 import { Button } from '@/components/ui/button';
 import { LoadingSpinner } from '@/components/ui/loadingspinner';
 
@@ -8,13 +10,20 @@ import { DataTable } from '@/app/admin/components/old-components/data-table';
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
 import { BookableItem } from '@prisma/client';
+import { inferProcedureOutput } from '@trpc/server';
+import { useRouter } from 'next/navigation';
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';
 
+type GetItemsOutput = inferProcedureOutput<
+    AppRouter['item']['getItems']
+>['items'][0];
+
 interface ItemListProps {
-    items: BookableItem[];
+    items: GetItemsOutput[];
 }
 
 export default function ItemList({ items }: ItemListProps) {
+    const router = useRouter();
     const [filters] = useQueryStates({
         groups: parseAsArrayOf<string>(parseAsString).withDefault([]),
         items: parseAsArrayOf<string>(parseAsString).withDefault([]),
@@ -40,6 +49,10 @@ export default function ItemList({ items }: ItemListProps) {
         },
         { getNextPageParam: (lastPage) => lastPage.nextCursor },
     );
+
+    const handleRowClick = (item: GetItemsOutput) => {
+        router.push(`/booking/${item.itemId}`);
+    };
 
     //NOE ER FEIL MED PAGINATION; FIKS DET
     return (

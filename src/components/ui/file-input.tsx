@@ -10,11 +10,13 @@ interface FileInputProps extends HTMLAttributes<HTMLDivElement> {
     maxSize?: number;
     accept?: string;
     label?: string;
+    disabled?: boolean;
 }
 export default function FileInput({
     maxSize = 5,
     accept,
     label,
+    disabled,
     className,
     ...props
 }: FileInputProps) {
@@ -28,6 +30,7 @@ export default function FileInput({
             <Button
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
+                disabled={disabled}
             >
                 {label ?? 'Velg fil'}
             </Button>
@@ -36,6 +39,7 @@ export default function FileInput({
                 type={'file'}
                 ref={fileInputRef}
                 onChange={handleFileSelect}
+                disabled={disabled}
                 accept={accept}
             />
             <p className="text-sm text-muted-foreground">{fileName}</p>

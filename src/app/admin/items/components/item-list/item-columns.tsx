@@ -1,12 +1,12 @@
 import { AppRouter } from '@/server/api/root';
 
-import { BookableItem } from '@prisma/client';
+import ItemActions from '@/app/admin/components/old-components/item-actions';
 import { type ColumnDef } from '@tanstack/react-table';
 import { inferProcedureOutput } from '@trpc/server';
 
 type GetItemsOutput = inferProcedureOutput<AppRouter['item']['getItems']>;
 
-export const itemColumns: ColumnDef<GetItemsOutput['items'][0]>[] = [
+export const itemColumns: ColumnDef<GetItemsOutput['items'][0], unknown>[] = [
     {
         accessorKey: 'name',
         header: 'Gjenstand',
@@ -19,6 +19,11 @@ export const itemColumns: ColumnDef<GetItemsOutput['items'][0]>[] = [
         accessorKey: 'group',
         header: 'Gruppe',
         accessorFn: ({ group }) => group.name,
+    },
+    {
+        accessorKey: 'name',
+        header: '',
+        cell: ({ row }) => <ItemActions item={row.original} />,
     },
     // {
     //     id: 'actions',

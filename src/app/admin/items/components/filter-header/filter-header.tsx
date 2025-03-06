@@ -22,7 +22,7 @@ export default function FilterHeader({
             {...props}
         >
             <AdminItemFilters />
-            <ItemDialog />
+            <ItemDialog label="Ny gjenstand" enableTrigger />
         </div>
     );
 }

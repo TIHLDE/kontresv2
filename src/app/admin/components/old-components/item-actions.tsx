@@ -1,3 +1,5 @@
+import { AppRouter } from '@/server/api/root';
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,74 +12,40 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
-import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+
+import ItemDialog from '../../items/components/item-dialog/item-dialog';
+import { type ItemFormValueTypes } from './create-item-form';
 // import { Form } from '@/components/ui/form';
-import { useToast } from '@/components/ui/use-toast';
-
-import { deleteItem, invalidateItems, updateItem } from '@/utils/apis/items';
-import { type DetailedItem } from '@/utils/apis/types';
-
-import CreateItemForm, { type ItemFormValueTypes } from './create-item-form';
-import { MoreHorizontal, Trash } from 'lucide-react';
+import { inferProcedureOutput } from '@trpc/server';
+import {
+    CornerUpRightIcon,
+    MoreHorizontal,
+    PencilIcon,
+    Trash,
+    TrashIcon,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 // import { resolve } from 'path';
 import { useState } from 'react';
 
-const ItemActions = ({ item }: { item: DetailedItem }) => {
+type GetItemsOutput = inferProcedureOutput<
+    AppRouter['item']['getItems']
+>['items'][0];
+
+const ItemActions = ({ item }: { item: GetItemsOutput }) => {
     const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const { toast } = useToast();
+    const router = useRouter();
 
-    const onSubmit = (e: ItemFormValueTypes) => {
-        return updateItem(item.id, e as DetailedItem)
-            .then(() => {
-                toast({
-                    title: 'Gjenstand oppdatert!',
-                    description: 'Gjenstanden er nå oppdatert.',
-                });
-                invalidateItems();
+    const onSubmit = (e: ItemFormValueTypes) => {};
 
-                setEditOpen(false);
-            })
-            .catch((err) => {
-                toast({
-                    title: 'Noe gikk galt',
-                    description: 'Kunne ikke oppdatere gjenstanden. ' + err,
-                    variant: 'destructive',
-                });
-            });
-    };
-
-    const onDelete = () => {
-        deleteItem(item.id)
-            .then(() => {
-                toast({
-                    title: 'Gjenstand slettet!',
-                    description: 'Gjenstanden er nå slettet.',
-                });
-                invalidateItems();
-            })
-            .catch((err) => {
-                toast({
-                    title: 'Noe gikk galt',
-                    description: 'Kunne ikke slette gjenstanden. ' + err,
-                    variant: 'destructive',
-                });
-                invalidateItems();
-            });
-    };
+    const onDelete = () => {};
 
     return (
         <div className="flex gap-3 justify-end place-content-center">
@@ -90,39 +58,44 @@ const ItemActions = ({ item }: { item: DetailedItem }) => {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuLabel>Handlinger</DropdownMenuLabel>
                     <DropdownMenuItem
-                        onClick={() => {
+                        onClick={(e) => {
                             setEditOpen(!editOpen);
                         }}
+                        className="gap-2"
                     >
+                        <PencilIcon size={14} />
                         Rediger
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={(e) => {
+                            router.push(`/booking/${item.itemId}`);
+                        }}
+                        className="gap-2"
+                    >
+                        <CornerUpRightIcon size={14} />
+                        Gå til gjenstand
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                        onClick={() => {
+                        onClick={(e) => {
                             setDeleteOpen(!deleteOpen);
                         }}
+                        className="gap-2"
                     >
+                        <TrashIcon size={14} />
                         Slett
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
 
             {/* Edit item dialog */}
-            <Dialog open={editOpen} onOpenChange={setEditOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Rediger gjenstand</DialogTitle>
-                        <DialogDescription>
-                            Her kan du redigere gjenstanden
-                        </DialogDescription>
-                    </DialogHeader>
-
-                    <CreateItemForm initialData={item} onSubmit={onSubmit} />
-                </DialogContent>
-            </Dialog>
-
+            <ItemDialog
+                enableTrigger={false}
+                item={item}
+                open={editOpen}
+                setOpen={setEditOpen}
+            />
             {/* Delete item dialog */}
             <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogContent>

@@ -1,6 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,7 +17,7 @@ const formSchema = z.object({
     name: z.string().min(1),
     description: z.string().min(1),
     image: z.string().url().optional().nullable(),
-    allows_alcohol: z.boolean().optional(),
+    allowsAlcohol: z.boolean().optional(),
 });
 
 export type ItemFormValueTypes = z.infer<typeof formSchema>;
@@ -80,7 +86,7 @@ export const CreateItemForm = ({
 
                 <FormField
                     control={form.control}
-                    name="allows_alcohol"
+                    name="allowsAlcohol"
                     render={({ field: { value, ...rest } }) => (
                         <FormItem className="flex items-center space-x-2">
                             <FormControl>
@@ -89,7 +95,7 @@ export const CreateItemForm = ({
                                     {...rest}
                                     onCheckedChange={(e) => {
                                         form.setValue(
-                                            'allows_alcohol',
+                                            'allowsAlcohol',
                                             Boolean(e.valueOf()),
                                             {
                                                 shouldDirty: true,

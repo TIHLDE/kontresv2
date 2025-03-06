@@ -36,11 +36,17 @@ const schema = z.object({
 interface ItemFormProps {
     onSubmit: (values: z.infer<typeof schema>) => void;
     isSubmitting?: boolean;
+    defaultValues?: z.infer<typeof schema>;
 }
 
-export default function ItemForm({ onSubmit, isSubmitting }: ItemFormProps) {
+export default function ItemForm({
+    onSubmit,
+    defaultValues,
+    isSubmitting,
+}: ItemFormProps) {
     const form = useForm<z.infer<typeof schema>>({
         resolver: zodResolver(schema),
+        defaultValues,
     });
 
     const formSubmitRef = useRef<HTMLButtonElement>(null);
@@ -114,6 +120,8 @@ export default function ItemForm({ onSubmit, isSubmitting }: ItemFormProps) {
                 </form>
             </Form>
             <FileInput
+                disabled
+                title="Ikke ferdigimplementert"
                 className="mt-5"
                 label="Velg bilde"
                 accept="image/*"

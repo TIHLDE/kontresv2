@@ -19,20 +19,25 @@ interface SideBarNavigationButtonProps extends ButtonProps {
     route: string;
     highlighted?: boolean;
     icon?: ReactNode;
+    link?: {
+        className?: string;
+    };
 }
 export function SideBarNavigationButton({
     highlighted,
     route,
     icon,
+    className,
+    link,
     children,
     ...props
 }: SideBarNavigationButtonProps) {
     return (
-        <Link href={route} className="w-full">
+        <Link href={route} className={cn('w-full', link?.className)}>
             <Button
                 variant={highlighted ? 'default' : 'ghost'}
                 {...props}
-                className="w-full gap-2.5 items-center"
+                className={cn('w-full gap-2.5 items-center', className)}
             >
                 {icon}
                 {children}

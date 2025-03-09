@@ -44,9 +44,7 @@ export default function ItemDialog({
     const [internalOpen, internalSetOpen] = useState(false);
     const utils = api.useUtils();
 
-    const action = useMemo(() => {
-        return !!item ? 'edit' : 'create';
-    }, [item]);
+    const action = !!item ? 'edit' : 'create';
 
     const onSubmit = (values: {
         name: string;
@@ -109,6 +107,7 @@ export default function ItemDialog({
                         description: item?.description ?? '',
                         group: item?.group.groupId ?? '',
                     }}
+                    formAction={action}
                     onSubmit={(values) =>
                         onSubmit({
                             ...values,

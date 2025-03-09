@@ -37,10 +37,12 @@ interface ItemFormProps {
     onSubmit: (values: z.infer<typeof schema>) => void;
     isSubmitting?: boolean;
     defaultValues?: z.infer<typeof schema>;
+    formAction?: 'edit' | 'create';
 }
 
 export default function ItemForm({
     onSubmit,
+    formAction,
     defaultValues,
     isSubmitting,
 }: ItemFormProps) {
@@ -136,8 +138,11 @@ export default function ItemForm({
                 >
                     {isSubmitting ? (
                         <>
-                            <LoadingSpinner /> Oppretter
+                            <LoadingSpinner />{' '}
+                            {formAction === 'edit' ? 'Lagrer' : 'Oppretter'}
                         </>
+                    ) : formAction === 'edit' ? (
+                        'Lagre endringer'
                     ) : (
                         'Opprett gjenstand'
                     )}

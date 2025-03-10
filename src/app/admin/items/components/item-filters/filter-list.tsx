@@ -1,18 +1,12 @@
-import {
-    Filter,
-    FilterGroup,
-} from '../../../../../components/ui/filters/filters';
-import StatusIndicator from '../../../../../components/ui/filters/status-indicator';
-import { TimeDirection } from '../../../utils/enums';
-import { BookableItem, Group, ReservationState } from '@prisma/client';
+import { FilterGroup } from '../../../../../components/ui/filters/filters';
+import { BookableItem, Group } from '@prisma/client';
 import {
     AlertCircleIcon,
     ClockIcon,
-    LucideIcon,
     ShapesIcon,
     UsersIcon,
 } from 'lucide-react';
-import { FC, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export default function itemFilterList({
     groups,

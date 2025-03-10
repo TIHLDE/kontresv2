@@ -10,7 +10,7 @@ export default function AdminSidebar() {
     const pathname = usePathname();
 
     return (
-        <Card className="h-fit min-w-72 sticky top-24">
+        <Card className="h-fit min-w-72 sticky top-24 z-50">
             <CardContent className="pt-6">
                 <div className="flex flex-col">
                     <SideBarNavigationButton

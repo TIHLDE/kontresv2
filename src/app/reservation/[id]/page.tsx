@@ -1,6 +1,14 @@
 import Header from '@/components/layout/header/header';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 
+import { AdminFooter, MemberFooter } from './cardFooter';
+import { auth } from '@/auth';
 import { api } from '@/trpc/server';
 import { ReservationState } from '@prisma/client';
 
@@ -19,7 +27,7 @@ export default async function Page({ params: { id } }: ReservationPageParams) {
     const itemData = data?.bookableItemId
         ? await api.bookableItem.getById({ itemId: +data.bookableItemId })
         : null;
-
+    const session = await auth();
     return (
         <div className="md:max-w-2xl max-w-page mx-auto min-h-screen w-full p-4">
             <Card className="w-full shadow-lg">
@@ -32,16 +40,16 @@ export default async function Page({ params: { id } }: ReservationPageParams) {
                     <div className="break-words">
                         <strong>Beskrivelse:</strong> {data?.description}
                     </div>
-                    <div className="flex justify-between">
-                        <div>
-                            <strong>Starttid:</strong>{' '}
-                            {data?.startTime?.toLocaleString()}
-                        </div>
-                        <div>
-                            <strong>Sluttid:</strong>{' '}
-                            {data?.endTime?.toLocaleString()}
-                        </div>
+
+                    <div>
+                        <strong>Starttid:</strong>{' '}
+                        {data?.startTime?.toLocaleString()}
                     </div>
+                    <div>
+                        <strong>Sluttid:</strong>{' '}
+                        {data?.endTime?.toLocaleString()}
+                    </div>
+
                     <div>
                         <strong>Gjenstand:</strong> {itemData?.name}
                     </div>
@@ -50,6 +58,15 @@ export default async function Page({ params: { id } }: ReservationPageParams) {
                         {data ? stateMap[data.status] : 'Unknown'}
                     </div>
                 </CardContent>
+                <CardFooter>
+                    {(session?.user?.leaderOf == data?.groupId ||
+                        session?.user?.role == 'ADMIN') &&
+                        data && <AdminFooter data={data} />}
+                    {session?.user.id == data?.authorId &&
+                        session?.user?.role != 'ADMIN' &&
+                        session?.user?.leaderOf != data?.groupId &&
+                        data && <MemberFooter data={data} />}
+                </CardFooter>
             </Card>
         </div>
     );

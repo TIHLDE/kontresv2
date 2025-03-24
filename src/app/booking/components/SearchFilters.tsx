@@ -75,6 +75,7 @@ export default function SearchFilters({
         'alcohol',
         parseAsBoolean.withDefault(false),
     );
+
     const [from, setFrom] = useQueryState('from', datetimeParser);
     const [to, setTo] = useQueryState('to', datetimeParser);
 

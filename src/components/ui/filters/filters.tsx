@@ -12,7 +12,15 @@ import FilterBadge from './filter-badge';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ListFilterIcon } from 'lucide-react';
-import { Dispatch, HTMLAttributes, ReactNode, SetStateAction } from 'react';
+import { UseQueryStatesKeysMap } from 'nuqs';
+import {
+    Dispatch,
+    HTMLAttributes,
+    ReactNode,
+    SetStateAction,
+    useEffect,
+    useState,
+} from 'react';
 
 export type Filter = {
     name: string;
@@ -47,17 +55,13 @@ interface FiltersProps extends HTMLAttributes<HTMLDivElement> {
      */
     setOpen?: Dispatch<SetStateAction<boolean>>;
     /**
-     * List of selected filters.
-     */
-    filters?: FilterCallbackType[];
-    /**
-     * Callback to set the list of selected filters.
-     */
-    setFilters?: Dispatch<SetStateAction<FilterCallbackType[]>>;
-    /**
      * Whether or not to display icons in each filter group header.
      */
     displayGroupIcons?: boolean;
+    /**
+     * Default values for the filters.
+     */
+    defaultValues?: Filter[];
     /**
      * Object containing icons for each filter group header.
      * The key is the group value and the value is the icon (ReactNode).
@@ -66,25 +70,25 @@ interface FiltersProps extends HTMLAttributes<HTMLDivElement> {
     /**
      * Function that is called when a filter is selected.
      */
-    onFilterChange?: (value: FilterCallbackType) => void;
+    onFilterChange?: (value: FilterCallbackType[]) => void;
     /**
      * List of filter groups to display. Each group contains a header and a list of filters.
      */
     filterGroups: FilterGroup[];
+    queryParsers: UseQueryStatesKeysMap<any>;
 }
 
 /**
  * To use this component, you need to pass in a list of filter groups, which contains a header and a list of filters.
  * Remember to define the filters and setFilters props
  *
- * @param param0
  * @returns
  */
 export default function Filters({
     open,
     setOpen,
-    filters,
-    setFilters,
+    queryParsers,
+    defaultValues,
     filterGroups,
     onFilterChange,
     groupIcons,
@@ -92,31 +96,66 @@ export default function Filters({
     className,
     ...props
 }: FiltersProps) {
+    const [filters, setFilters] = useState<FilterCallbackType[]>([]);
+
+    useEffect(() => {
+        if (defaultValues)
+            setFilters(
+                defaultValues.map((g) => ({
+                    filter: g,
+                    parentValue: g.value,
+                })),
+            );
+    }, []);
+
     // Function for adding a filter if it is not already in the filters list
     const addFilter = (filter: FilterCallbackType) => {
-        if (!isInFilters(filter)) {
-            setFilters?.((prev) => [...prev, filter]);
-        } else {
-            // remove the filter instead
-            removeFilter(filter);
-        }
+        setFilters((prev) => {
+            let updatedFilters;
+            if (!isInFilters(filter, prev)) {
+                // Add the filter
+                updatedFilters = [...prev, filter];
+            } else {
+                // Remove the filter
+                updatedFilters = prev.filter(
+                    (f) =>
+                        f.filter.value !== filter.filter.value ||
+                        f.parentValue !== filter.parentValue,
+                );
+            }
+
+            // Call the callback with the updated filters
+            onFilterChange?.(updatedFilters);
+
+            return updatedFilters;
+        });
     };
 
-    const isInFilters = (filter: FilterCallbackType) =>
-        filters?.some(
+    // Updated isInFilters to accept the current filters as an argument
+    const isInFilters = (
+        filter: FilterCallbackType,
+        currentFilters = filters,
+    ) =>
+        currentFilters.some(
             (f) =>
                 f.filter.value === filter.filter.value &&
                 f.parentValue === filter.parentValue,
         );
 
     const removeFilter = (filter: FilterCallbackType) => {
-        setFilters?.((prev) =>
-            prev.filter(
+        setFilters((prev) => {
+            // Remove the filter
+            const updatedFilters = prev.filter(
                 (f) =>
                     f.filter.value !== filter.filter.value ||
                     f.parentValue !== filter.parentValue,
-            ),
-        );
+            );
+
+            // Call the callback with the updated filters
+            onFilterChange?.(updatedFilters);
+
+            return updatedFilters;
+        });
     };
 
     return (
@@ -193,10 +232,6 @@ export default function Filters({
                                     key={filter.value + index + group.header}
                                     onSelect={() => {
                                         addFilter({
-                                            filter,
-                                            parentValue: group.value,
-                                        });
-                                        onFilterChange?.({
                                             filter,
                                             parentValue: group.value,
                                         });

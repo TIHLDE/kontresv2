@@ -1,10 +1,13 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import Filters, { FilterCallbackType } from '@/components/ui/filters/filters';
+import Filters, {
+    Filter,
+    FilterCallbackType,
+} from '@/components/ui/filters/filters';
 
-import { TimeDirection } from '../../../utils/enums';
 import reservationFilterList, { GroupIcons } from './filter-list';
+import { TimeDirection } from '@/app/admin/utils/enums';
 import { groupParser } from '@/app/booking/components/SearchFilters';
 import { api } from '@/trpc/react';
 import { ReservationState } from '@prisma/client';
@@ -12,7 +15,7 @@ import {
     parseAsArrayOf,
     parseAsString,
     parseAsStringEnum,
-    useQueryState,
+    useQueryStates,
 } from 'nuqs';
 import React, { useEffect, useState } from 'react';
 
@@ -34,65 +37,35 @@ export default function AdminBookingFilters({
     const { data: items } = api.item.getItems.useQuery({});
 
     const [filters, setFilters] = useState<FilterCallbackType[]>([]);
-
-    const [_, setQueryGroups] = useQueryState(
-        'groups',
-        groupParser.withDefault([]),
-    );
-
-    const [__, setQueryStates] = useQueryState(
-        'states',
-        reservationStateParser.withDefault([]),
-    );
-
-    const [___, setQueryItems] = useQueryState(
-        'items',
-        parseAsArrayOf<string>(parseAsString),
-    );
-
-    const [____, setQueryTimeDirection] = useQueryState(
-        'time',
-        timeDirectionParser.withDefault([]),
-    );
-
-    const onFilterChange = (value: FilterCallbackType) => {
-        console.log('Filter changed:', value);
-    };
+    const [queryStates, setQueryStates] = useQueryStates({
+        groups: groupParser.withDefault([]),
+        states: reservationStateParser.withDefault([]),
+        items: parseAsArrayOf<string>(parseAsString),
+        time: timeDirectionParser.withDefault([]),
+    });
 
     useEffect(() => {
-        // if (queryGroups || queryStates || queryItems) return;
-
-        setQueryGroups(
-            filters
+        setQueryStates({
+            groups: filters
                 .filter((g) => g.parentValue === 'group')
                 .map((g) => g.filter.value),
-        );
-
-        setQueryStates(
-            filters
+            states: filters
                 .filter((g) => g.parentValue === 'status')
                 .map((g) => g.filter.value as ReservationState),
-        );
-
-        setQueryItems(
-            filters
+            items: filters
                 .filter((g) => g.parentValue === 'item')
                 .map((g) => g.filter.value),
-        );
-        setQueryTimeDirection(
-            filters
+            time: filters
                 .filter((g) => g.parentValue === 'time')
                 .map((g) => g.filter.value as TimeDirection),
-        );
+        });
     }, [filters]);
 
     // Register shortcut listener
     useEffect(() => {
         const callback = (e: KeyboardEvent) => {
             if (!(e.ctrlKey && e.key === 'k')) return;
-
             setOpen((prev) => {
-                console.log('Setting open to', !prev);
                 return !prev;
             });
         };
@@ -104,7 +77,6 @@ export default function AdminBookingFilters({
         };
 
         window.addEventListener('keydown', ignore);
-
         window.addEventListener('keydown', callback);
 
         return () => {
@@ -115,18 +87,21 @@ export default function AdminBookingFilters({
 
     return (
         <Filters
+            queryParsers={{
+                groups: groupParser.withDefault([]),
+                states: reservationStateParser.withDefault([]),
+                items: parseAsArrayOf<string>(parseAsString),
+                time: timeDirectionParser.withDefault([]),
+            }}
             open={open}
             setOpen={setOpen}
-            filters={filters}
-            setFilters={setFilters}
             groupIcons={GroupIcons}
             displayGroupIcons={true}
             filterGroups={reservationFilterList({
                 groups: groups ?? [],
                 items: items?.items ?? [],
             })}
-            onFilterChange={(value) => {
-                onFilterChange(value);
+            onFilterChange={() => {
                 setOpen(false);
             }}
         />

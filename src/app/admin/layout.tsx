@@ -7,13 +7,6 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import React, { ReactNode, Suspense } from 'react';
 
-const AdminButtons: { label: string; route: string; separated?: boolean }[] = [
-    { label: 'Avventende søknader', route: 'awaiting' },
-    { label: 'Godkjente søknader', route: 'approved' },
-    { label: 'Avslåtte søknader', route: 'rejected' },
-    { label: 'Gjenstander', route: 'items', separated: true },
-];
-
 interface SideBarNavigationButtonProps extends ButtonProps {
     route: string;
     highlighted?: boolean;
@@ -55,7 +48,13 @@ export default function AdminLayout({
             <AdminSidebar />
             <div className="flex flex-col w-full gap-5">
                 <Card className="md:min-w-72 h-full">
-                    <Suspense fallback={<LoadingSpinner />}>
+                    <Suspense
+                        fallback={
+                            <div className="w-full h-full flex items-center justify-center">
+                                <LoadingSpinner />
+                            </div>
+                        }
+                    >
                         {children}
                     </Suspense>
                 </Card>

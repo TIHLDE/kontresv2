@@ -11,8 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 
-import { createItem, getItems, invalidateItems } from '@/utils/apis/items';
-import { type DetailedItem } from '@/utils/apis/types';
+import { createItem, invalidateItems } from '@/utils/apis/items';
 
 import { itemColumns } from '../../items/components/item-list/item-columns';
 import CreateItemForm, { type ItemFormValueTypes } from './create-item-form';
@@ -48,7 +47,7 @@ const CreateItem = () => {
 
                 setOpen(false);
             })
-            .catch((err) => {
+            .catch((_: unknown) => {
                 toast({
                     title: 'Noe gikk galt',
                     description: 'Kunne ikke opprette gjenstanden. ' + err,

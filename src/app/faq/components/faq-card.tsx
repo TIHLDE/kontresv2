@@ -25,23 +25,28 @@ export default function FaqCard({
     group,
 }: FaqCardProps) {
     return (
-        <Card className="w-100 h-full flex flex-col">
-            <CardHeader>
+        <div className='bg-border rounded-md h-full'>
+        <Card className="w-100 h-full flex flex-col hover:-translate-y-1 hover:translate-x-1 transition-transform">
+            <CardHeader className='pb-3'>
                 <CardTitle className="text-left">{title}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4 h-full">
-                <a className="h-12 line-clamp-2">{description}</a>
                 <span className="text-xs text-muted-foreground ">
-                    {author}, {group}
+                    Postet av {author}, {group}
                 </span>
-                <span className="mt-auto bottom-5 left-5">
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4 ">
+                <a className="line-clamp-2">{description}</a>
+                {bookableItems ? 
+                <span className="mt-auto ">
                     {bookableItems.map((item) => (
-                        <Badge key={item.itemId} className="m-1 ">
+                        <Badge key={item.itemId} className="m-1 ml-0">
                             {item.name}
                         </Badge>
                     ))}
                 </span>
+                : null
+                }
             </CardContent>
         </Card>
+        </div>
     );
 }

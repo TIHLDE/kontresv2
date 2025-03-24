@@ -27,7 +27,7 @@ const FaqList = () => {
     );
     return (
         <>
-            <div className="grid md:grid-cols-3 grid-cols-1 gap-5">
+            <div className="grid md:grid-cols-3 grid-cols-1 gap-5 ">
                 {data?.pages.map((page) =>
                     page.faqs.map((object) => (
                         <Link
@@ -50,7 +50,12 @@ const FaqList = () => {
                 {hasNextPage && (
                     <Button onClick={() => fetchNextPage()}>
                         {isFetchingNextPage && <LoadingSpinner />}
-                        {!isFetchingNextPage && 'Last inn flere'}
+                        {!isFetchingNextPage && (
+                            <>
+                                <img src='down-arrow-svgrepo-com.svg' alt="arrow" className='w-4 h-4 invert mr-1'></img>
+                                Last inn mer
+                            </>
+                            )}
                     </Button>
                 )}
                 {error && <text>Noe gikk galt</text>}

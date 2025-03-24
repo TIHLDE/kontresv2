@@ -18,7 +18,10 @@ export default async function page() {
                 </h1>
                 {isAdmin && (
                     <Link href={'./faq/create/'} className="w-fit">
-                        <Button>Opprett ny</Button>
+                        <Button>
+                            <img src='plus-svgrepo-com.svg' alt="arrow" className='w-5 h-5 invert mr-1'></img>
+                            Opprett ny
+                        </Button>
                     </Link>
                 )}
             </div>

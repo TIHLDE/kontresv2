@@ -1,6 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
+import FilterSkeleton from '@/components/ui/filters/filter-skeleton';
 import Filters, {
     Filter,
     FilterCallbackType,
@@ -39,38 +40,39 @@ export default function AdminItemFilters({
     const { data: existingGroups } = api.group.getAll.useQuery();
     const { data: existingItems } = api.item.getItems.useQuery({});
 
-    const filters = useMemo<Filter[]>(() => {
+    const filters = useMemo<FilterCallbackType[]>(() => {
         return [
             ...filterQueries.groups.map(
                 (group) =>
                     ({
-                        name:
-                            existingGroups?.find((g) => g.groupId === group)
-                                ?.name ?? 'Ukjent gruppe',
-                        value: group,
-                        icon: GroupIcons['group'],
-                    }) as Filter,
+                        parentValue: 'group',
+                        filter: {
+                            name:
+                                existingGroups?.find((g) => g.groupId === group)
+                                    ?.name ?? 'Ukjent gruppe',
+                            value: group,
+                            icon: GroupIcons['group'],
+                        },
+                    }) as FilterCallbackType,
             ),
             ...filterQueries.items.map((item) => {
                 return {
-                    name:
-                        existingItems?.items.find(
-                            (i) => i.itemId === parseInt(item),
-                        )?.name ?? 'Ukjent gjenstand',
-                    value: item,
-                    icon: GroupIcons['item'],
-                };
+                    parentValue: 'item',
+                    filter: {
+                        name:
+                            existingItems?.items.find(
+                                (i) => i.itemId === parseInt(item),
+                            )?.name ?? 'Ukjent gjenstand',
+                        value: item,
+                        icon: GroupIcons['item'],
+                    },
+                } as FilterCallbackType;
             }),
-        ] as Filter[];
+        ] as FilterCallbackType[];
     }, [filterQueries, existingGroups, existingItems]);
-
-    // Get groups and items, as they are used in the filters
-    const { data: groups } = api.group.getAll.useQuery();
-    const { data: items } = api.item.getItems.useQuery({});
 
     // Register shortcut listener
     useEffect(() => {
-        console.log(filterQueries.groups);
         const callback = (e: KeyboardEvent) => {
             if (!(e.ctrlKey && e.key === 'k')) return;
 
@@ -99,7 +101,6 @@ export default function AdminItemFilters({
     }, []);
 
     const onFilterChange = (filters: FilterCallbackType[]) => {
-        console.log(filters);
         setFilterQueries({
             groups: filters
                 .filter((f) => f.parentValue === 'group')
@@ -117,14 +118,10 @@ export default function AdminItemFilters({
                     open={open}
                     setOpen={setOpen}
                     defaultValues={filters}
-                    queryParsers={{
-                        groups: groupParser.withDefault([]),
-                        items: parseAsArrayOf<string>(parseAsString),
-                    }}
                     groupIcons={GroupIcons}
                     filterGroups={itemFilterList({
-                        groups: groups ?? [],
-                        items: items?.items ?? [],
+                        groups: existingGroups ?? [],
+                        items: existingItems?.items ?? [],
                     })}
                     onFilterChange={(value) => {
                         onFilterChange(value);
@@ -136,13 +133,3 @@ export default function AdminItemFilters({
         </>
     );
 }
-
-const FilterSkeleton = () => {
-    return (
-        <div className="flex gap-2 items-center">
-            <Skeleton className="w-20 h-5" />
-            <Skeleton className="w-20 h-5" />
-            <Skeleton className="w-20 h-5" />
-        </div>
-    );
-};

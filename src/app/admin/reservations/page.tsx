@@ -57,7 +57,7 @@ export default function Page() {
             <CardHeader>
                 <CardTitle>Reservasjoner</CardTitle>
             </CardHeader>
-            <CardContent className="">
+            <CardContent>
                 <div className="gap-5 flex flex-col">
                     <AdminBookingFilters />
                     <div

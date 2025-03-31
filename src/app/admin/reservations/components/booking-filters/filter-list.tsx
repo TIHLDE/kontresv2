@@ -2,14 +2,8 @@ import { FilterGroup } from '@/components/ui/filters/filters';
 import StatusIndicator from '@/components/ui/filters/status-indicator';
 
 import { TimeDirection } from '../../../utils/enums';
+import { FilterGroups } from './value-maps';
 import { BookableItem, Group, ReservationState } from '@prisma/client';
-import {
-    AlertCircleIcon,
-    ClockIcon,
-    ShapesIcon,
-    UsersIcon,
-} from 'lucide-react';
-import { ReactNode } from 'react';
 
 export default function reservationFilterList({
     groups,
@@ -21,7 +15,7 @@ export default function reservationFilterList({
     return [
         {
             header: 'Tidsrom',
-            value: 'time',
+            value: FilterGroups.TIME,
             filters: [
                 {
                     icon: <StatusIndicator variant={'approved'} />,
@@ -38,7 +32,7 @@ export default function reservationFilterList({
         },
         {
             header: 'Status',
-            value: 'status',
+            value: FilterGroups.STATUS,
             filters: [
                 {
                     icon: <StatusIndicator variant={'approved'} />,
@@ -59,7 +53,7 @@ export default function reservationFilterList({
         },
         {
             header: 'Gjenstand',
-            value: 'item',
+            value: FilterGroups.ITEM,
             filters: items.map((item) => {
                 return {
                     name: item.name,
@@ -69,7 +63,7 @@ export default function reservationFilterList({
         },
         {
             header: 'Gruppe',
-            value: 'group',
+            value: FilterGroups.GROUP,
             filters: groups.map((group) => {
                 return {
                     name: group.name,
@@ -79,11 +73,3 @@ export default function reservationFilterList({
         },
     ];
 }
-
-// Object containing filterLists group values as keys, and an icon as value
-export const GroupIcons: Record<string, ReactNode> = {
-    group: <UsersIcon size={12} />,
-    status: <AlertCircleIcon size={12} />,
-    item: <ShapesIcon size={12} />,
-    time: <ClockIcon size={12} />,
-};

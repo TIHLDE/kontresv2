@@ -12,7 +12,6 @@ import FilterBadge from './filter-badge';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ListFilterIcon } from 'lucide-react';
-import { UseQueryStatesKeysMap } from 'nuqs';
 import {
     Dispatch,
     HTMLAttributes,
@@ -61,7 +60,7 @@ interface FiltersProps extends HTMLAttributes<HTMLDivElement> {
     /**
      * Default values for the filters.
      */
-    defaultValues?: Filter[];
+    defaultValues?: FilterCallbackType[];
     /**
      * Object containing icons for each filter group header.
      * The key is the group value and the value is the icon (ReactNode).
@@ -75,7 +74,6 @@ interface FiltersProps extends HTMLAttributes<HTMLDivElement> {
      * List of filter groups to display. Each group contains a header and a list of filters.
      */
     filterGroups: FilterGroup[];
-    queryParsers: UseQueryStatesKeysMap<any>;
 }
 
 /**
@@ -87,7 +85,6 @@ interface FiltersProps extends HTMLAttributes<HTMLDivElement> {
 export default function Filters({
     open,
     setOpen,
-    queryParsers,
     defaultValues,
     filterGroups,
     onFilterChange,
@@ -99,14 +96,14 @@ export default function Filters({
     const [filters, setFilters] = useState<FilterCallbackType[]>([]);
 
     useEffect(() => {
-        if (defaultValues)
-            setFilters(
-                defaultValues.map((g) => ({
-                    filter: g,
-                    parentValue: g.value,
-                })),
-            );
+        if (defaultValues) {
+            setFilters(defaultValues);
+        }
     }, []);
+
+    useEffect(() => {
+        console.log(filters);
+    }, [filters]);
 
     // Function for adding a filter if it is not already in the filters list
     const addFilter = (filter: FilterCallbackType) => {
@@ -159,7 +156,10 @@ export default function Filters({
     };
 
     return (
-        <div className={cn('flex gap-2 items-center flex-wrap', className)}>
+        <div
+            className={cn('flex gap-2 items-center flex-wrap', className)}
+            {...props}
+        >
             <div className="flex gap-1 max-w-full flex-wrap items-center">
                 {filters?.map((filter, index) => (
                     <motion.div

@@ -1,12 +1,17 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
-import Filters, {
-    Filter,
-    FilterCallbackType,
-} from '@/components/ui/filters/filters';
+import FilterSkeleton from '@/components/ui/filters/filter-skeleton';
+import Filters, { FilterCallbackType } from '@/components/ui/filters/filters';
 
-import reservationFilterList, { GroupIcons } from './filter-list';
+import reservationFilterList from './filter-list';
+import {
+    FilterGroups,
+    GroupIcons,
+    StateIconMap,
+    StateMap,
+    TimeDirectionIconMap,
+    TimeDirectionMap,
+} from './value-maps';
 import { TimeDirection } from '@/app/admin/utils/enums';
 import { groupParser } from '@/app/booking/components/SearchFilters';
 import { api } from '@/trpc/react';
@@ -17,7 +22,7 @@ import {
     parseAsStringEnum,
     useQueryStates,
 } from 'nuqs';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export const reservationStateParser = parseAsArrayOf<ReservationState>(
     parseAsStringEnum(Object.values(ReservationState)),
@@ -27,39 +32,71 @@ export const timeDirectionParser = parseAsArrayOf<TimeDirection>(
     parseAsStringEnum(Object.values(TimeDirection)),
 );
 
-export default function AdminBookingFilters({
-    ...props
-}: React.ComponentProps<typeof Card>) {
+export default function AdminBookingFilters() {
     const [open, setOpen] = useState(false);
 
     // Get groups and items, as they are used in the filters
-    const { data: groups } = api.group.getAll.useQuery();
-    const { data: items } = api.item.getItems.useQuery({});
+    const { data: existingGroups } = api.group.getAll.useQuery();
+    const { data: existingItems } = api.item.getItems.useQuery({});
 
-    const [filters, setFilters] = useState<FilterCallbackType[]>([]);
-    const [queryStates, setQueryStates] = useQueryStates({
+    const [filterQueries, setFilterQueries] = useQueryStates({
         groups: groupParser.withDefault([]),
         states: reservationStateParser.withDefault([]),
         items: parseAsArrayOf<string>(parseAsString),
         time: timeDirectionParser.withDefault([]),
     });
 
-    useEffect(() => {
-        setQueryStates({
-            groups: filters
-                .filter((g) => g.parentValue === 'group')
-                .map((g) => g.filter.value),
-            states: filters
-                .filter((g) => g.parentValue === 'status')
-                .map((g) => g.filter.value as ReservationState),
-            items: filters
-                .filter((g) => g.parentValue === 'item')
-                .map((g) => g.filter.value),
-            time: filters
-                .filter((g) => g.parentValue === 'time')
-                .map((g) => g.filter.value as TimeDirection),
-        });
-    }, [filters]);
+    useEffect(() => {}, [existingItems]);
+
+    const filters = useMemo<FilterCallbackType[]>(() => {
+        return [
+            ...(filterQueries.groups ?? []).map(
+                (group) =>
+                    ({
+                        parentValue: FilterGroups.GROUP,
+                        filter: {
+                            name:
+                                existingGroups?.find((g) => g.groupId === group)
+                                    ?.name ?? 'Ukjent gruppe',
+                            value: group,
+                            icon: GroupIcons['group'],
+                        },
+                    }) as FilterCallbackType,
+            ),
+            ...(filterQueries?.items ?? []).map((item) => {
+                return {
+                    parentValue: FilterGroups.ITEM,
+                    filter: {
+                        name:
+                            existingItems?.items?.find(
+                                (i) => i.itemId === parseInt(item),
+                            )?.name ?? 'Ukjent gjenstand',
+                        value: item,
+                    },
+                } as FilterCallbackType;
+            }),
+            ...filterQueries?.time.map((time) => {
+                return {
+                    parentValue: FilterGroups.TIME,
+                    filter: {
+                        name: TimeDirectionMap[time],
+                        value: time,
+                        icon: TimeDirectionIconMap[time],
+                    },
+                } as FilterCallbackType;
+            }),
+            ...filterQueries?.states.map((state) => {
+                return {
+                    parentValue: FilterGroups.STATUS,
+                    filter: {
+                        name: StateMap[state],
+                        value: state,
+                        icon: StateIconMap[state],
+                    },
+                } as FilterCallbackType;
+            }),
+        ];
+    }, [filterQueries, existingGroups, existingItems]);
 
     // Register shortcut listener
     useEffect(() => {
@@ -85,23 +122,39 @@ export default function AdminBookingFilters({
         };
     }, []);
 
+    const onFilterChange = (filters: FilterCallbackType[]) => {
+        setFilterQueries({
+            groups: filters
+                .filter((f) => f.parentValue === 'group')
+                .map((f) => f.filter.value),
+            items: filters
+                .filter((f) => f.parentValue === 'item')
+                .map((f) => f.filter.value),
+            time: filters
+                .filter((f) => f.parentValue === 'time')
+                .map((f) => f.filter.value as TimeDirection),
+            states: filters
+                .filter((f) => f.parentValue === 'status')
+                .map((f) => f.filter.value as ReservationState),
+        });
+    };
+
+    if (!existingGroups || !existingItems || !filters)
+        return <FilterSkeleton />;
+
     return (
         <Filters
-            queryParsers={{
-                groups: groupParser.withDefault([]),
-                states: reservationStateParser.withDefault([]),
-                items: parseAsArrayOf<string>(parseAsString),
-                time: timeDirectionParser.withDefault([]),
-            }}
             open={open}
+            defaultValues={filters}
             setOpen={setOpen}
             groupIcons={GroupIcons}
             displayGroupIcons={true}
             filterGroups={reservationFilterList({
-                groups: groups ?? [],
-                items: items?.items ?? [],
+                groups: existingGroups ?? [],
+                items: existingItems?.items ?? [],
             })}
-            onFilterChange={() => {
+            onFilterChange={(value) => {
+                onFilterChange(value);
                 setOpen(false);
             }}
         />

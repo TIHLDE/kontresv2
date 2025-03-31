@@ -3,14 +3,14 @@
 import { Card, CardContent } from '@/components/ui/card';
 
 import { SideBarNavigationButton } from '../../layout';
-import { CalendarIcon, GamepadIcon, Shapes } from 'lucide-react';
+import { CalendarIcon, Shapes } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function AdminSidebar() {
     const pathname = usePathname();
 
     return (
-        <Card className="h-fit min-w-72 sticky top-24 z-50">
+        <Card className="h-fit min-w-72 md:sticky top-24 z-50">
             <CardContent className="pt-6">
                 <div className="flex flex-col">
                     <SideBarNavigationButton

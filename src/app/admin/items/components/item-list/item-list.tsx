@@ -9,7 +9,6 @@ import { itemColumns } from './item-columns';
 import { DataTable } from '@/app/admin/components/old-components/data-table';
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
-import { BookableItem } from '@prisma/client';
 import { inferProcedureOutput } from '@trpc/server';
 import { useRouter } from 'next/navigation';
 import { parseAsArrayOf, parseAsString, useQueryStates } from 'nuqs';

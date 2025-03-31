@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import ItemDialog from '../item-dialog/item-dialog';
-// import { Form } from '@/components/ui/form';
+import { api } from '@/trpc/react';
 import { inferProcedureOutput } from '@trpc/server';
 import {
     CornerUpRightIcon,
@@ -43,8 +43,22 @@ const ItemActions = ({ item }: { item: GetItemsOutput }) => {
     const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const router = useRouter();
+    const { mutate } = api.item.deleteItem.useMutation();
+    const queryUtils = api.useUtils();
 
-    const onDelete = () => {};
+    const onDelete = () => {
+        mutate(
+            {
+                groupId: item.groupId, // Why do we need group id for deleting the item??
+                itemId: item.itemId,
+            },
+            {
+                onSuccess: () => {
+                    queryUtils.item.invalidate();
+                },
+            },
+        );
+    };
 
     return (
         <div className="flex gap-3 justify-end place-content-center">

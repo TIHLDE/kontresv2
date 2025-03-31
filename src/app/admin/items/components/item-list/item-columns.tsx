@@ -1,6 +1,6 @@
 import { AppRouter } from '@/server/api/root';
 
-import ItemActions from '@/app/admin/components/old-components/item-actions';
+import ItemActions from '@/app/admin/items/components/item-list/item-actions';
 import { type ColumnDef } from '@tanstack/react-table';
 import { inferProcedureOutput } from '@trpc/server';
 

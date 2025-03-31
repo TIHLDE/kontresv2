@@ -11,7 +11,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 
-import ItemForm from './components/item-form';
+import ItemForm from './item-form';
 import { api } from '@/trpc/react';
 import { inferProcedureOutput } from '@trpc/server';
 import { PlusIcon } from 'lucide-react';

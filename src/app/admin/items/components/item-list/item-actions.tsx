@@ -21,8 +21,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import ItemDialog from '../../items/components/item-dialog/item-dialog';
-import { type ItemFormValueTypes } from './create-item-form';
+import ItemDialog from '../item-dialog/item-dialog';
 // import { Form } from '@/components/ui/form';
 import { inferProcedureOutput } from '@trpc/server';
 import {
@@ -44,8 +43,6 @@ const ItemActions = ({ item }: { item: GetItemsOutput }) => {
     const [editOpen, setEditOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const router = useRouter();
-
-    const onSubmit = (e: ItemFormValueTypes) => {};
 
     const onDelete = () => {};
 

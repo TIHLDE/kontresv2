@@ -1,6 +1,6 @@
 import { type ReservationWithAuthor } from '@/server/dtos/reservations';
 
-import { DataTable } from '../old-components/data-table';
+import { DataTable } from '../../../../components/ui/data-table';
 import { columns } from './columns';
 
 interface BookingListProps {

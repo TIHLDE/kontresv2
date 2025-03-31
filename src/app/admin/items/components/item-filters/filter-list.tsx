@@ -1,4 +1,6 @@
-import { FilterGroup } from '../../../../../components/ui/filters/filters';
+import { FilterGroup } from '@/components/ui/filters/filters';
+
+import { FilterGroups } from '@/app/admin/reservations/components/booking-filters/value-maps';
 import { BookableItem, Group } from '@prisma/client';
 import {
     AlertCircleIcon,
@@ -8,7 +10,7 @@ import {
 } from 'lucide-react';
 import { ReactNode } from 'react';
 
-export default function itemFilterList({
+export default function itemFilterGroups({
     groups,
     items,
 }: {
@@ -18,7 +20,7 @@ export default function itemFilterList({
     return [
         {
             header: 'Gruppe',
-            value: 'group',
+            value: FilterGroups.GROUP,
             filters: groups.map((group) => ({
                 name: group.name,
                 value: group.groupId,
@@ -26,7 +28,7 @@ export default function itemFilterList({
         },
         {
             header: 'Gjenstand',
-            value: 'item',
+            value: FilterGroups.ITEM,
             filters: items.map((item) => ({
                 name: item.name,
                 value: item.itemId.toString(),

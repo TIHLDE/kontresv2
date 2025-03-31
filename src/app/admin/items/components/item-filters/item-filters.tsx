@@ -1,14 +1,10 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
 import FilterSkeleton from '@/components/ui/filters/filter-skeleton';
-import Filters, {
-    Filter,
-    FilterCallbackType,
-} from '@/components/ui/filters/filters';
-import { Skeleton } from '@/components/ui/skeleton';
+import Filters, { FilterCallbackType } from '@/components/ui/filters/filters';
 
-import itemFilterList, { GroupIcons } from './filter-list';
+import itemFilterGroups, { GroupIcons } from './filter-list';
+import { FilterGroups } from '@/app/admin/reservations/components/booking-filters/value-maps';
 import { TimeDirection } from '@/app/admin/utils/enums';
 import { groupParser } from '@/app/booking/components/SearchFilters';
 import { api } from '@/trpc/react';
@@ -19,7 +15,7 @@ import {
     parseAsStringEnum,
     useQueryStates,
 } from 'nuqs';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export const reservationStateParser = parseAsArrayOf<ReservationState>(
     parseAsStringEnum(Object.values(ReservationState)),
@@ -29,9 +25,7 @@ export const timeDirectionParser = parseAsArrayOf<TimeDirection>(
     parseAsStringEnum(Object.values(TimeDirection)),
 );
 
-export default function AdminItemFilters({
-    ...props
-}: React.ComponentProps<typeof Card>) {
+export default function AdminItemFilters() {
     const [open, setOpen] = useState(false);
     const [filterQueries, setFilterQueries] = useQueryStates({
         groups: groupParser.withDefault([]),
@@ -45,26 +39,24 @@ export default function AdminItemFilters({
             ...filterQueries.groups.map(
                 (group) =>
                     ({
-                        parentValue: 'group',
+                        parentValue: FilterGroups.GROUP,
                         filter: {
                             name:
                                 existingGroups?.find((g) => g.groupId === group)
                                     ?.name ?? 'Ukjent gruppe',
                             value: group,
-                            icon: GroupIcons['group'],
                         },
                     }) as FilterCallbackType,
             ),
             ...filterQueries.items.map((item) => {
                 return {
-                    parentValue: 'item',
+                    parentValue: FilterGroups.ITEM,
                     filter: {
                         name:
                             existingItems?.items.find(
                                 (i) => i.itemId === parseInt(item),
                             )?.name ?? 'Ukjent gjenstand',
                         value: item,
-                        icon: GroupIcons['item'],
                     },
                 } as FilterCallbackType;
             }),
@@ -103,33 +95,29 @@ export default function AdminItemFilters({
     const onFilterChange = (filters: FilterCallbackType[]) => {
         setFilterQueries({
             groups: filters
-                .filter((f) => f.parentValue === 'group')
+                .filter((f) => f.parentValue === FilterGroups.GROUP)
                 .map((f) => f.filter.value),
             items: filters
-                .filter((f) => f.parentValue === 'item')
+                .filter((f) => f.parentValue === FilterGroups.ITEM)
                 .map((f) => f.filter.value),
         });
     };
 
+    if (!existingGroups || !existingItems) return <FilterSkeleton />;
     return (
-        <>
-            {existingGroups && existingItems && (
-                <Filters
-                    open={open}
-                    setOpen={setOpen}
-                    defaultValues={filters}
-                    groupIcons={GroupIcons}
-                    filterGroups={itemFilterList({
-                        groups: existingGroups ?? [],
-                        items: existingItems?.items ?? [],
-                    })}
-                    onFilterChange={(value) => {
-                        onFilterChange(value);
-                        setOpen(false);
-                    }}
-                />
-            )}
-            {!existingGroups && !existingItems && <FilterSkeleton />}
-        </>
+        <Filters
+            open={open}
+            setOpen={setOpen}
+            defaultValues={filters}
+            groupIcons={GroupIcons}
+            filterGroups={itemFilterGroups({
+                groups: existingGroups ?? [],
+                items: existingItems?.items ?? [],
+            })}
+            onFilterChange={(value) => {
+                onFilterChange(value);
+                setOpen(false);
+            }}
+        />
     );
 }

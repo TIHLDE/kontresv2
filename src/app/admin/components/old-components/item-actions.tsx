@@ -1,3 +1,5 @@
+'use client';
+
 import { AppRouter } from '@/server/api/root';
 
 import {
@@ -51,7 +53,7 @@ const ItemActions = ({ item }: { item: GetItemsOutput }) => {
         <div className="flex gap-3 justify-end place-content-center">
             {/* Item row dropdown menu */}
             <DropdownMenu>
-                <DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild>
                     <Button variant={'ghost'} className="h-8 w-8 p-0">
                         <MoreHorizontal className="w-4 h-4" />
                         <span className="sr-only">Vis flere handlinger</span>

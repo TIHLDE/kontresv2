@@ -5,7 +5,7 @@ import { TimeDirection } from '../../../utils/enums';
 import { FilterGroups } from './value-maps';
 import { BookableItem, Group, ReservationState } from '@prisma/client';
 
-export default function reservationFilterList({
+export default function reservationFilterGroups({
     groups,
     items,
 }: {

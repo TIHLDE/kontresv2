@@ -3,7 +3,7 @@
 import FilterSkeleton from '@/components/ui/filters/filter-skeleton';
 import Filters, { FilterCallbackType } from '@/components/ui/filters/filters';
 
-import reservationFilterList from './filter-list';
+import reservationFilterGroups from './filter-list';
 import {
     FilterGroups,
     GroupIcons,
@@ -149,7 +149,7 @@ export default function AdminBookingFilters() {
             setOpen={setOpen}
             groupIcons={GroupIcons}
             displayGroupIcons={true}
-            filterGroups={reservationFilterList({
+            filterGroups={reservationFilterGroups({
                 groups: existingGroups ?? [],
                 items: existingItems?.items ?? [],
             })}

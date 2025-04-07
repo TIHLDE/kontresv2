@@ -10,7 +10,6 @@ const getHeaders = (headers?: HeadersInit, token?: string) => {
 };
 
 const getUserById = async (userId: string, requestToken: string) => {
-    console.log(`${env.LEPTON_API_URL}/${URLS.USERS}/${userId}/`);
     return fetch(`${env.LEPTON_API_URL}/${URLS.USERS}/${userId}/`, {
         headers: {
             ...getHeaders(undefined, requestToken),

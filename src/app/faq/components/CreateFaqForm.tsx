@@ -97,7 +97,7 @@ export default function CreateFaqForm({
             } else {
                 await createFaq({
                     ...faqData,
-                    groupId: '1', //må finne ut hva groupId skal være
+                    groupId: formData.group || "",
                 });
             }
 

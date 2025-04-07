@@ -32,12 +32,18 @@ type DataTableProps<TData, TValue> = {
     filterProperty?: keyof TData;
     searchPlaceholder?: string;
     headerItem?: React.ReactNode;
+    displayPageNavigation?: boolean;
+    displaySearch?: boolean;
+    pageSize?: number;
 };
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    pageSize,
+    displayPageNavigation = true,
     rowClickCallback,
+    displaySearch = false,
     searchPlaceholder,
     filterProperty,
     headerItem,
@@ -48,6 +54,7 @@ export function DataTable<TData, TValue>({
     const table = useReactTable({
         data,
         columns,
+        rowCount: pageSize ?? data.length,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
@@ -62,18 +69,20 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder={searchPlaceholder ?? 'Søk...'}
-                    onChange={(event) =>
-                        table
-                            .getColumn(filterProperty as string)
-                            ?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm"
-                />
-                {headerItem}
-            </div>
+            {displaySearch && (
+                <div className="flex items-center py-4">
+                    <Input
+                        placeholder={searchPlaceholder ?? 'Søk...'}
+                        onChange={(event) =>
+                            table
+                                .getColumn(filterProperty as string)
+                                ?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
+                    {headerItem}
+                </div>
+            )}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -124,31 +133,33 @@ export function DataTable<TData, TValue>({
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    Her var det lite 🤔
+                                    Ingen resultater
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.previousPage()}
-                    disabled={!table.getCanPreviousPage()}
-                >
-                    Forrige
-                </Button>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                >
-                    Neste
-                </Button>
-            </div>
+            {displayPageNavigation && (
+                <div className="flex items-center justify-end space-x-2 py-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                    >
+                        Forrige
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                    >
+                        Neste
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }

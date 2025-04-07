@@ -15,19 +15,11 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 
 import { cn } from '@/lib/utils';
 import { api } from '@/trpc/react';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { Suspense, useMemo } from 'react';
+import { useMemo } from 'react';
 
 export default function BookableItemsSelect({
     field,

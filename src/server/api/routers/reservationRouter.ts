@@ -129,6 +129,7 @@ export const reservationRouter = createTRPCRouter({
                     try {
                         const user = (await ctx.Lepton.getUserById(
                             reservation.authorId,
+                            ctx.session.user.TIHLDE_Token,
                         ).then((user) => user.json())) as User;
 
                         reservation.author = user;

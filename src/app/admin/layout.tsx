@@ -46,19 +46,17 @@ export default function AdminLayout({
     return (
         <div className="max-w-page h-[80vh] mx-auto md:w-full grid md:grid-cols-[min-content_auto] grid-cols-1 gap-10">
             <AdminSidebar />
-            <div className="flex flex-col w-full gap-5">
-                <Card className="md:min-w-72 h-full">
-                    <Suspense
-                        fallback={
-                            <div className="w-full h-full flex items-center justify-center">
-                                <LoadingSpinner />
-                            </div>
-                        }
-                    >
-                        {children}
-                    </Suspense>
-                </Card>
-            </div>
+            <Card className="md:min-w-72 h-full">
+                <Suspense
+                    fallback={
+                        <div className="w-full h-full flex items-center justify-center">
+                            <LoadingSpinner />
+                        </div>
+                    }
+                >
+                    {children}
+                </Suspense>
+            </Card>
         </div>
     );
 }

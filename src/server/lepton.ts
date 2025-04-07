@@ -2,18 +2,18 @@
 import { URLS } from './api/urls';
 import { env } from '@/env';
 
-const getHeaders = (headers?: HeadersInit) => {
+const getHeaders = (headers?: HeadersInit, token?: string) => {
     return {
-        'x-csrf-token': env.LEPTON_API_KEY ?? '',
+        'x-csrf-token': token ?? '',
         ...headers,
     };
 };
 
-const getUserById = async (userId: string) => {
+const getUserById = async (userId: string, requestToken: string) => {
     console.log(`${env.LEPTON_API_URL}/${URLS.USERS}/${userId}/`);
     return fetch(`${env.LEPTON_API_URL}/${URLS.USERS}/${userId}/`, {
         headers: {
-            ...getHeaders(),
+            ...getHeaders(undefined, requestToken),
         },
     });
 };

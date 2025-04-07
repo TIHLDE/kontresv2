@@ -178,14 +178,14 @@ export default function CreateFaqForm({
                     )}
                 ></FormField>
 
-                <div className="w-full flex gap-10">
+                <div className="w-full grid gap-10 grid-cols-2">
                     <FormField
                         control={form.control}
                         name="bookableItemIds"
                         render={({ field }) => (
                             <FormItem className="flex flex-col mt-5">
                                 <FormLabel>
-                                    Gjelder spørsmålet noen spesifike
+                                    Gjelder spørsmålet noen
                                     gjenstander?
                                 </FormLabel>
                                 <FormControl>
@@ -233,7 +233,7 @@ export default function CreateFaqForm({
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Velg minst én gruppe
+                                        Velg en gruppe
                                     </FormDescription>
                                 </FormItem>
                             )}

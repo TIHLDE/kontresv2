@@ -8,6 +8,7 @@ import FAQListSkeleton from './faq-list-skeleton';
 import Error from '@/app/error';
 import { api } from '@/trpc/react';
 import Link from 'next/link';
+import { ArrowDown } from 'lucide-react';
 
 const FaqList = () => {
     const {
@@ -48,11 +49,11 @@ const FaqList = () => {
             {isLoading && !error && <FAQListSkeleton />}
             <div className="max-w-page mx-auto flex gap-5">
                 {hasNextPage && (
-                    <Button onClick={() => fetchNextPage()}>
+                    <Button onClick={() => fetchNextPage()} className='gap-2.5'>
                         {isFetchingNextPage && <LoadingSpinner />}
                         {!isFetchingNextPage && (
                             <>
-                                <img src='down-arrow-svgrepo-com.svg' alt="arrow" className='w-4 h-4 invert mr-1'></img>
+                                <ArrowDown size={16} strokeWidth={2.5}/>
                                 Last inn mer
                             </>
                             )}

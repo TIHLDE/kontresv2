@@ -8,6 +8,7 @@ import FAQListSkeleton from './faq-list-skeleton';
 import Error from '@/app/error';
 import { api } from '@/trpc/react';
 import Link from 'next/link';
+import { ArrowDown } from 'lucide-react';
 
 const FaqList = () => {
     const {
@@ -27,7 +28,7 @@ const FaqList = () => {
     );
     return (
         <>
-            <div className="grid md:grid-cols-3 grid-cols-1 gap-5">
+            <div className="grid md:grid-cols-3 grid-cols-1 gap-5 ">
                 {data?.pages.map((page) =>
                     page.faqs.map((object) => (
                         <Link
@@ -48,9 +49,14 @@ const FaqList = () => {
             {isLoading && !error && <FAQListSkeleton />}
             <div className="max-w-page mx-auto flex gap-5">
                 {hasNextPage && (
-                    <Button onClick={() => fetchNextPage()}>
+                    <Button onClick={() => fetchNextPage()} className='gap-2.5'>
                         {isFetchingNextPage && <LoadingSpinner />}
-                        {!isFetchingNextPage && 'Last inn flere'}
+                        {!isFetchingNextPage && (
+                            <>
+                                <ArrowDown size={16} strokeWidth={2.5}/>
+                                Last inn mer
+                            </>
+                            )}
                     </Button>
                 )}
                 {error && <text>Noe gikk galt</text>}

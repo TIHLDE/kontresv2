@@ -5,6 +5,7 @@ import FaqList from './components/faq-list';
 import { auth } from '@/auth';
 import { api } from '@/trpc/server';
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
 
 export default async function page() {
     const session = await auth();
@@ -18,7 +19,10 @@ export default async function page() {
                 </h1>
                 {isAdmin && (
                     <Link href={'./faq/create/'} className="w-fit">
-                        <Button>Opprett ny</Button>
+                        <Button className='gap-2.5'>
+                            <Plus size={16} strokeWidth={2.5}/>
+                            Opprett ny
+                        </Button>
                     </Link>
                 )}
             </div>

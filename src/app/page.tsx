@@ -1,4 +1,4 @@
-import Hero from './components/hero';
+import Hero from '../components/ui/hero/hero';
 import { Suspense } from 'react';
 
 export default async function Home() {

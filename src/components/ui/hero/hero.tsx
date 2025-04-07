@@ -1,7 +1,7 @@
 import { buttonVariants } from '@/components/ui/button';
+import WelcomeTitle from '@/components/ui/hero/welcometitle';
 
 import styles from './welcometitle.module.css';
-import WelcomeTitle from '@/app/components/welcometitle';
 import { cn } from '@/lib/utils';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';

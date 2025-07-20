@@ -7,6 +7,7 @@ import { bookableItemRouter } from './routers/bookableItem';
 import { groupRouter } from './routers/groupRouter';
 import { itemRouter } from './routers/itemRouter';
 import { reservationRouter } from './routers/reservationRouter';
+import { userRouter } from './routers/userRouter';
 
 /**
  * This is the primary router for your server.
@@ -21,6 +22,7 @@ export const appRouter = createTRPCRouter({
     reservation: reservationRouter,
     faq: faqRouter,
     group: groupRouter,
+    user: userRouter,
 });
 
 // export type definition of API
